@@ -40,6 +40,7 @@
 (require 'init-gui-frames)
 (require 'init-proxies)
 (require 'init-evil)
+(require 'init-key-chord) ; Requires evil mode
 (require 'init-dired)
 (require 'init-isearch)
 (require 'init-uniquify)
