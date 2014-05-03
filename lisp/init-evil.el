@@ -13,7 +13,7 @@
 (setq evil-insert-state-message nil)
 (setq evil-visual-state-message nil)
 
-(after-load 'evil-mode
+(after-load 'evil
   (define-key evil-normal-state-map "Y" (kbd "y$"))
   (define-key evil-normal-state-map (kbd "SPC") 'evil-repeat-find-char)
   (define-key
@@ -60,49 +60,49 @@
   (evil-leader/set-leader ",")
 
   (evil-leader/set-key
-   "a"  'ido-find-alternate-file
-   "b"  'ibuffer
-   "db" 'kill-buffer
-   "dw" 'delete-window
-   "eb" 'eval-buffer
-   "ee" 'eval-expression
-   "er" 'eval-region
-   "fb" 'ido-switch-buffer
-   "fd" 'ido-dired
-   "ff" 'ido-find-file
-   "fp" 'fiplr-find-file
-   "gb" 'magit-blame-mode
-   "gl" 'magit-log
-   "gs" 'magit-status
-   "pb" 'projectile-switch-to-buffer
-   "pd" 'projectile-dired
-   "pf" 'projectile-find-file
-   "w"  'save-buffer
-   "x"  'smex)
+    "a"  'ido-find-alternate-file
+    "b"  'ibuffer
+    "db" 'kill-buffer
+    "dw" 'delete-window
+    "eb" 'eval-buffer
+    "ee" 'eval-expression
+    "er" 'eval-region
+    "fb" 'ido-switch-buffer
+    "fd" 'ido-dired
+    "ff" 'ido-find-file
+    "fp" 'fiplr-find-file
+    "gb" 'magit-blame-mode
+    "gl" 'magit-log
+    "gs" 'magit-status
+    "pb" 'projectile-switch-to-buffer
+    "pd" 'projectile-dired
+    "pf" 'projectile-find-file
+    "w"  'save-buffer
+    "x"  'smex)
 
   (evil-leader/set-key-for-mode 'org-mode
-                                "t" 'org-todo
-                                "s" 'org-sort-list)
+    "t" 'org-todo
+    "s" 'org-sort-list)
 
   (evil-leader/set-key-for-mode 'clojure-mode
-                                "a" 'clojure-jump-between-tests-and-code
-                                "v" 'clojure-test-run-test
-                                "V" 'clojure-test-run-tests
-                                "cc" 'cider-connect
-                                "cj" 'cider-jack-in
-                                "cq" 'cider-quit
-                                "rs" 'cljr-sort-ns
-                                "rr" 'cljr-add-require-to-ns
-                                "ru" 'cljr-add-use-to-ns)
+    "a" 'clojure-jump-between-tests-and-code
+    "v" 'clojure-test-run-test
+    "V" 'clojure-test-run-tests
+    "cc" 'cider-connect
+    "cj" 'cider-jack-in
+    "cq" 'cider-quit
+    "rs" 'cljr-sort-ns
+    "rr" 'cljr-add-require-to-ns
+    "ru" 'cljr-add-use-to-ns)
 
   (evil-leader/set-key-for-mode 'ruby-mode
-                                "a" 'rspec-toggle-spec-and-target
-                                "v" 'rspec-verify
-                                "V" 'rspec-verify-all)
+    "a" 'rspec-toggle-spec-and-target
+    "v" 'rspec-verify
+    "V" 'rspec-verify-all)
 
   (evil-leader/set-key-for-mode 'feature-mode
-                                "v" 'feature-verify-scenario-at-pos
-                                "V" 'feature-verify-all-scenarios-in-buffer))
+    "v" 'feature-verify-scenario-at-pos
+    "V" 'feature-verify-all-scenarios-in-buffer))
 
 ;; Activate evil-mode after global-evil-leader-mode (http://j.mp/1i0vLSP)
 (global-evil-leader-mode)
