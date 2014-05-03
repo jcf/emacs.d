@@ -77,6 +77,7 @@
    "pb" 'projectile-switch-to-buffer
    "pd" 'projectile-dired
    "pf" 'projectile-find-file
+   "w"  'save-buffer
    "x"  'smex)
 
   (evil-leader/set-key-for-mode 'org-mode
