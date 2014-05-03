@@ -1,6 +1,8 @@
-
-;;; This file bootstraps the configuration, which is divided into
-;;; a number of other files.
+;;; init --- Configure Emacs
+;;; Commentary:
+;;; This file bootstraps the configuration, which is divided into a
+;;; number of other files.
+;;; Code:
 
 (let ((minver 23))
   (unless (>= emacs-major-version minver)
@@ -37,6 +39,7 @@
 (require 'init-osx-keys)
 (require 'init-gui-frames)
 (require 'init-proxies)
+(require 'init-evil)
 (require 'init-dired)
 (require 'init-isearch)
 (require 'init-uniquify)
