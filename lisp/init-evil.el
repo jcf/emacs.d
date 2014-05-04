@@ -70,7 +70,6 @@
     "fb" 'ido-switch-buffer
     "fd" 'ido-dired
     "ff" 'ido-find-file
-    "fp" 'fiplr-find-file
     "gb" 'magit-blame-mode
     "gl" 'magit-log
     "gs" 'magit-status
