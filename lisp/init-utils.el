@@ -17,7 +17,7 @@
 ;;----------------------------------------------------------------------------
 ;; String utilities missing from core emacs
 ;;----------------------------------------------------------------------------
-(defun sanityinc/string-all-matches (regex str &optional group)
+(defun jcf/string-all-matches (regex str &optional group)
   "Find all matches for `REGEX' within `STR', returning the full match string or group `GROUP'."
   (let ((result nil)
         (pos 0)
@@ -27,7 +27,7 @@
       (setq pos (match-end group)))
     result))
 
-(defun sanityinc/string-rtrim (str)
+(defun jcf/string-rtrim (str)
   "Remove trailing whitespace from `STR'."
   (replace-regexp-in-string "[ \t\n]*$" "" str))
 
@@ -36,7 +36,7 @@
 ;; Find the directory containing a given library
 ;;----------------------------------------------------------------------------
 (autoload 'find-library-name "find-func")
-(defun sanityinc/directory-of-library (library-name)
+(defun jcf/directory-of-library (library-name)
   "Return the directory in which the `LIBRARY-NAME' load file is found."
   (file-name-as-directory (file-name-directory (find-library-name library-name))))
 

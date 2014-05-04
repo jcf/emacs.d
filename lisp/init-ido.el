@@ -28,7 +28,7 @@
 (setq ido-default-buffer-method 'selected-window)
 
 (when (eval-when-compile (< emacs-major-version 24))
- (defun sanityinc/ido-choose-from-recentf ()
+ (defun jcf/ido-choose-from-recentf ()
    "Use ido to select a recently opened file from the `recentf-list'"
    (interactive)
    (if (and ido-use-virtual-buffers (fboundp 'ido-toggle-virtual-buffers))
@@ -37,7 +37,7 @@
                                      (mapcar 'abbreviate-file-name recentf-list)
                                      nil t))))
 
- (global-set-key [(meta f11)] 'sanityinc/ido-choose-from-recentf))
+ (global-set-key [(meta f11)] 'jcf/ido-choose-from-recentf))
 
 
 ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem

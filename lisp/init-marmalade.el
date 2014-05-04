@@ -4,14 +4,14 @@
 
 (autoload 'marmalade-upload-buffer "marmalade")
 
-(defun sanityinc/parse-git-version (s)
+(defun jcf/parse-git-version (s)
   "Return numeric version array parsed from S, or nil."
   (ignore-errors (version-to-list s)))
 
 (defun latest-version-from-git-tag ()
   (let ((versions
          (remove-if #'null
-                    (mapcar #'sanityinc/parse-git-version
+                    (mapcar #'jcf/parse-git-version
                             (split-string (shell-command-to-string "git tag"))))))
     (sort versions #'version-list-<)
     (package-version-join (car (last versions)))))

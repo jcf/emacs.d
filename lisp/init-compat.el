@@ -17,19 +17,19 @@ to case differences."
 (let ((fn (symbol-function 'called-interactively-p)))
   (when (and (subrp fn) (zerop (cdr-safe (subr-arity fn))))
     (message "Warning: overriding called-interactively-p to support an argument.")
-    (fset 'sanityinc/called-interactively-p fn)
+    (fset 'jcf/called-interactively-p fn)
     (defun called-interactively-p (&optional kind)
-      "Overridden; see `sanityinc/called-interactively-p' for the wrapped function."
-      (sanityinc/called-interactively-p))))
+      "Overridden; see `jcf/called-interactively-p' for the wrapped function."
+      (jcf/called-interactively-p))))
 
 (when (eval-when-compile (< emacs-major-version 24))
   ;; Help package.el work in older Emacsen, where there's no TRASH arg
   ;; for 'delete-directory
   (message "Warning: overriding delete-directory to support TRASH argument.")
-  (fset 'sanityinc/delete-directory (symbol-function 'delete-directory))
+  (fset 'jcf/delete-directory (symbol-function 'delete-directory))
   (defun delete-directory (directory &optional recursive trash)
-    "Overridden: see `sanityinc/delete-directory' for the wrapped function"
-    (sanityinc/delete-directory directory recursive)))
+    "Overridden: see `jcf/delete-directory' for the wrapped function"
+    (jcf/delete-directory directory recursive)))
 
 
 ;;----------------------------------------------------------------------------

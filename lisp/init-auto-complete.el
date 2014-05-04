@@ -19,19 +19,19 @@
       c-insert-tab-function 'indent-for-tab-command)
 
 ;; hook AC into completion-at-point
-(defun sanityinc/auto-complete-at-point ()
+(defun jcf/auto-complete-at-point ()
   (when (and (not (minibufferp))
 	     (fboundp 'auto-complete-mode)
 	     auto-complete-mode)
     (auto-complete)))
 
-(defun sanityinc/never-indent ()
+(defun jcf/never-indent ()
   (set (make-local-variable 'indent-line-function) (lambda () 'noindent)))
 
 (defun set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions
-        (cons 'sanityinc/auto-complete-at-point
-              (remove 'sanityinc/auto-complete-at-point completion-at-point-functions))))
+        (cons 'jcf/auto-complete-at-point
+              (remove 'jcf/auto-complete-at-point completion-at-point-functions))))
 
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 
@@ -56,10 +56,10 @@
 
 
 ;; Exclude very large buffers from dabbrev
-(defun sanityinc/dabbrev-friend-buffer (other-buffer)
+(defun jcf/dabbrev-friend-buffer (other-buffer)
   (< (buffer-size other-buffer) (* 1 1024 1024)))
 
-(setq dabbrev-friend-buffer-function 'sanityinc/dabbrev-friend-buffer)
+(setq dabbrev-friend-buffer-function 'jcf/dabbrev-friend-buffer)
 
 
 (provide 'init-auto-complete)

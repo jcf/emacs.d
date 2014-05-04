@@ -11,7 +11,7 @@
 
 ;; Make C-x C-e run 'eval-region if the region is active
 
-(defun sanityinc/eval-last-sexp-or-region (beg end prefix)
+(defun jcf/eval-last-sexp-or-region (beg end prefix)
   "Eval region from BEG to END if active, otherwise the last sexp."
   (interactive "r\nP")
   (if (use-region-p)
@@ -21,7 +21,7 @@
 (global-set-key (kbd "M-:") 'pp-eval-expression)
 
 (after-load 'lisp-mode
-  (define-key emacs-lisp-mode-map (kbd "C-x C-e") 'sanityinc/eval-last-sexp-or-region))
+  (define-key emacs-lisp-mode-map (kbd "C-x C-e") 'jcf/eval-last-sexp-or-region))
 
 (require-package 'ipretty)
 (ipretty-mode 1)
@@ -85,7 +85,7 @@
 ;;; Support byte-compilation in a sub-process, as
 ;;; required by highlight-cl
 
-(defun sanityinc/byte-compile-file-batch (filename)
+(defun jcf/byte-compile-file-batch (filename)
   "Byte-compile FILENAME in batch mode, ie. a clean sub-process."
   (interactive "fFile to byte-compile in batch mode: ")
   (let ((emacs (car command-line-args)))
@@ -107,42 +107,42 @@
   (diminish 'redshank-mode))
 
 
-(defun sanityinc/lisp-setup ()
+(defun jcf/lisp-setup ()
   "Enable features useful in any Lisp mode."
   (rainbow-delimiters-mode t)
   (enable-paredit-mode)
   (turn-on-eldoc-mode)
   (redshank-mode))
 
-(defun sanityinc/emacs-lisp-setup ()
+(defun jcf/emacs-lisp-setup ()
   "Enable features useful when working with elisp."
   (elisp-slime-nav-mode t)
   (set-up-hippie-expand-for-elisp)
   (ac-emacs-lisp-mode-setup))
 
-(defconst sanityinc/elispy-modes
+(defconst jcf/elispy-modes
   '(emacs-lisp-mode ielm-mode)
   "Major modes relating to elisp.")
 
-(defconst sanityinc/lispy-modes
-  (append sanityinc/elispy-modes
+(defconst jcf/lispy-modes
+  (append jcf/elispy-modes
           '(lisp-mode inferior-lisp-mode lisp-interaction-mode))
   "All lispy major modes.")
 
 (require 'derived)
 
-(dolist (hook (mapcar #'derived-mode-hook-name sanityinc/lispy-modes))
-  (add-hook hook 'sanityinc/lisp-setup))
+(dolist (hook (mapcar #'derived-mode-hook-name jcf/lispy-modes))
+  (add-hook hook 'jcf/lisp-setup))
 
-(dolist (hook (mapcar #'derived-mode-hook-name sanityinc/elispy-modes))
-  (add-hook hook 'sanityinc/emacs-lisp-setup))
+(dolist (hook (mapcar #'derived-mode-hook-name jcf/elispy-modes))
+  (add-hook hook 'jcf/emacs-lisp-setup))
 
-(defun sanityinc/maybe-check-parens ()
+(defun jcf/maybe-check-parens ()
   "Run `check-parens' if this is a lispy mode."
-  (when (memq major-mode sanityinc/lispy-modes)
+  (when (memq major-mode jcf/lispy-modes)
     (check-parens)))
 
-(add-hook 'after-save-hook #'sanityinc/maybe-check-parens)
+(add-hook 'after-save-hook #'jcf/maybe-check-parens)
 
 (require-package 'eldoc-eval)
 (require 'eldoc-eval)
@@ -167,12 +167,12 @@
 ;; their .elc counterparts removed - VC hooks would be necessary for
 ;; that.
 
-(defvar sanityinc/vc-reverting nil
+(defvar jcf/vc-reverting nil
   "Whether or not VC or Magit is currently reverting buffers.")
 
-(defadvice revert-buffer (after sanityinc/maybe-remove-elc activate)
+(defadvice revert-buffer (after jcf/maybe-remove-elc activate)
   "If reverting from VC, delete any .elc file that will now be out of sync."
-  (when sanityinc/vc-reverting
+  (when jcf/vc-reverting
     (when (and (eq 'emacs-lisp-mode major-mode)
                buffer-file-name
                (string= "el" (file-name-extension buffer-file-name)))
@@ -181,11 +181,11 @@
           (message "Removing out-of-sync elc file %s" (file-name-nondirectory elc))
           (delete-file elc))))))
 
-(defadvice magit-revert-buffers (around sanityinc/reverting activate)
-  (let ((sanityinc/vc-reverting t))
+(defadvice magit-revert-buffers (around jcf/reverting activate)
+  (let ((jcf/vc-reverting t))
     ad-do-it))
-(defadvice vc-revert-buffer-internal (around sanityinc/reverting activate)
-  (let ((sanityinc/vc-reverting t))
+(defadvice vc-revert-buffer-internal (around jcf/reverting activate)
+  (let ((jcf/vc-reverting t))
     ad-do-it))
 
 

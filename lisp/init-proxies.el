@@ -5,7 +5,7 @@
 ;;----------------------------------------------------------------------------
 (when (and *is-a-mac* (executable-find "proxy-config"))
   (defun mac-configured-proxy (proto)
-    (sanityinc/string-rtrim
+    (jcf/string-rtrim
      (shell-command-to-string
       (concat "proxy-config " (cdr (assoc-string proto '(("http" . "-h") ("https" . "-s"))))))))
 
