@@ -57,6 +57,12 @@
 (when (fboundp 'coffee-mode)
   (add-to-list 'auto-mode-alist '("\\.coffee\\.erb\\'" . coffee-mode)))
 
+
+
+;;; JSON
+(add-auto-mode 'json-mode "\\.bowerrc\\'" "\\.csslintrc\\'" "\\.jshintrc\\'")
+
+
 ;; ---------------------------------------------------------------------------
 ;; Run and interact with an inferior JS via js-comint.el
 ;; ---------------------------------------------------------------------------
