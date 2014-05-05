@@ -2,6 +2,7 @@
 ;; See also init-clojure-cider.el
 
 (require-package 'clojure-mode)
+(require-package 'clj-refactor)
 (require-package 'clojure-test-mode)
 (require-package 'cljsbuild-mode)
 (require-package 'elein)
@@ -33,6 +34,7 @@
 
 (after-load 'clojure-mode
   (add-hook 'clojure-mode-hook 'jcf/lisp-setup)
+  (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
   (add-hook 'clojure-mode-hook 'subword-mode))
 
 
