@@ -102,6 +102,7 @@
 ;; Enable desired features for all lisp modes
 ;; ----------------------------------------------------------------------------
 (require-package 'rainbow-delimiters)
+(require-package 'paredit) ; Redshank requires paredit
 (require-package 'redshank)
 (after-load 'redshank
   (diminish 'redshank-mode))
@@ -109,8 +110,7 @@
 
 (defun jcf/lisp-setup ()
   "Enable features useful in any Lisp mode."
-  (rainbow-delimiters-mode t)
-  (enable-paredit-mode)
+  (rainbow-delimiters-mode 1)
   (turn-on-eldoc-mode)
   (redshank-mode))
 

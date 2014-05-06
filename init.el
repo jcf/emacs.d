@@ -80,7 +80,8 @@
 (require 'init-rails)
 (require 'init-sql)
 
-(require 'init-paredit)
+;; (require 'init-paredit)
+(require 'init-smartparens)
 (require 'init-lisp)
 (require 'init-slime)
 (require 'init-clojure)

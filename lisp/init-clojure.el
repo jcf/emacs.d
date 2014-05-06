@@ -34,6 +34,8 @@
 
 (after-load 'clojure-mode
   (add-hook 'clojure-mode-hook 'jcf/lisp-setup)
+  ;; Undo activation of Paredit by clojure-mode
+  (add-hook 'clojure-mode-hook (lambda () (paredit-mode nil)))
   (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
   (add-hook 'clojure-mode-hook 'subword-mode))
 

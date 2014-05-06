@@ -247,9 +247,10 @@
 
 
 ;;----------------------------------------------------------------------------
-;; Shift lines up and down with M-up and M-down. When paredit is enabled,
-;; it will use those keybindings. For this reason, you might prefer to
-;; use M-S-up and M-S-down, which will work even in lisp modes.
+;; Shift lines up and down with M-up and M-down. When smartparens is
+;; enabled, it will use those keybindings. For this reason, you might
+;; prefer to use M-S-up and M-S-down, which will work even in lisp
+;; modes.
 ;;----------------------------------------------------------------------------
 (require-package 'move-text)
 (global-set-key [M-up] 'move-text-up)
