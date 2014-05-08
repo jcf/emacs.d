@@ -97,10 +97,12 @@
 
 (require 'init-dash)
 (require 'init-ledger)
+
 ;; Extra packages which don't require any configuration
 
 (require-package 'gnuplot)
 (require-package 'lua-mode)
+(require-package 'feature-mode)
 (require-package 'htmlize)
 (require-package 'dsvn)
 (when *is-a-mac*
