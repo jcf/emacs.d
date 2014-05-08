@@ -109,6 +109,11 @@
 (after-load 'ruby-mode
   (rspec-mode 1))
 
+
+;;; Bundler support
+(require-package 'bundler)
+
+
 ;;----------------------------------------------------------------------------
 ;; Ruby - my convention for heredocs containing SQL
 ;;----------------------------------------------------------------------------
