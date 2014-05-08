@@ -102,6 +102,13 @@
   (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))
 
 
+
+;;; RSpec
+(require-package 'rspec-mode)
+
+(after-load 'ruby-mode
+  (rspec-mode 1))
+
 ;;----------------------------------------------------------------------------
 ;; Ruby - my convention for heredocs containing SQL
 ;;----------------------------------------------------------------------------
