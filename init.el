@@ -49,6 +49,7 @@
 
 (require 'init-recentf)
 (require 'init-ido)
+(require 'init-projectile)
 (require 'init-hippie-expand)
 (require 'init-auto-complete)
 (require 'init-windows)
