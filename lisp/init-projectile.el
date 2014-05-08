@@ -5,5 +5,5 @@
 (require-package 'projectile)
 (projectile-global-mode)
 
-p(provide 'init-projectile)
+(provide 'init-projectile)
 ;;; init-projectile.el ends here
