@@ -63,6 +63,7 @@
 (require 'init-darcs)
 (require 'init-git)
 
+(require 'init-shell)
 (require 'init-crontab)
 (require 'init-textile)
 (require 'init-markdown)
