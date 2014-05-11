@@ -2,8 +2,9 @@ alias clear recenter 0
 alias d g diff $*
 alias du du -kh
 alias ff find-file $1
-alias g git -c color.ui=always $*
+alias g gh -c color.ui=always $*
 alias gbs git-branches $*
+alias git gh $*
 alias gp g push $*
 alias l ls -1A $*
 alias la ll -A $*
