@@ -7,11 +7,33 @@
 (require-package 'evil)
 (require-package 'evil-leader)
 (require-package 'evil-matchit)
+(require-package 'evil-numbers)
+(require-package 'evil-visualstar)
+(require-package 'goto-chg)
 (require-package 'surround)
 
 (setq evil-default-cursor t)
 (setq evil-insert-state-message nil)
 (setq evil-visual-state-message nil)
+
+(setq evil-mode-line-format 'before)
+
+(setq evil-emacs-state-cursor  '("red" box))
+(setq evil-normal-state-cursor '("gray" box))
+(setq evil-visual-state-cursor '("gray" box))
+(setq evil-insert-state-cursor '("gray" bar))
+(setq evil-motion-state-cursor '("gray" box))
+
+;; Activate evil-mode after global-evil-leader-mode (http://j.mp/1i0vLSP)
+(global-evil-leader-mode)
+(evil-mode 1)
+(global-surround-mode 1)
+(global-evil-matchit-mode 1)
+
+(define-key evil-normal-state-map (kbd "C-A")
+  'evil-numbers/inc-at-pt)
+(define-key evil-normal-state-map (kbd "C-S-A")
+  'evil-numbers/dec-at-pt)
 
 (after-load 'evil
   (define-key evil-normal-state-map "Y" (kbd "y$"))
@@ -21,6 +43,17 @@
 
   (define-key evil-normal-state-map ";" 'evil-ex)
   (define-key evil-visual-state-map ";" 'evil-ex)
+
+  ;; Magit from avsej
+  (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
+  (evil-add-hjkl-bindings magit-commit-mode-map 'emacs)
+  (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs
+    "K" 'magit-discard-item
+    "L" 'magit-key-mode-popup-logging)
+  (evil-add-hjkl-bindings magit-status-mode-map 'emacs
+    "K" 'magit-discard-item
+    "l" 'magit-key-mode-popup-logging
+    "h" 'magit-toggle-diff-refine-hunk)
 
   (defadvice evil-search-next
       (after advice-for-evil-search-next activate)
@@ -103,11 +136,6 @@
     "v" 'feature-verify-scenario-at-pos
     "V" 'feature-verify-all-scenarios-in-buffer))
 
-;; Activate evil-mode after global-evil-leader-mode (http://j.mp/1i0vLSP)
-(global-evil-leader-mode)
-(evil-mode 1)
-(global-surround-mode 1)
-(global-evil-matchit-mode 1)
 
 (provide 'init-evil)
 ;;; init-evil.el ends here
