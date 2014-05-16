@@ -112,7 +112,8 @@
   "Enable features useful in any Lisp mode."
   (rainbow-delimiters-mode 1)
   (turn-on-eldoc-mode)
-  (redshank-mode))
+  (redshank-mode)
+  (disable-paredit-mode))
 
 (defun jcf/emacs-lisp-setup ()
   "Enable features useful when working with elisp."
