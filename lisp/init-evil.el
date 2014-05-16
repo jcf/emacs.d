@@ -30,12 +30,14 @@
 (global-surround-mode 1)
 (global-evil-matchit-mode 1)
 
-(define-key evil-normal-state-map (kbd "C-A")
-  'evil-numbers/inc-at-pt)
-(define-key evil-normal-state-map (kbd "C-S-A")
-  'evil-numbers/dec-at-pt)
-
 (after-load 'evil
+  (define-key evil-motion-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
+
+  (define-key evil-normal-state-map (kbd "C-A")
+    'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map (kbd "C-S-A")
+    'evil-numbers/dec-at-pt)
+
   (define-key evil-normal-state-map "Y" (kbd "y$"))
   (define-key evil-normal-state-map (kbd "SPC") 'evil-repeat-find-char)
   (define-key

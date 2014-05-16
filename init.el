@@ -59,6 +59,7 @@
 (require 'init-mmm)
 
 (require 'init-editing-utils)
+(require 'init-tags)
 
 (require 'init-vc)
 (require 'init-darcs)
