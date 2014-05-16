@@ -104,6 +104,7 @@
 
 ;; Extra packages which don't require any configuration
 
+(require-package 'google-this)
 (require-package 'dsvn)
 (require-package 'feature-mode)
 (require-package 'gnuplot)
