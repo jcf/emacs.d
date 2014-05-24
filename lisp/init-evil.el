@@ -109,7 +109,7 @@
     "gl" 'magit-log
     "gs" 'magit-status
     "pb" 'projectile-switch-to-buffer
-    "pd" 'projectile-dired
+    "pd" 'projectile-switch-project
     "pf" 'projectile-find-file
     "w"  'save-buffer
     "x"  'smex)
