@@ -104,10 +104,11 @@
 
 ;; Extra packages which don't require any configuration
 
-(require-package 'google-this)
 (require-package 'dsvn)
 (require-package 'feature-mode)
 (require-package 'gnuplot)
+(require-package 'go-mode)
+(require-package 'google-this)
 (require-package 'htmlize)
 (require-package 'lua-mode)
 (require-package 'regex-tool)
