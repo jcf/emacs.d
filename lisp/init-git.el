@@ -82,6 +82,7 @@
 
 ;;; github
 
+(require-package 'gh)
 (require-package 'yagist)
 (require-package 'github-browse-file)
 (require-package 'bug-reference-github)
