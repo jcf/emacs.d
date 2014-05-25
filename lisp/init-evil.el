@@ -1,7 +1,7 @@
 ;;; init-evil.el --- Sets up Evil
 ;;; Commentary:
-;; Loads up Evil, activates it, and configures it with custom leading
-;; bindings, and more.
+;;; Loads up Evil, activates it, and configures it with custom leading
+;;; bindings, and more.
 ;;; Code:
 
 (require-package 'evil)
