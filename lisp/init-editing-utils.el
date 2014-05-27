@@ -366,5 +366,8 @@ With arg N, insert N newlines."
 (guide-key-mode 1)
 (diminish 'guide-key-mode)
 
+
+(require-package 'editorconfig)
+(add-to-list 'auto-mode-alist '("\\.editorconfig\\'" . conf-unix-mode))
 
 (provide 'init-editing-utils)
