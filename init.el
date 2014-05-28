@@ -15,7 +15,7 @@
 (defconst *is-a-mac* (eq system-type 'darwin))
 
 ;;----------------------------------------------------------------------------
-;; Bootstrap config
+;; Bootstrap configuration
 ;;----------------------------------------------------------------------------
 (require 'init-compat)
 (require 'init-utils)
