@@ -47,7 +47,7 @@
 
 ;;; Whitespace
 
-(defun sanityinc/no-trailing-whitespace ()
+(defun jcf/no-trailing-whitespace ()
   "Turn off display of trailing whitespace in this buffer."
   (setq show-trailing-whitespace nil))
 
@@ -59,7 +59,7 @@
                 compilation-mode-hook
                 twittering-mode-hook
                 minibuffer-setup-hook))
-  (add-hook hook #'sanityinc/no-trailing-whitespace))
+  (add-hook hook #'jcf/no-trailing-whitespace))
 
 
 (require-package 'whitespace-cleanup-mode)
@@ -69,13 +69,13 @@
 ;;; Newline behaviour
 
 (global-set-key (kbd "RET") 'newline-and-indent)
-(defun sanityinc/newline-at-end-of-line ()
+(defun jcf/newline-at-end-of-line ()
   "Move to end of line, enter a newline, and reindent."
   (interactive)
   (move-end-of-line 1)
   (newline-and-indent))
 
-(global-set-key (kbd "<S-return>") 'sanityinc/newline-at-end-of-line)
+(global-set-key (kbd "<S-return>") 'jcf/newline-at-end-of-line)
 
 
 
