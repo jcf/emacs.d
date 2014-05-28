@@ -6,6 +6,7 @@
 (require-package 'clojure-test-mode)
 (require-package 'cljsbuild-mode)
 (require-package 'elein)
+(require-package 'typed-clojure-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Slime with Clojure
@@ -37,6 +38,7 @@
   ;; Undo activation of Paredit by clojure-mode
   (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
   (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+  (add-hook 'clojure-mode-hook 'typed-clojure-mode)
   (add-hook 'clojure-mode-hook 'subword-mode))
 
 
