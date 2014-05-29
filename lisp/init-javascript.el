@@ -2,7 +2,8 @@
 (when (>= emacs-major-version 24)
   (require-package 'js2-mode)
   (require-package 'ac-js2)
-  (require-package 'coffee-mode))
+  (require-package 'coffee-mode)
+  (require-package 'jsx-mode))
 (require-package 'js-comint)
 
 (defcustom preferred-javascript-mode
@@ -57,6 +58,10 @@
 (when (fboundp 'coffee-mode)
   (add-to-list 'auto-mode-alist '("\\.coffee\\.erb\\'" . coffee-mode)))
 
+
+
+;;; JSX
+(add-auto-mode 'jsx-mode "\\.jsx\\'")
 
 
 ;;; JSON
