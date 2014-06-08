@@ -17,7 +17,5 @@
                      (member (file-name-nondirectory buffer-file-name) jcf-pretzo-files))
                 (sh-set-shell "zsh"))))
 
-(add-hook 'eshell-mode-hook '(lambda () (setq show-trailing-whitespace nil)))
-
 (provide 'init-shell)
 ;;; init-shell.el ends here
