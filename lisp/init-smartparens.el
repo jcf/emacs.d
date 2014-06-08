@@ -4,9 +4,10 @@
 ;;; Code:
 (require-package 'smartparens)
 
+;; I don't need paredit, but some package developers do!
+(require-package 'paredit)
+
 (after-load 'smartparens
-  ;; We don't need paredit too
-  (require 'paredit)
   (disable-paredit-mode))
 
 ;; Enable smartparens everywhere
