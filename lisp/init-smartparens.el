@@ -8,6 +8,7 @@
 (require-package 'paredit)
 
 (after-load 'smartparens
+  (require 'paredit)
   (disable-paredit-mode))
 
 ;; Enable smartparens everywhere
