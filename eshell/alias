@@ -4,6 +4,7 @@ alias du du -kh
 alias e find-file $1
 alias ff find-file $1
 alias g gh -c color.ui=always $*
+alias ga gh add $*
 alias gbs git-branches $*
 alias git gh $*
 alias gp g push $*
