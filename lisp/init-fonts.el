@@ -50,6 +50,7 @@ by the :height face attribute."
 (global-set-key (kbd "C-M-=") 'jcf/increase-default-font-height)
 (global-set-key (kbd "C-M--") 'jcf/decrease-default-font-height)
 
-
+(if *is-a-mac*
+    (set-frame-font "-*-Source Code Pro for Powerline-normal-normal-normal-*-12-*-*-*-m-0-iso10646-1"))
 
 (provide 'init-fonts)
