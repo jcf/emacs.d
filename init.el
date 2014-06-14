@@ -119,9 +119,12 @@
 ;;----------------------------------------------------------------------------
 ;; Allow access from emacsclient
 ;;----------------------------------------------------------------------------
-(require 'server)
-(unless (server-running-p)
-  (server-start))
+(defun jcf/start-server ()
+  (require 'server)
+  (unless (server-running-p)
+    (server-start)))
+
+(add-hook 'after-init-hook 'jcf/start-server)
 
 
 ;;----------------------------------------------------------------------------
