@@ -47,6 +47,7 @@
 (require 'init-ibuffer)
 (require 'init-flycheck)
 (require 'init-eshell)
+(require 'init-erc)
 
 (require 'init-recentf)
 (require 'init-ido)
