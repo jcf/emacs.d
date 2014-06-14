@@ -45,6 +45,12 @@
 (define-key evil-normal-state-map ";" 'evil-ex)
 (define-key evil-visual-state-map ";" 'evil-ex)
 
+;; C-hjkl to move around windows
+(define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+(define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+(define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+(define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+
 ;; Magit from avsej
 (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
 (evil-add-hjkl-bindings magit-commit-mode-map 'emacs)
@@ -98,12 +104,15 @@
   "db" 'kill-buffer
   "dw" 'delete-window
   "eb" 'eval-buffer
+  "ed" 'eval-defun
   "ee" 'eval-expression
+  "es" 'eval-last-sexp
   "er" 'eval-region
   "fb" 'ido-switch-buffer
   "fd" 'ido-dired
   "ff" 'ido-find-file
   "gb" 'magit-blame-mode
+  "gc" 'magit-commit
   "gl" 'magit-log
   "gs" 'magit-status
   "pb" 'projectile-switch-to-buffer
@@ -136,6 +145,10 @@
   "v" 'feature-verify-scenario-at-pos
   "V" 'feature-verify-all-scenarios-in-buffer)
 
+;; C-n and C-p to select completions
+(after-load 'auto-complete
+  (define-key ac-completing-map (kbd "C-n") 'ac-next)
+  (define-key ac-completing-map (kbd "C-p") 'ac-previous))
 
 (provide 'init-evil)
 ;;; init-evil.el ends here
