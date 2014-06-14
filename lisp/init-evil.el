@@ -96,13 +96,31 @@
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
+(defun jcf/delete-window ()
+  "Delete the current window, and rebalance remaining windows."
+  (interactive)
+  (delete-window)
+  (balance-windows))
+
+(defun jcf/split-window-horizontally ()
+  "Create a new horizontal split and rebalance windows."
+  (interactive)
+  (split-window-horizontally)
+  (balance-windows))
+
+(defun jcf/split-window-vertically ()
+  "Create a new vertical split and rebalance windows."
+  (interactive)
+  (split-window-vertically)
+  (balance-windows))
+
 (evil-leader/set-leader ",")
 
 (evil-leader/set-key
   "a"  'ido-find-alternate-file
   "b"  'ibuffer
   "db" 'kill-buffer
-  "dw" 'delete-window
+  "dw" 'jcf/delete-window
   "eb" 'eval-buffer
   "ed" 'eval-defun
   "ee" 'eval-expression
@@ -122,6 +140,8 @@
   "pb" 'projectile-switch-to-buffer
   "pd" 'projectile-switch-project
   "pf" 'projectile-find-file
+  "ss" 'jcf/split-window-horizontally
+  "sv" 'jcf/split-window-vertically
   "w"  'save-buffer
   "x"  'smex)
 
