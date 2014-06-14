@@ -115,6 +115,10 @@
   "gc" 'magit-commit
   "gl" 'magit-log
   "gs" 'magit-status
+  "hf" 'describe-function
+  "hm" 'describe-mode
+  "hp" 'describe-package
+  "hv" 'describe-variable
   "pb" 'projectile-switch-to-buffer
   "pd" 'projectile-switch-project
   "pf" 'projectile-find-file
