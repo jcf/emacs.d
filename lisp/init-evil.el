@@ -15,8 +15,9 @@
 (setq evil-default-cursor t)
 (setq evil-insert-state-message nil)
 (setq evil-visual-state-message nil)
-
 (setq evil-mode-line-format 'before)
+
+(setq evil-search-module 'evil-search)
 
 (setq evil-emacs-state-cursor  '("red" box))
 (setq evil-normal-state-cursor '("gray" box))
