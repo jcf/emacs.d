@@ -5,8 +5,11 @@
 ;;; Code:
 
 (require-package 'evil)
+(require-package 'evil-exchange)
+(require-package 'evil-indent-textobject)
 (require-package 'evil-leader)
 (require-package 'evil-matchit)
+(require-package 'evil-nerd-commenter)
 (require-package 'evil-numbers)
 (require-package 'evil-visualstar)
 (require-package 'goto-chg)
@@ -30,6 +33,7 @@
 (evil-mode 1)
 (global-surround-mode 1)
 (global-evil-matchit-mode 1)
+(evil-exchange-install)
 
 (define-key evil-motion-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
 
