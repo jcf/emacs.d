@@ -122,7 +122,7 @@
 (evil-leader/set-leader ",")
 
 (evil-leader/set-key
-  "a"  'ido-find-alternate-file
+  "a"  'projectile-toggle-between-implementation-and-test
   "b"  'ibuffer
   "db" 'kill-buffer
   "dw" 'jcf/delete-window
@@ -155,7 +155,6 @@
   "s" 'org-sort-list)
 
 (evil-leader/set-key-for-mode 'clojure-mode
-  "a" 'clojure-jump-between-tests-and-code
   "v" 'clojure-test-run-test
   "V" 'clojure-test-run-tests
   "cc" 'cider-connect
@@ -166,7 +165,6 @@
   "ru" 'cljr-add-use-to-ns)
 
 (evil-leader/set-key-for-mode 'ruby-mode
-  "a" 'rspec-toggle-spec-and-target
   "v" 'rspec-verify
   "V" 'rspec-verify-all)
 
