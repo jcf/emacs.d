@@ -2,6 +2,7 @@
 (require-package 'emacs '(24))
 
 (require-package 'cider)
+(require-package 'slamhound)
 (require-package 'ac-nrepl)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
