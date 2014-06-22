@@ -1,7 +1,7 @@
 # emacs.d
 
 This is my Emacs config. It's setup to work a number of different
-languages, and use Vim-style bindings via the excellent evil-mode.
+languages, and use Vim-style bindings via the excellent [evil-mode][].
 
 ## Requirements
 
@@ -20,3 +20,5 @@ git clone https://github.com/jcf/emacs.d.git ~/.emacs.d
 
 Upon starting up Emacs for the first time, further third-party
 packages will be automatically downloaded and installed.
+
+[evil-mode]: https://github.com/emacsmirror/evil
