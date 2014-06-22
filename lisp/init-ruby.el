@@ -137,4 +137,4 @@
 
 
 
-(provide 'init-ruby-mode)
+(provide 'init-ruby)

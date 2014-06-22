@@ -4,4 +4,4 @@
               auto-mode-alist))
 
 
-(provide 'init-python-mode)
+(provide 'init-python)
