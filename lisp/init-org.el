@@ -1,3 +1,6 @@
+;;; init-org.el --- Configures org-mode
+;;; Commentary:
+;;; Code:
 (when (< emacs-major-version 24)
   (require-package 'org))
 (require-package 'org-fstree)
@@ -107,3 +110,4 @@
     (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
 
 (provide 'init-org)
+;;; init-org.el ends here
