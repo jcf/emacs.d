@@ -7,6 +7,8 @@
 (when *is-a-mac*
   (require-package 'org-mac-link)
   (autoload 'org-mac-grab-link "org-mac-link" nil t)
+  (setq org-directory "~/Dropbox/Org")
+  (setq org-agenda-files 'org-directory)
   (require-package 'org-mac-iCal))
 
 
