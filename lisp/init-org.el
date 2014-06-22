@@ -7,7 +7,6 @@
 (when *is-a-mac*
   (require-package 'org-mac-link)
   (autoload 'org-mac-grab-link "org-mac-link" nil t)
-  (setq org-directory "~/Dropbox/Org")
   (require-package 'org-mac-iCal))
 
 
@@ -25,6 +24,11 @@
       org-fast-tag-selection-single-key 'expert
       org-export-kill-product-buffer-when-displayed t
       org-tags-column 80)
+
+;; Where to keep org files
+(setq org-directory "~/Dropbox/Org"
+      org-agenda-files '("~/Dropbox/Org/")
+      org-default-notes-file "~/Dropbox/Org/refile.org")
 
 
 ; Refile targets include this file and any file contributing to the agenda - up to 5 levels deep
