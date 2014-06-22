@@ -25,6 +25,7 @@ limited to:
 - [Javascript][]
 - [Lisp][]
 - [Markdown][]
+- [Python][]
 - [Ruby][]
 - [Ruby on Rails][]
 - [Textile][]
@@ -57,6 +58,7 @@ packages will be automatically downloaded and installed.
 [Javascript]: https://github.com/jcf/emacs.d/blob/master/lisp/init-javascript.el
 [Lisp]: https://github.com/jcf/emacs.d/blob/master/lisp/init-lisp.el
 [Markdown]: https://github.com/jcf/emacs.d/blob/master/lisp/init-markdown.el
+[Python]: https://github.com/jcf/emacs.d/blob/master/lisp/init-python.el
 [Ruby]: https://github.com/jcf/emacs.d/blob/master/lisp/init-ruby.el
 [Ruby on Rails]: https://github.com/jcf/emacs.d/blob/master/lisp/init-rails.el
 [Textile]: https://github.com/jcf/emacs.d/blob/master/lisp/init-textile.el
