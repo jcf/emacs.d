@@ -33,7 +33,7 @@
 ;; conditionally enable it according to whether gpg is available. We
 ;; re-run this check once $PATH has been configured
 (defun jcf/package-maybe-enable-signatures ()
-  (setq package-check-signature (if (executable-find "gpg") 'allow-unsigned)))
+  (setq package-check-signature (when (executable-find "gpg") 'allow-unsigned)))
 
 (jcf/package-maybe-enable-signatures)
 (after-load 'init-exec-path
