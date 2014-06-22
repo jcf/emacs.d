@@ -50,13 +50,13 @@ packages will be automatically downloaded and installed.
 [evil-mode]: https://github.com/emacsmirror/evil
 
 [Clojure]: https://github.com/jcf/emacs.d/blob/master/lisp/init-clojure.el
-[Erlang][]: https://github.com/jcf/emacs.d/blob/master/lisp/init-erlang.el
-[Go][]: https://github.com/jcf/emacs.d/blob/master/lisp/init-go.el
-[HTML][]: https://github.com/jcf/emacs.d/blob/master/lisp/init-html.el
-[Haskell][]: https://github.com/jcf/emacs.d/blob/master/lisp/init-haskell.el
-[Javascript][]: https://github.com/jcf/emacs.d/blob/master/lisp/init-javascript.el
-[Lisp][]: https://github.com/jcf/emacs.d/blob/master/lisp/init-lisp.el
-[Markdown][]: https://github.com/jcf/emacs.d/blob/master/lisp/init-markdown.el
-[Ruby][]: https://github.com/jcf/emacs.d/blob/master/lisp/init-ruby.el
-[Ruby on Rails][]: https://github.com/jcf/emacs.d/blob/master/lisp/init-rails.el
-[Textile][]: https://github.com/jcf/emacs.d/blob/master/lisp/init-textile.el
+[Erlang]: https://github.com/jcf/emacs.d/blob/master/lisp/init-erlang.el
+[Go]: https://github.com/jcf/emacs.d/blob/master/lisp/init-go.el
+[HTML]: https://github.com/jcf/emacs.d/blob/master/lisp/init-html.el
+[Haskell]: https://github.com/jcf/emacs.d/blob/master/lisp/init-haskell.el
+[Javascript]: https://github.com/jcf/emacs.d/blob/master/lisp/init-javascript.el
+[Lisp]: https://github.com/jcf/emacs.d/blob/master/lisp/init-lisp.el
+[Markdown]: https://github.com/jcf/emacs.d/blob/master/lisp/init-markdown.el
+[Ruby]: https://github.com/jcf/emacs.d/blob/master/lisp/init-ruby.el
+[Ruby on Rails]: https://github.com/jcf/emacs.d/blob/master/lisp/init-rails.el
+[Textile]: https://github.com/jcf/emacs.d/blob/master/lisp/init-textile.el
