@@ -145,6 +145,8 @@
   "pb" 'projectile-switch-to-buffer
   "pd" 'projectile-switch-project
   "pf" 'projectile-find-file
+  "sd" 'jcf/delete-window
+  "sf" 'delete-other-windows
   "ss" 'jcf/split-window-horizontally
   "sv" 'jcf/split-window-vertically
   "w"  'save-buffer
