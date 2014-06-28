@@ -13,7 +13,7 @@
 (require-package 'evil-numbers)
 (require-package 'evil-visualstar)
 (require-package 'goto-chg)
-(require-package 'surround)
+(require-package 'evil-surround)
 
 (setq evil-default-cursor t)
 (setq evil-insert-state-message nil)
@@ -31,7 +31,7 @@
 ;; Activate evil-mode after global-evil-leader-mode (http://j.mp/1i0vLSP)
 (global-evil-leader-mode)
 (evil-mode 1)
-(global-surround-mode 1)
+(global-evil-surround-mode 1)
 (global-evil-matchit-mode 1)
 (evil-exchange-install)
 
