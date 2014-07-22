@@ -5,6 +5,7 @@
 (mapc #'delete-file
       (file-expand-wildcards (concat user-emacs-directory "elpa/slime-2*/contrib/*.elc")))
 
+(require-package 'slime-company)
 (require-package 'hippie-expand-slime)
 
 
@@ -12,13 +13,12 @@
 
 (defun jcf/slime-setup ()
   "Mode setup function for slime lisp buffers."
-  (set-up-slime-hippie-expand)
-  (set-up-slime-ac t))
+  (set-up-slime-hippie-expand))
 
 (after-load 'slime
   (setq slime-protocol-version 'ignore)
   (setq slime-net-coding-system 'utf-8-unix)
-  (slime-setup '(slime-repl slime-fuzzy))
+  (slime-setup '(slime-repl slime-fuzzy slime-company))
   (setq slime-complete-symbol*-fancy t)
   (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
   (add-hook 'slime-mode-hook 'jcf/slime-setup))
