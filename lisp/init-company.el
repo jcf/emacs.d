@@ -4,16 +4,18 @@
 (require-package 'company)
 (add-hook 'after-init-hook 'global-company-mode)
 
-(require-package 'company-go)
-(require-package 'company-inf-ruby)
-(require-package 'company-tern)
+(defvar jcf/completion-backends
+  '(company-go company-inf-ruby company-tern))
 
-;; Add completion backends
+(dolist (package jcf/completion-backends)
+  (require-package package))
+
 (after-load 'company
   (diminish 'company-mode)
-  (add-to-list 'company-backends 'company-go)
-  (add-to-list 'company-backends 'company-inf-ruby)
-  (add-to-list 'company-backends 'company-tern))
+
+  ;; Add completion backends
+  (dolist (backend jcf/completion-backends)
+    (add-to-list 'company-backends backend)))
 
 (provide 'init-company)
 ;;; init-company.el ends here
