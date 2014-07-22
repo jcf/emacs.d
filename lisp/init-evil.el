@@ -14,6 +14,7 @@
 (require-package 'evil-visualstar)
 (require-package 'goto-chg)
 (require-package 'evil-surround)
+(require-package 'evil-jumper)
 
 (setq evil-default-cursor t)
 (setq evil-insert-state-message nil)
@@ -34,6 +35,7 @@
 (global-evil-surround-mode 1)
 (global-evil-matchit-mode 1)
 (evil-exchange-install)
+(require 'evil-jumper)
 
 (define-key evil-motion-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
 
