@@ -53,7 +53,8 @@
 (require 'init-ido)
 (require 'init-projectile)
 (require 'init-hippie-expand)
-(require 'init-auto-complete)
+(require 'init-company)
+
 (require 'init-snippets)
 (require 'init-windows)
 (require 'init-sessions)

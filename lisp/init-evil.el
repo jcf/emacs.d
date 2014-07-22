@@ -174,10 +174,5 @@
   "v" 'feature-verify-scenario-at-pos
   "V" 'feature-verify-all-scenarios-in-buffer)
 
-;; C-n and C-p to select completions
-(after-load 'auto-complete
-  (define-key ac-completing-map (kbd "C-n") 'ac-next)
-  (define-key ac-completing-map (kbd "C-p") 'ac-previous))
-
 (provide 'init-evil)
 ;;; init-evil.el ends here
