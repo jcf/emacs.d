@@ -110,9 +110,10 @@
 
 (defun jcf/lisp-setup ()
   "Enable features useful in any Lisp mode."
-  (rainbow-delimiters-mode 1)
   (turn-on-eldoc-mode)
   (redshank-mode)
+  (smartparens-strict-mode +1)
+  (rainbow-delimiters-mode +1)
   (disable-paredit-mode))
 
 (defun jcf/emacs-lisp-setup ()
