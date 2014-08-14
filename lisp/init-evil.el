@@ -135,7 +135,8 @@
   "er" 'eval-region
   "fb" 'ido-switch-buffer
   "fd" 'ido-dired
-  "ff" 'ido-find-file
+  "ff" 'dired-jump
+  "fo" 'ido-find-file
   "gb" 'magit-blame-mode
   "gc" 'magit-commit
   "gl" 'magit-log
