@@ -25,10 +25,19 @@
 
 (sp-use-paredit-bindings)
 
+(sp-with-modes '(markdown-mode gfm-mode rst-mode)
+  (sp-local-pair "*" "*" :bind "C-*")
+  (sp-local-tag "2" "**" "**")
+  (sp-local-tag "s" "```scheme" "```")
+  (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+
+(sp-with-modes '(html-mode sgml-mode)
+  (sp-local-pair "<" ">"))
+
+;; Close a backtick with another backtick in clojure-mode
+(sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
+
 (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p))
-(sp-local-tag '(sgml-mode html-mode rhtml-mode)
-              "<" "<_>" "</_>"
-              :transform 'sp-match-sgml-tags)
 
 (provide 'init-smartparens)
 ;;; init-smartparens ends here
