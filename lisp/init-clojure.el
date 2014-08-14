@@ -1,6 +1,7 @@
-;; Basic clojure support, even in Emacs 23
-;; See also init-clojure-cider.el
-
+;;; init-clojure.el --- Basic clojure support, even in Emacs 23
+;;; Commentary:
+;;; See also init-clojure-cider.el
+;;; Code:
 (require-package 'clojure-mode)
 (require-package 'clj-refactor)
 (require-package 'clojure-test-mode)
@@ -49,3 +50,4 @@
 
 
 (provide 'init-clojure)
+;;; init-clojure ends here
