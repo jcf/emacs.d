@@ -5,6 +5,8 @@
   (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
     (add-hook hook 'rainbow-mode)))
 
+(setq css-indent-offset 2)
+
 
 ;;; Embedding in html
 (require-package 'mmm-mode)
