@@ -165,6 +165,10 @@
   "cc" 'cider-connect
   "cj" 'cider-jack-in
   "cq" 'cider-quit
+  "eb" 'cider-eval-buffer
+  "ed" 'cider-eval-defun-at-point
+  "es" 'cider-eval-last-sexp
+  "er" 'cider-eval-region
   "rs" 'cljr-sort-ns
   "rr" 'cljr-add-require-to-ns
   "ru" 'cljr-add-use-to-ns)
