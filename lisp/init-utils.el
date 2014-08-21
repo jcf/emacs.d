@@ -57,7 +57,7 @@
 ;;----------------------------------------------------------------------------
 ;; Rename the current file
 ;;----------------------------------------------------------------------------
-(defun prelude-rename-buffer-and-file ()
+(defun rename-buffer-and-file ()
   "Rename current buffer and if the buffer is visiting a file, rename it too."
   (interactive)
   (let ((filename (buffer-file-name)))
