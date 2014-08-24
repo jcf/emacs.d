@@ -25,6 +25,9 @@
       org-export-kill-product-buffer-when-displayed t
       org-tags-column 80)
 
+;; Syntax highlight inline code blocks
+(setq org-src-fontify-natively t)
+
 ;; Where to keep org files
 (setq org-directory "~/Dropbox/Org"
       org-agenda-files '("~/Dropbox/Org/")
