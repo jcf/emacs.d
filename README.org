@@ -2096,6 +2096,13 @@
      ;; Syntax highlight inline code blocks
      (setq org-src-fontify-natively t)
 
+     ;; Workaround issues with exporting HTML.
+     ;;
+     ;;     org-html-fontify-code: Wrong number of arguments:
+     ;;       #[(_beg _end) "À " [font-lock-fontify-buffer] 1], 0
+     (defun org-font-lock-ensure ()
+       (font-lock-fontify-buffer))
+
      ;; Where to keep org files
      (setq org-directory "~/Dropbox/Org"
            org-agenda-files '("~/Dropbox/Org/")
