@@ -89,47 +89,46 @@
      (defconst *is-a-mac* (eq system-type 'darwin))
     #+END_SRC
 ** Compatibility
-   #+BEGIN_SRC emacs-lisp
-     (when (eval-when-compile (< emacs-major-version 24))
-       (defun string-prefix-p (str1 str2 &optional ignore-case)
-         "Return non-nil if STR1 is a prefix of STR2.  If IGNORE-CASE is
-     non-nil, the comparison is done without paying attention to case
-     differences."
-         (eq t (compare-strings str1 nil nil
-                                str2 0 (length str1) ignore-case))))
+*** Backport string-prefix-p
+    #+BEGIN_SRC emacs-lisp
+      (when (eval-when-compile (< emacs-major-version 24))
+        (defun string-prefix-p (str1 str2 &optional ignore-case)
+          "Return non-nil if STR1 is a prefix of STR2.  If IGNORE-CASE is
+      non-nil, the comparison is done without paying attention to case
+      differences."
+          (eq t (compare-strings str1 nil nil
+                                 str2 0 (length str1) ignore-case))))
+    #+END_SRC
+*** Enable newer packages in older Emacs
+    Allow recent packages to safely pass an arg to
+    'called-interactively-p in older Emacsen, including 23.1.
+
+    #+BEGIN_SRC emacs-lisp
+      (let ((fn (symbol-function 'called-interactively-p)))
+        (when (and (subrp fn) (zerop (cdr-safe (subr-arity fn))))
+          (message "Warning: overriding called-interactively-p to support an argument.")
+          (fset 'jcf/called-interactively-p fn)
+          (defun called-interactively-p (&optional kind)
+            "Overridden; see `jcf/called-interactively-p' for the wrapped function."
+            (jcf/called-interactively-p))))
    #+END_SRC
+*** Add ~TRASH~ support to ~delete-directory~
+    Help package.el work in older Emacsen, where there's no ~TRASH~
+    arg for ~'delete-directory~.
 
-   Allow recent packages to safely pass an arg to
-   'called-interactively-p in older Emacsen, including 23.1.
-
-   #+BEGIN_SRC emacs-lisp
-     (let ((fn (symbol-function 'called-interactively-p)))
-       (when (and (subrp fn) (zerop (cdr-safe (subr-arity fn))))
-         (message "Warning: overriding called-interactively-p to support an argument.")
-         (fset 'jcf/called-interactively-p fn)
-         (defun called-interactively-p (&optional kind)
-           "Overridden; see `jcf/called-interactively-p' for the wrapped function."
-           (jcf/called-interactively-p))))
-   #+END_SRC
-
-   Help package.el work in older Emacsen, where there's no ~TRASH~ arg
-   for ~'delete-directory~.
-
-   #+BEGIN_SRC emacs-lisp
-     (when (eval-when-compile (< emacs-major-version 24))
-       (message "Warning: overriding delete-directory to support TRASH argument.")
-       (fset 'jcf/delete-directory (symbol-function 'delete-directory))
-       (defun delete-directory (directory &optional recursive trash)
-         "Overridden: see `jcf/delete-directory' for the wrapped function"
-         (jcf/delete-directory directory recursive)))
-   #+END_SRC
-
-   Restore removed var alias, used by ruby-electric-brace and others.
-
-   #+BEGIN_SRC emacs-lisp
-     (unless (boundp 'last-command-char)
-       (defvaralias 'last-command-char 'last-command-event))
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (when (eval-when-compile (< emacs-major-version 24))
+        (message "Warning: overriding delete-directory to support TRASH argument.")
+        (fset 'jcf/delete-directory (symbol-function 'delete-directory))
+        (defun delete-directory (directory &optional recursive trash)
+          "Overridden: see `jcf/delete-directory' for the wrapped function"
+          (jcf/delete-directory directory recursive)))
+    #+END_SRC
+*** Restore removed var alias, used by ruby-electric-brace and others.
+    #+BEGIN_SRC emacs-lisp
+      (unless (boundp 'last-command-char)
+        (defvaralias 'last-command-char 'last-command-event))
+    #+END_SRC
 ** Utilities
 *** Evaluate a variable number of expressions after a feature has been loaded
    #+BEGIN_SRC emacs-lisp
