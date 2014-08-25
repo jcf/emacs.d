@@ -790,6 +790,139 @@
    #+BEGIN_SRC emacs-lisp
      (require-package 'evil)
    #+END_SRC
+** Extensions
+   We load extensions first because they need to be installed before
+   we can configure them.
+*** Exchange
+    An [[https://github.com/Dewdrops/evil-exchange][Emacs port]] of [[https://github.com/tommcdo/vim-exchange][vim-exchange]], designed to make it easier to
+    exchange two regions.
+
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'evil-exchange)
+    #+END_SRC
+*** Indent Textobject
+    [[https://github.com/cofi/evil-indent-textobject][evil-indent-text-object]] defines textobjects based on indentation.
+
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'evil-indent-textobject)
+    #+END_SRC
+*** Leader
+    [[https://github.com/cofi/evil-leader][evil-leader]] adds support for Vim's venerable ~<leader>~ key, which
+    any Vim user will be very accustomed to.
+
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'evil-leader)
+      (setq evil-leader/leader ",")
+
+      (evil-leader/set-key
+        "a"  'projectile-toggle-between-implementation-and-test
+        "b"  'ibuffer
+        "db" 'kill-buffer
+        "dw" 'jcf/delete-window
+        "eb" 'eval-buffer
+        "ed" 'eval-defun
+        "ee" 'eval-expression
+        "es" 'eval-last-sexp
+        "er" 'eval-region
+        "fb" 'ido-switch-buffer
+        "fd" 'ido-dired
+        "ff" 'ido-find-file
+        "fj" 'dired-jump
+        "gb" 'magit-blame-mode
+        "gc" 'magit-commit
+        "gl" 'magit-log
+        "gs" 'magit-status
+        "hf" 'describe-function
+        "hm" 'describe-mode
+        "hp" 'describe-package
+        "hv" 'describe-variable
+        "pb" 'projectile-switch-to-buffer
+        "pd" 'projectile-switch-project
+        "pf" 'projectile-find-file
+        "sd" 'jcf/delete-window
+        "sf" 'delete-other-windows
+        "ss" 'jcf/split-window-horizontally
+        "sv" 'jcf/split-window-vertically
+        "w"  'save-buffer
+        "x"  'smex)
+    #+END_SRC
+**** ~org-mode~ bindings
+    #+BEGIN_SRC emacs-lisp
+      (evil-leader/set-key-for-mode 'org-mode
+        "ot" 'org-todo
+        "os" 'org-sort-list)
+    #+END_SRC
+**** ~clojure-mode~ bindings
+    #+BEGIN_SRC emacs-lisp
+      (evil-leader/set-key-for-mode 'clojure-mode
+        "v" 'clojure-test-run-test
+        "V" 'clojure-test-run-tests
+        "cc" 'cider-connect
+        "cj" 'cider-jack-in
+        "cq" 'cider-quit
+        "eb" 'cider-eval-buffer
+        "ed" 'cider-eval-defun-at-point
+        "es" 'cider-eval-last-sexp
+        "er" 'cider-eval-region
+        "rs" 'cljr-sort-ns
+        "rr" 'cljr-add-require-to-ns
+        "ru" 'cljr-add-use-to-ns)
+    #+END_SRC
+**** ~ruby-mode~ bindings
+    #+BEGIN_SRC emacs-lisp
+      (evil-leader/set-key-for-mode 'ruby-mode
+        "v" 'rspec-verify
+        "V" 'rspec-verify-all)
+    #+END_SRC
+**** ~feature-mode~ bindings
+    #+BEGIN_SRC emacs-lisp
+      (evil-leader/set-key-for-mode 'feature-mode
+        "v" 'feature-verify-scenario-at-pos
+        "V" 'feature-verify-all-scenarios-in-buffer)
+    #+END_SRC
+*** Extended ~%~ matches
+    [[https://github.com/redguardtoo/evil-matchit][evil-matchit]] is a port of [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] by Benji Fisher. Matchit
+    enhances ~%~ to match HTML tags, ~do~/~end~ blocks and more.
+
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'evil-matchit)
+    #+END_SRC
+*** NERD commenter
+    I tend to use Emacs' built-in ~comment-dwim~ more than
+    [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]], but it's here in case I decide to regress.
+
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'evil-nerd-commenter)
+    #+END_SRC
+*** Numbers
+    Another one from [[https://github.com/cofi][Michael Markert]] (perhaps better known as cofi),
+    [[https://github.com/cofi/evil-numbers][evil-numbers]] enhances ~C-a~ and ~C-x~ in a similar way to Tim
+    Pope's [[https://github.com/tpope/vim-speeddating][speeddating.vim]].
+
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'evil-numbers)
+
+      (define-key evil-normal-state-map (kbd "C-A")
+        'evil-numbers/inc-at-pt)
+      (define-key evil-normal-state-map (kbd "C-S-A")
+        'evil-numbers/dec-at-pt)
+    #+END_SRC
+*** Visual star
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'evil-visualstar)
+    #+END_SRC
+*** ~goto-chg~
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'goto-chg)
+    #+END_SRC
+*** Surround
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'evil-surround)
+    #+END_SRC
+*** Jumper
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'evil-jumper)
+    #+END_SRC
 ** Fire up the modes
    Activates all of the evil extensions installed above, making sure
    to [[http://j.mp/1i0vLSP][load evil-leader]] before evil itself.
@@ -915,137 +1048,6 @@
       (defadvice evil-search-previous
           (after advice-for-evil-search-previous activate)
         (evil-scroll-line-to-center (line-number-at-pos)))
-    #+END_SRC
-** Extensions
-*** Exchange
-    An [[https://github.com/Dewdrops/evil-exchange][Emacs port]] of [[https://github.com/tommcdo/vim-exchange][vim-exchange]], designed to make it easier to
-    exchange two regions.
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'evil-exchange)
-    #+END_SRC
-*** Indent Textobject
-    [[https://github.com/cofi/evil-indent-textobject][evil-indent-text-object]] defines textobjects based on indentation.
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'evil-indent-textobject)
-    #+END_SRC
-*** Leader
-    [[https://github.com/cofi/evil-leader][evil-leader]] adds support for Vim's venerable ~<leader>~ key, which
-    any Vim user will be very accustomed to.
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'evil-leader)
-      (evil-leader/set-leader ",")
-
-      (evil-leader/set-key
-        "a"  'projectile-toggle-between-implementation-and-test
-        "b"  'ibuffer
-        "db" 'kill-buffer
-        "dw" 'jcf/delete-window
-        "eb" 'eval-buffer
-        "ed" 'eval-defun
-        "ee" 'eval-expression
-        "es" 'eval-last-sexp
-        "er" 'eval-region
-        "fb" 'ido-switch-buffer
-        "fd" 'ido-dired
-        "ff" 'ido-find-file
-        "fj" 'dired-jump
-        "gb" 'magit-blame-mode
-        "gc" 'magit-commit
-        "gl" 'magit-log
-        "gs" 'magit-status
-        "hf" 'describe-function
-        "hm" 'describe-mode
-        "hp" 'describe-package
-        "hv" 'describe-variable
-        "pb" 'projectile-switch-to-buffer
-        "pd" 'projectile-switch-project
-        "pf" 'projectile-find-file
-        "sd" 'jcf/delete-window
-        "sf" 'delete-other-windows
-        "ss" 'jcf/split-window-horizontally
-        "sv" 'jcf/split-window-vertically
-        "w"  'save-buffer
-        "x"  'smex)
-    #+END_SRC
-**** ~org-mode~ bindings
-    #+BEGIN_SRC emacs-lisp
-      (evil-leader/set-key-for-mode 'org-mode
-        "ot" 'org-todo
-        "os" 'org-sort-list)
-    #+END_SRC
-**** ~clojure-mode~ bindings
-    #+BEGIN_SRC emacs-lisp
-      (evil-leader/set-key-for-mode 'clojure-mode
-        "v" 'clojure-test-run-test
-        "V" 'clojure-test-run-tests
-        "cc" 'cider-connect
-        "cj" 'cider-jack-in
-        "cq" 'cider-quit
-        "eb" 'cider-eval-buffer
-        "ed" 'cider-eval-defun-at-point
-        "es" 'cider-eval-last-sexp
-        "er" 'cider-eval-region
-        "rs" 'cljr-sort-ns
-        "rr" 'cljr-add-require-to-ns
-        "ru" 'cljr-add-use-to-ns)
-    #+END_SRC
-**** ~ruby-mode~ bindings
-    #+BEGIN_SRC emacs-lisp
-      (evil-leader/set-key-for-mode 'ruby-mode
-        "v" 'rspec-verify
-        "V" 'rspec-verify-all)
-    #+END_SRC
-**** ~feature-mode~ bindings
-    #+BEGIN_SRC emacs-lisp
-      (evil-leader/set-key-for-mode 'feature-mode
-        "v" 'feature-verify-scenario-at-pos
-        "V" 'feature-verify-all-scenarios-in-buffer)
-    #+END_SRC
-*** Extended ~%~ matches
-    [[https://github.com/redguardtoo/evil-matchit][evil-matchit]] is a port of [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] by Benji Fisher. Matchit
-    enhances ~%~ to match HTML tags, ~do~/~end~ blocks and more.
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'evil-matchit)
-    #+END_SRC
-*** NERD commenter
-    I tend to use Emacs' built-in ~comment-dwim~ more than
-    [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]], but it's here in case I decide to regress.
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'evil-nerd-commenter)
-    #+END_SRC
-*** Numbers
-    Another one from [[https://github.com/cofi][Michael Markert]] (perhaps better known as cofi),
-    [[https://github.com/cofi/evil-numbers][evil-numbers]] enhances ~C-a~ and ~C-x~ in a similar way to Tim
-    Pope's [[https://github.com/tpope/vim-speeddating][speeddating.vim]].
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'evil-numbers)
-
-      (define-key evil-normal-state-map (kbd "C-A")
-        'evil-numbers/inc-at-pt)
-      (define-key evil-normal-state-map (kbd "C-S-A")
-        'evil-numbers/dec-at-pt)
-    #+END_SRC
-*** Visual star
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'evil-visualstar)
-    #+END_SRC
-*** ~goto-chg~
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'goto-chg)
-    #+END_SRC
-*** Surround
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'evil-surround)
-    #+END_SRC
-*** Jumper
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'evil-jumper)
     #+END_SRC
 * Key Chord
   #+BEGIN_QUOTE
