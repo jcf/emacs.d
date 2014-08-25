@@ -3235,15 +3235,15 @@
      (setq auto-mode-alist
            (cons '("\\.textile\\'" . textile-mode) auto-mode-alist))
    #+END_SRC
-* Other packages
- #+BEGIN_SRC emacs-lisp
-   (require-package 'dsvn)
-   (require-package 'gnuplot)
-   (require-package 'google-this)
-   (require-package 'htmlize)
-   (require-package 'regex-tool)
- #+END_SRC
-* Miscellaneous
+* Finishing up
+** Other packages
+  #+BEGIN_SRC emacs-lisp
+    (require-package 'dsvn)
+    (require-package 'gnuplot)
+    (require-package 'google-this)
+    (require-package 'htmlize)
+    (require-package 'regex-tool)
+  #+END_SRC
 ** Start server
    #+BEGIN_SRC emacs-lisp
      (defun jcf/start-server ()
@@ -3269,36 +3269,36 @@
        (error "Please move init-local.el to ~/.emacs.d/lisp"))
      (require 'init-local nil t)
    #+END_SRC
-* Locales
-   Setting them earlier in this file doesn't work in X.
+** Locales
+    Setting them earlier in this file doesn't work in X.
 
+    #+BEGIN_SRC emacs-lisp
+      (defun jcf/utf8-locale-p (v)
+        "Return whether locale string V relates to a UTF-8 locale."
+        (and v (string-match "UTF-8" v)))
+
+      (defun locale-is-utf8-p ()
+        "Return t iff the \"locale\" command or environment variables prefer UTF-8."
+        (or (jcf/utf8-locale-p (and (executable-find "locale") (shell-command-to-string "locale")))
+            (jcf/utf8-locale-p (getenv "LC_ALL"))
+            (jcf/utf8-locale-p (getenv "LC_CTYPE"))
+            (jcf/utf8-locale-p (getenv "LANG"))))
+
+      (when (or window-system (locale-is-utf8-p))
+        ;; Disable CJK coding/encoding (Chinese/Japanese/Korean characters)
+        (setq utf-translate-cjk-mode nil)
+        (set-language-environment 'utf-8)
+        (setq locale-coding-system 'utf-8)
+        (set-default-coding-systems 'utf-8)
+        (set-terminal-coding-system 'utf-8)
+        (unless (eq system-type 'windows-nt)
+          (set-selection-coding-system 'utf-8))
+        (prefer-coding-system 'utf-8))
+    #+END_SRC
+** Benchmark end
    #+BEGIN_SRC emacs-lisp
-     (defun jcf/utf8-locale-p (v)
-       "Return whether locale string V relates to a UTF-8 locale."
-       (and v (string-match "UTF-8" v)))
-
-     (defun locale-is-utf8-p ()
-       "Return t iff the \"locale\" command or environment variables prefer UTF-8."
-       (or (jcf/utf8-locale-p (and (executable-find "locale") (shell-command-to-string "locale")))
-           (jcf/utf8-locale-p (getenv "LC_ALL"))
-           (jcf/utf8-locale-p (getenv "LC_CTYPE"))
-           (jcf/utf8-locale-p (getenv "LANG"))))
-
-     (when (or window-system (locale-is-utf8-p))
-       ;; Disable CJK coding/encoding (Chinese/Japanese/Korean characters)
-       (setq utf-translate-cjk-mode nil)
-       (set-language-environment 'utf-8)
-       (setq locale-coding-system 'utf-8)
-       (set-default-coding-systems 'utf-8)
-       (set-terminal-coding-system 'utf-8)
-       (unless (eq system-type 'windows-nt)
-         (set-selection-coding-system 'utf-8))
-       (prefer-coding-system 'utf-8))
+     (add-hook 'after-init-hook
+               (lambda ()
+                 (message "init completed in %.2fms"
+                          (jcf/time-subtract-millis after-init-time before-init-time))))
    #+END_SRC
-* Benchmark end
-  #+BEGIN_SRC emacs-lisp
-    (add-hook 'after-init-hook
-              (lambda ()
-                (message "init completed in %.2fms"
-                         (jcf/time-subtract-millis after-init-time before-init-time))))
-  #+END_SRC
