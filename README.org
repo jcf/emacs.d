@@ -421,21 +421,12 @@
           (message "Submitted version %s to marmalade" tag))))
   #+END_SRC
 ** Diminish
-    [[http://www.emacswiki.org/emacs/DiminishedModes][Diminish]] lets you fight modeline clutter by removing or abbreviating
-    minor mode indicators.
+   [[http://www.emacswiki.org/emacs/DiminishedModes][Diminish]] lets you fight modeline clutter by removing or abbreviating
+   minor mode indicators.
 
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'diminish)
-    #+END_SRC
-
-    When Emacs starts up, it contains a buffer named *scratch*, which is
-    provided for evaluating Emacs Lisp expressions interactively. Its
-    major mode is Lisp Interaction mode. You can also enable Lisp
-    Interaction mode by typing ~M-x lisp-interaction-mode~.
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'scratch)
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (require-package 'diminish)
+   #+END_SRC
 ** PATH
    Use [[https://github.com/purcell/exec-path-from-shell][~exec-path-from-shell~]] to pull ~PATH~ configuration from the
    user's shell.
@@ -1903,6 +1894,16 @@
       (require-package 'projectile)
       (projectile-global-mode)
     #+END_SRC
+** Scratch
+   When Emacs starts up, it contains a buffer named *scratch*, which
+   is provided for evaluating Emacs Lisp expressions
+   interactively. Its major mode is Lisp Interaction mode. You can
+   also enable Lisp Interaction mode by typing ~M-x
+   lisp-interaction-mode~.
+
+   #+BEGIN_SRC emacs-lisp
+     (require-package 'scratch)
+   #+END_SRC
 ** Smart mode line
    Disabled for now.
 
