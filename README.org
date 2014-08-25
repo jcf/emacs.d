@@ -763,10 +763,6 @@
       column-number-mode t
       compilation-scroll-output t
       delete-selection-mode t
-      ediff-split-window-function 'split-window-horizontally
-      ediff-window-setup-function 'ediff-setup-windows-plain
-      grep-highlight-matches t
-      grep-scroll-output t
       indent-tabs-mode nil
       line-spacing 0.2
       make-backup-files nil
@@ -782,6 +778,18 @@
       truncate-partial-width-windows nil
       visible-bell t)
    #+END_SRC
+*** grep
+    #+BEGIN_SRC emacs-lisp
+      (setq-default
+       grep-highlight-matches t
+       grep-scroll-output t)
+    #+END_SRC
+*** ediff
+    #+BEGIN_SRC emacs-lisp
+      (setq-default
+       ediff-split-window-function 'split-window-horizontally
+       ediff-window-setup-function 'ediff-setup-windows-plain)
+    #+END_SRC
 *** Blink cursor
     #+BEGIN_SRC emacs-lisp
       (setq-default
