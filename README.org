@@ -2,10 +2,11 @@
 #+AUTHOR: James Conroy-Finn
 #+EMAIL: james@logi.cl
 #+STARTUP: content
-#+OPTIONS: toc:3 num:nil ^:nil
+#+OPTIONS: toc:2 num:nil ^:nil
 #+LINK: org-babel http://orgmode.org/worg/org-contrib/babel/
 
-* Introduction
+* emacs.d
+** Introduction
   *My evil Emacs configuration* generated from the documentation you
   see before you.
 
@@ -16,7 +17,7 @@
    Out of the box there are some pretty major enhancements to Emacs, including:
 
    - Great OS X support
-   - Org mode on top of Dropbox (~~/Dropbox/Org~)
+   - Org mode on top of Dropbox
    - Projectile ready to go
    - Replacement of the built-in ~M-x~ with ~smex~
    - Smartparens
@@ -419,6 +420,22 @@
           (revert-buffer t t)
           (message "Submitted version %s to marmalade" tag))))
   #+END_SRC
+** Diminish
+    [[http://www.emacswiki.org/emacs/DiminishedModes][Diminish]] lets you fight modeline clutter by removing or abbreviating
+    minor mode indicators.
+
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'diminish)
+    #+END_SRC
+
+    When Emacs starts up, it contains a buffer named *scratch*, which is
+    provided for evaluating Emacs Lisp expressions interactively. Its
+    major mode is Lisp Interaction mode. You can also enable Lisp
+    Interaction mode by typing ~M-x lisp-interaction-mode~.
+
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'scratch)
+    #+END_SRC
 ** PATH
    Use [[https://github.com/purcell/exec-path-from-shell][~exec-path-from-shell~]] to pull ~PATH~ configuration from the
    user's shell.
@@ -443,51 +460,6 @@
      (when (memq window-system '(mac ns))
        (exec-path-from-shell-initialize))
    #+END_SRC
-
-** First packages
-*** ~wgrep~
-    [[https://github.com/mhayashi1120/Emacs-wgrep][~wgrep~]] makes the ~grep~, and ~ag~ buffers writable so you can make
-    changes to your search results.
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'wgrep)
-    #+END_SRC
-*** ~project-local-variables~
-    The [[http://www.emacswiki.org/emacs/ProjectLocalVariables][~project-local-variables~]] package looks for a ~.emacs-project~
-    file in your current directory, and evaluates its contents.
-
-    This poses an obvious security risk as any arbitrary Lisp code will
-    be evaluated when found.
-
-    Consider replacing with the built-in [[http://www.emacswiki.org/emacs/DirectoryVariables][~directory-variables~]].
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'project-local-variables)
-    #+END_SRC
-*** ~diminish~
-    [[http://www.emacswiki.org/emacs/DiminishedModes][Diminish]] lets you fight modeline clutter by removing or abbreviating
-    minor mode indicators.
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'diminish)
-    #+END_SRC
-
-    When Emacs starts up, it contains a buffer named *scratch*, which is
-    provided for evaluating Emacs Lisp expressions interactively. Its
-    major mode is Lisp Interaction mode. You can also enable Lisp
-    Interaction mode by typing ~M-x lisp-interaction-mode~.
-
-    #+BEGIN_SRC emacs-lisp
-      (require-package 'scratch)
-    #+END_SRC
-*** ~mwe-log-commands~
-    ~[[http://www.foldr.org/~michaelw/emacs/mwe-log-commands.el][mwe-log-commands~]] is logs is designed for use during demos, logging
-    keystrokes into a designated buffer, along with the command bound to
-    them.
-
-    #+BEGIN_SRC emacs-lisp
-     (require-package 'mwe-log-commands)
-    #+END_SRC
 * Configuration
 ** Frame hooks
    Run hooks based on whether we're using Emacs via console or GUI.
@@ -510,33 +482,34 @@
      (add-hook 'after-make-frame-functions 'run-after-make-frame-hooks)
    #+END_SRC
 ** xterm
-   Fix arrow keys in ~xterm~? This was here when I arrived, and I'm not
-   using xterm so just leaving it here for now.
+*** Fix arrow keys
+    Fix arrow keys in ~xterm~? This was here when I arrived, and I'm not
+    using xterm so just leaving it here for now.
 
-   #+BEGIN_SRC emacs-lisp
-     (defun fix-up-xterm-control-arrows ()
-       (let ((map (if (boundp 'input-decode-map)
-                      input-decode-map
-                    function-key-map)))
-         (define-key map "\e[1;5A" [C-up])
-         (define-key map "\e[1;5B" [C-down])
-         (define-key map "\e[1;5C" [C-right])
-         (define-key map "\e[1;5D" [C-left])
-         (define-key map "\e[5A"   [C-up])
-         (define-key map "\e[5B"   [C-down])
-         (define-key map "\e[5C"   [C-right])
-         (define-key map "\e[5D"   [C-left])))
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (defun fix-up-xterm-control-arrows ()
+        (let ((map (if (boundp 'input-decode-map)
+                       input-decode-map
+                     function-key-map)))
+          (define-key map "\e[1;5A" [C-up])
+          (define-key map "\e[1;5B" [C-down])
+          (define-key map "\e[1;5C" [C-right])
+          (define-key map "\e[1;5D" [C-left])
+          (define-key map "\e[5A"   [C-up])
+          (define-key map "\e[5B"   [C-down])
+          (define-key map "\e[5C"   [C-right])
+          (define-key map "\e[5D"   [C-left])))
+    #+END_SRC
+*** Enable mouse
+    Mouse in a terminal (use shift to paste with middle button).
 
-   Mouse in a terminal (use shift to paste with middle button).
-
-   #+BEGIN_SRC emacs-lisp
-     (defun jcf/enable-mouse-in-terminal ()
-       (xterm-mouse-mode 1)
-       (when (fboundp 'mwheel-install)
-         (mwheel-install)))
-   #+END_SRC
-
+    #+BEGIN_SRC emacs-lisp
+      (defun jcf/enable-mouse-in-terminal ()
+        (xterm-mouse-mode 1)
+        (when (fboundp 'mwheel-install)
+          (mwheel-install)))
+    #+END_SRC
+*** Run hooks inside console
    Run the above fixes using the frame hook
    ~after-make-console-frame-hooks~.
 
@@ -708,7 +681,7 @@
      (global-set-key (kbd "C-M-=") 'jcf/increase-default-font-height)
      (global-set-key (kbd "C-M--") 'jcf/decrease-default-font-height)
    #+END_SRC
-** Default font on OS X
+** OS X
    #+BEGIN_SRC emacs-lisp
      (if *is-a-mac*
          (set-frame-font "-*-Source Code Pro-normal-normal-normal-*-12-*-*-*-m-0-iso10646-1"))
@@ -741,6 +714,11 @@
        (global-set-key (kbd "M-v") 'cua-paste)
        (global-set-key (kbd "M-c") 'cua-copy-region))
    #+END_SRC
+** ~mdfind~ on OS X
+  #+BEGIN_SRC emacs-lisp
+    (when *is-a-mac*
+      (setq-default locate-command "mdfind"))
+  #+END_SRC
 ** Proxy
    Pick up ~http_proxy~ & ~https_proxy~ from Mac system config using
    [[http://www.cs.usyd.edu.au/~massad/project-proxy-config.html][proxy-config]].
@@ -783,6 +761,411 @@
    #+BEGIN_SRC emacs-lisp
      (when *is-a-mac*
            (require-package 'osx-location))
+   #+END_SRC
+* Editing
+** TODO Some basic preferences - use a table?
+*** Defaults
+    #+BEGIN_SRC emacs-lisp
+     (setq-default
+      buffers-menu-max-size 30
+      case-fold-search t
+      column-number-mode t
+      compilation-scroll-output t
+      delete-selection-mode t
+      ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain
+      grep-highlight-matches t
+      grep-scroll-output t
+      indent-tabs-mode nil
+      line-spacing 0.2
+      make-backup-files nil
+      mouse-yank-at-point t
+      next-line-add-newlines nil
+      require-final-newline t
+      save-interprogram-paste-before-kill t
+      scroll-preserve-screen-position 'always
+      set-mark-command-repeat-pop t
+      show-trailing-whitespace t
+      tooltip-delay 1.5
+      truncate-lines nil
+      truncate-partial-width-windows nil
+      visible-bell t)
+   #+END_SRC
+*** Blink cursor
+    #+BEGIN_SRC emacs-lisp
+      (setq-default
+       blink-cursor-delay 0
+       blink-cursor-interval 0.4)
+    #+END_SRC
+*** Bookmark file
+    #+BEGIN_SRC emacs-lisp
+      (setq-default
+       bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory))
+    #+END_SRC
+*** Auto revert
+   #+BEGIN_SRC emacs-lisp
+     (global-auto-revert-mode)
+     (setq global-auto-revert-non-file-buffers t
+           auto-revert-verbose nil)
+   #+END_SRC
+*** Transient mark
+   #+BEGIN_SRC emacs-lisp
+     (transient-mark-mode t)
+   #+END_SRC
+** Highlight trailing whitespace
+   #+BEGIN_SRC emacs-lisp
+    (defun jcf/no-trailing-whitespace ()
+      "Turn off display of trailing whitespace in this buffer."
+      (setq show-trailing-whitespace nil))
+
+    ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
+    (dolist (hook '(special-mode-hook
+                    eshell-mode-hook
+                    eww-mode
+                    term-mode-hook
+                    comint-mode-hook
+                    compilation-mode-hook
+                    twittering-mode-hook
+                    minibuffer-setup-hook))
+      (add-hook hook #'jcf/no-trailing-whitespace))
+   #+END_SRC
+** Newline behaviour
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "RET") 'newline-and-indent)
+     (defun jcf/newline-at-end-of-line ()
+       "Move to end of line, enter a newline, and reindent."
+       (interactive)
+       (move-end-of-line 1)
+       (newline-and-indent))
+
+     (global-set-key (kbd "S-<return>") 'jcf/newline-at-end-of-line)
+   #+END_SRC
+** Workaround for subword not being available
+   See https://github.com/purcell/emacs.d/issues/138 for more
+   information.
+
+   #+BEGIN_SRC emacs-lisp
+     (when (eval-when-compile (string< "24.3.1" emacs-version))
+       (after-load 'subword
+         (diminish 'subword-mode)))
+   #+END_SRC
+** Prettify symbols
+   #+BEGIN_SRC emacs-lisp
+     (when (fboundp 'global-prettify-symbols-mode)
+       (global-prettify-symbols-mode))
+   #+END_SRC
+** Zap up to char
+   #+BEGIN_SRC emacs-lisp
+    (autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
+    (global-set-key (kbd "M-Z") 'zap-up-to-char)
+   #+END_SRC
+** Don't disable narrowing commands
+   #+BEGIN_SRC emacs-lisp
+    (put 'narrow-to-region 'disabled nil)
+    (put 'narrow-to-page 'disabled nil)
+    (put 'narrow-to-defun 'disabled nil)
+   #+END_SRC
+** Show matching parens
+   #+BEGIN_SRC emacs-lisp
+    (show-paren-mode 1)
+   #+END_SRC
+** Don't disable case-change functions
+   #+BEGIN_SRC emacs-lisp
+    (put 'upcase-region 'disabled nil)
+    (put 'downcase-region 'disabled nil)
+   #+END_SRC
+** CUA selection mode for rectangles
+   #+BEGIN_SRC emacs-lisp
+    (cua-selection-mode t)
+   #+END_SRC
+** Selection bindings
+*** M-x without meta.
+   #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-x C-m") 'execute-extended-command)
+   #+END_SRC
+*** Vim-like alternatives to M-^ and C-u M-^.
+   #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-c j") 'join-line)
+    (global-set-key (kbd "C-c J") (lambda () (interactive) (join-line 1)))
+
+    (global-set-key (kbd "C-.") 'set-mark-command)
+    (global-set-key (kbd "C-x C-.") 'pop-global-mark)
+   #+END_SRC
+** Multiple cursors
+*** Installation
+   #+BEGIN_SRC emacs-lisp
+    (require-package 'multiple-cursors)
+   #+END_SRC
+*** Mark bindings
+   #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+    (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+    (global-set-key (kbd "C-+") 'mc/mark-next-like-this)
+    (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+   #+END_SRC
+*** From active region to multiple cursors
+   #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-c c r") 'set-rectangular-region-anchor)
+    (global-set-key (kbd "C-c c c") 'mc/edit-lines)
+    (global-set-key (kbd "C-c c e") 'mc/edit-ends-of-lines)
+    (global-set-key (kbd "C-c c a") 'mc/edit-beginnings-of-lines)
+   #+END_SRC
+** Disable left and right arrow key bindings
+   #+BEGIN_SRC emacs-lisp
+    (global-unset-key [M-left])
+    (global-unset-key [M-right])
+   #+END_SRC
+** Delete to beginning of line
+   #+BEGIN_SRC emacs-lisp
+     (defun kill-back-to-indentation ()
+       "Kill from point back to the first non-whitespace character on
+       the line."
+       (interactive)
+       (let ((prev-pos (point)))
+         (back-to-indentation)
+         (kill-region (point) prev-pos)))
+
+     (global-set-key (kbd "C-M-<backspace>") 'kill-back-to-indentation)
+   #+END_SRC
+** Move lines
+   Shift lines up and down with M-up and M-down. When smartparens is
+   enabled, it will use those keybindings. For this reason, you might
+   prefer to use M-S-up and M-S-down, which will work even in lisp
+   modes.
+
+   #+BEGIN_SRC emacs-lisp
+     (require-package 'move-dup)
+     (global-set-key [M-up] 'md/move-lines-up)
+     (global-set-key [M-down] 'md/move-lines-down)
+     (global-set-key [M-S-up] 'md/move-lines-up)
+     (global-set-key [M-S-down] 'md/move-lines-down)
+
+     (global-set-key (kbd "C-c p") 'md/duplicate-down)
+   #+END_SRC
+** Fix backward-up-list to understand quotes, see http://bit.ly/h7mdIL
+   #+BEGIN_SRC emacs-lisp
+     (defun backward-up-sexp (arg)
+       "Jump up to the start of the ARG'th enclosing sexp."
+       (interactive "p")
+       (let ((ppss (syntax-ppss)))
+         (cond ((elt ppss 3)
+                (goto-char (elt ppss 8))
+                (backward-up-sexp (1- arg)))
+               ((backward-up-list arg)))))
+
+     (global-set-key [remap backward-up-list] 'backward-up-sexp) ; C-M-u, C-M-up
+   #+END_SRC
+** Cut/copy current line if no region active
+   #+BEGIN_SRC emacs-lisp
+     (require-package 'whole-line-or-region)
+
+     (whole-line-or-region-mode t)
+     (diminish 'whole-line-or-region-mode)
+     (make-variable-buffer-local 'whole-line-or-region-mode)
+
+     (defun suspend-mode-during-cua-rect-selection (mode-name)
+       "Add an advice to suspend `MODE-NAME' while selecting a CUA rectangle."
+       (let ((flagvar (intern (format "%s-was-active-before-cua-rectangle" mode-name)))
+             (advice-name (intern (format "suspend-%s" mode-name))))
+         (eval-after-load 'cua-rect
+           `(progn
+              (defvar ,flagvar nil)
+              (make-variable-buffer-local ',flagvar)
+              (defadvice cua--activate-rectangle (after ,advice-name activate)
+                (setq ,flagvar (and (boundp ',mode-name) ,mode-name))
+                (when ,flagvar
+                  (,mode-name 0)))
+              (defadvice cua--deactivate-rectangle (after ,advice-name activate)
+                (when ,flagvar
+                  (,mode-name 1)))))))
+
+     (suspend-mode-during-cua-rect-selection 'whole-line-or-region-mode)
+   #+END_SRC
+** Indentation-aware open line
+   #+BEGIN_SRC emacs-lisp
+     (defun jcf/open-line-with-reindent (n)
+       "A version of `open-line' which reindents the start and end
+     positions.
+
+     If there is a fill prefix and/or a `left-margin', insert them on the
+     new line if the line would have been blank. With arg N, insert N
+     newlines."
+       (interactive "*p")
+       (let* ((do-fill-prefix (and fill-prefix (bolp)))
+              (do-left-margin (and (bolp) (> (current-left-margin) 0)))
+              (loc (point-marker))
+              ;; Don't expand an abbrev before point.
+              (abbrev-mode nil))
+         (delete-horizontal-space t)
+         (newline n)
+         (indent-according-to-mode)
+         (when (eolp)
+           (delete-horizontal-space t))
+         (goto-char loc)
+         (while (> n 0)
+           (cond ((bolp)
+                  (if do-left-margin (indent-to (current-left-margin)))
+                  (if do-fill-prefix (insert-and-inherit fill-prefix))))
+           (forward-line 1)
+           (setq n (1- n)))
+         (goto-char loc)
+         (end-of-line)
+         (indent-according-to-mode)))
+
+     (global-set-key (kbd "C-o") 'jcf/open-line-with-reindent)
+   #+END_SRC
+** Randomise lines
+   #+BEGIN_SRC emacs-lisp
+     (defun sort-lines-random (beg end)
+       "Sort lines in region randomly."
+       (interactive "r")
+       (save-excursion
+         (save-restriction
+           (narrow-to-region beg end)
+           (goto-char (point-min))
+           (let ;; To make `end-of-line' and etc. to ignore fields.
+               ((inhibit-field-text-motion t))
+             (sort-subr nil 'forward-line 'end-of-line nil nil
+                        (lambda (s1 s2) (eq (random 2) 0)))))))
+   #+END_SRC
+** isearch improvements
+   There are a number of ~isearch~ improvements provided. As we're
+   typically using ~evil-mode~ and ~evil-search-forward~ they're not
+   particuarly useful but are kept around for posterity sake and in
+   case we're stuck in Emacs mode.
+*** Show number of matches
+    #+BEGIN_SRC emacs-lisp
+      (when (>= emacs-major-version 24)
+        (require-package 'anzu)
+        (global-anzu-mode t)
+        (diminish 'anzu-mode)
+        (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
+        (global-set-key [remap query-replace] 'anzu-query-replace))
+    #+END_SRC
+*** Use ~occur~ inside ~isearch~
+    #+BEGIN_SRC emacs-lisp
+      (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+    #+END_SRC
+*** Search back/forth for symbol at point
+    #+BEGIN_SRC emacs-lisp
+      (defun isearch-yank-symbol ()
+        "*Put symbol at current point into search string."
+        (interactive)
+        (let ((sym (symbol-at-point)))
+          (if sym
+              (progn
+                (setq isearch-regexp t
+                      isearch-string (concat "\\_<" (regexp-quote (symbol-name sym)) "\\_>")
+                      isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
+                      isearch-yank-flag t))
+            (ding)))
+        (isearch-search-and-update))
+
+      (define-key isearch-mode-map "\C-\M-w" 'isearch-yank-symbol)
+    #+END_SRC
+*** Zap to isearch
+    http://www.emacswiki.org/emacs/ZapToISearch
+
+    #+BEGIN_SRC emacs-lisp
+      (defun zap-to-isearch (rbeg rend)
+        "Kill the region between the mark and the closest portion of the
+      isearch match string. The behaviour is meant to be analogous to
+      zap-to-char; let's call it zap-to-isearch.
+
+      The deleted region does not include the isearch word. This is meant to
+      be bound only in isearch mode. The point of this function is that
+      oftentimes you want to delete some portion of text, one end of which
+      happens to be an active isearch word.
+
+      The observation to make is that if you use isearch a lot to move the
+      cursor around (as you should, it is much more efficient than using the
+      arrows), it happens a lot that you could just delete the active region
+      between the mark and the point, not include the isearch word."
+        (interactive "r")
+        (when (not mark-active)
+          (error "Mark is not active"))
+        (let* ((isearch-bounds (list isearch-other-end (point)))
+               (ismin (apply 'min isearch-bounds))
+               (ismax (apply 'max isearch-bounds))
+               )
+          (if (< (mark) ismin)
+              (kill-region (mark) ismin)
+            (if (> (mark) ismax)
+                (kill-region ismax (mark))
+              (error "Internal error in isearch kill function.")))
+          (isearch-exit)
+          ))
+
+      (define-key isearch-mode-map [(meta z)] 'zap-to-isearch)
+
+      (defun isearch-exit-other-end (rbeg rend)
+        "Exit isearch, but at the other end of the search string.
+      This is useful when followed by an immediate kill."
+        (interactive "r")
+        (isearch-exit)
+        (goto-char isearch-other-end))
+
+      (define-key isearch-mode-map [(control return)] 'isearch-exit-other-end)
+    #+END_SRC
+** flycheck
+*** Emacs 23 support
+    #+BEGIN_SRC emacs-lisp
+      (when (eval-when-compile (>= emacs-major-version 24))
+        (require-package 'flycheck)
+        (add-hook 'after-init-hook 'global-flycheck-mode))
+    #+END_SRC
+*** Override default triggers
+    #+BEGIN_SRC emacs-lisp
+      (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
+            flycheck-idle-change-delay 0.8)
+    #+END_SRC
+** Spelling
+   #+BEGIN_SRC emacs-lisp
+     (require 'ispell)
+
+     (when (executable-find ispell-program-name)
+       (if (fboundp 'prog-mode)
+           (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+         (dolist (hook '(lisp-mode-hook
+                         emacs-lisp-mode-hook
+                         scheme-mode-hook
+                         clojure-mode-hook
+                         ruby-mode-hook
+                         yaml-mode
+                         python-mode-hook
+                         shell-mode-hook
+                         php-mode-hook
+                         css-mode-hook
+                         haskell-mode-hook
+                         caml-mode-hook
+                         nxml-mode-hook
+                         crontab-mode-hook
+                         perl-mode-hook
+                         tcl-mode-hook
+                         javascript-mode-hook))
+           (add-hook hook 'flyspell-prog-mode)))
+
+       (after-load 'flyspell
+         (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)))
+   #+END_SRC
+** goto-address
+   Converts URLs in comments into clickable links.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq goto-address-mail-face 'link)
+
+     (dolist (hook (if (fboundp 'prog-mode)
+                       '(prog-mode-hook ruby-mode-hook)
+                     '(find-file-hooks)))
+       (add-hook hook 'goto-address-prog-mode))
+  #+END_SRC
+** Make scripts executable
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+   #+END_SRC
+** Perl-style regular expressions
+   #+BEGIN_SRC emacs-lisp
+     (setq-default regex-tool-backend 'perl)
    #+END_SRC
 * Evil
 ** Setup
@@ -935,14 +1318,22 @@
      (require 'evil-jumper)
    #+END_SRC
 ** Configuration
+*** Default cursor
    #+BEGIN_SRC emacs-lisp
      (setq evil-default-cursor t)
+   #+END_SRC
+*** Modeline
+   #+BEGIN_SRC emacs-lisp
      (setq evil-insert-state-message nil)
      (setq evil-visual-state-message nil)
      (setq evil-mode-line-format 'before)
-
+   #+END_SRC
+*** Use evil-search
+   #+BEGIN_SRC emacs-lisp
      (setq evil-search-module 'evil-search)
-
+   #+END_SRC
+*** Colourise cursor based on state
+   #+BEGIN_SRC emacs-lisp
      (setq evil-emacs-state-cursor  '("red" box))
      (setq evil-normal-state-cursor '("gray" box))
      (setq evil-visual-state-cursor '("gray" box))
@@ -1048,227 +1439,128 @@
           (after advice-for-evil-search-previous activate)
         (evil-scroll-line-to-center (line-number-at-pos)))
     #+END_SRC
-* Key Chord
-  #+BEGIN_QUOTE
-  Key-chord lets you bind commands to combination of key-strokes. Here
-  a "key chord" means two keys pressed simultaneously, or a single key
-  quickly pressed twice.
-  #+END_QUOTE
-
-  http://www.emacswiki.org/emacs/KeyChord
-
-  #+BEGIN_SRC emacs-lisp
-     (require-package 'key-chord)
-
-     (setq key-chord-two-keys-delay 0.05)
-
-     (key-chord-mode 1)
-     (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
-  #+END_SRC
-* Editing
-** Unfill
-  #+BEGIN_SRC emacs-lisp
-    (require-package 'unfill)
-   #+END_SRC
-** Electric pair mode
-   #+BEGIN_SRC emacs-lisp
-    (when (fboundp 'electric-pair-mode)
-      (setq-default electric-pair-mode 1))
-   #+END_SRC
-** Some basic preferences
-   #+BEGIN_SRC emacs-lisp
-    (setq-default
-     blink-cursor-delay 0
-     blink-cursor-interval 0.4
-     bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory)
-     buffers-menu-max-size 30
-     case-fold-search t
-     column-number-mode t
-     compilation-scroll-output t
-     delete-selection-mode t
-     ediff-split-window-function 'split-window-horizontally
-     ediff-window-setup-function 'ediff-setup-windows-plain
-     grep-highlight-matches t
-     grep-scroll-output t
-     indent-tabs-mode nil
-     line-spacing 0.2
-     make-backup-files nil
-     mouse-yank-at-point t
-     next-line-add-newlines nil
-     require-final-newline t
-     save-interprogram-paste-before-kill t
-     scroll-preserve-screen-position 'always
-     set-mark-command-repeat-pop t
-     show-trailing-whitespace t
-     tooltip-delay 1.5
-     truncate-lines nil
-     truncate-partial-width-windows nil
-     visible-bell t)
-
-    (when *is-a-mac*
-      (setq-default locate-command "mdfind"))
-
-    (global-auto-revert-mode)
-    (setq global-auto-revert-non-file-buffers t
-          auto-revert-verbose nil)
-
-    (transient-mark-mode t)
-   #+END_SRC
-** Whitespace
-   #+BEGIN_SRC emacs-lisp
-    (defun jcf/no-trailing-whitespace ()
-      "Turn off display of trailing whitespace in this buffer."
-      (setq show-trailing-whitespace nil))
-
-    ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
-    (dolist (hook '(special-mode-hook
-                    eshell-mode-hook
-                    eww-mode
-                    term-mode-hook
-                    comint-mode-hook
-                    compilation-mode-hook
-                    twittering-mode-hook
-                    minibuffer-setup-hook))
-      (add-hook hook #'jcf/no-trailing-whitespace))
-
-    (require-package 'whitespace-cleanup-mode)
-    (global-whitespace-cleanup-mode t)
-   #+END_SRC
-** Newline behaviour
-   #+BEGIN_SRC emacs-lisp
-     (global-set-key (kbd "RET") 'newline-and-indent)
-     (defun jcf/newline-at-end-of-line ()
-       "Move to end of line, enter a newline, and reindent."
-       (interactive)
-       (move-end-of-line 1)
-       (newline-and-indent))
-
-     (global-set-key (kbd "S-<return>") 'jcf/newline-at-end-of-line)
-   #+END_SRC
-** Workaround for subword not being available
-   See https://github.com/purcell/emacs.d/issues/138 for more
-   information.
-
-   #+BEGIN_SRC emacs-lisp
-     (when (eval-when-compile (string< "24.3.1" emacs-version))
-       (after-load 'subword
-         (diminish 'subword-mode)))
-   #+END_SRC
-** Prettify symbols
-   #+BEGIN_SRC emacs-lisp
-     (when (fboundp 'global-prettify-symbols-mode)
-       (global-prettify-symbols-mode))
-   #+END_SRC
-** Undo tree
-   #+BEGIN_SRC emacs-lisp
-    (require-package 'undo-tree)
-    (global-undo-tree-mode)
-    (diminish 'undo-tree-mode)
-   #+END_SRC
-** Highlight symbols
-   #+BEGIN_SRC emacs-lisp
-    (require-package 'highlight-symbol)
-    (dolist (hook '(prog-mode-hook html-mode-hook))
-      (add-hook hook 'highlight-symbol-mode)
-      (add-hook hook 'highlight-symbol-nav-mode))
-    (eval-after-load 'highlight-symbol
-      '(diminish 'highlight-symbol-mode))
-   #+END_SRC
-** Zap up to char
-   #+BEGIN_SRC emacs-lisp
-    (autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
-    (global-set-key (kbd "M-Z") 'zap-up-to-char)
-   #+END_SRC
-** Don't disable narrowing commands
-   #+BEGIN_SRC emacs-lisp
-    (put 'narrow-to-region 'disabled nil)
-    (put 'narrow-to-page 'disabled nil)
-    (put 'narrow-to-defun 'disabled nil)
-   #+END_SRC
-** Show matching parens
-   #+BEGIN_SRC emacs-lisp
-    (show-paren-mode 1)
-   #+END_SRC
-** Expand region
-   #+BEGIN_SRC emacs-lisp
-    (require-package 'expand-region)
-    (global-set-key (kbd "C-=") 'er/expand-region)
-   #+END_SRC
-** Don't disable case-change functions
-   #+BEGIN_SRC emacs-lisp
-    (put 'upcase-region 'disabled nil)
-    (put 'downcase-region 'disabled nil)
-   #+END_SRC
-** CUA selection mode for rectangles
-   #+BEGIN_SRC emacs-lisp
-    (cua-selection-mode t)
-   #+END_SRC
-** Selection bindings
-   M-x without meta.
-
-   #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "C-x C-m") 'execute-extended-command)
-   #+END_SRC
-
-   Vim-like alternatives to M-^ and C-u M-^.
-
-   #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "C-c j") 'join-line)
-    (global-set-key (kbd "C-c J") (lambda () (interactive) (join-line 1)))
-
-    (global-set-key (kbd "C-.") 'set-mark-command)
-    (global-set-key (kbd "C-x C-.") 'pop-global-mark)
-   #+END_SRC
+* Packages
 ** Ace Jump
    #+BEGIN_SRC emacs-lisp
     (require-package 'ace-jump-mode)
     (global-set-key (kbd "C-;") 'ace-jump-mode)
     (global-set-key (kbd "C-:") 'ace-jump-word-mode)
    #+END_SRC
-** Multiple cursors
+** Company
    #+BEGIN_SRC emacs-lisp
-    (require-package 'multiple-cursors)
+     (require-package 'company)
+     (add-hook 'after-init-hook 'global-company-mode)
+
+     (defvar jcf/completion-backends
+       '(company-go company-inf-ruby company-tern))
+
+     (dolist (package jcf/completion-backends)
+       (require-package package))
+
+     (after-load 'company
+       (diminish 'company-mode)
+
+       ;; Add completion backends
+       (dolist (backend jcf/completion-backends)
+         (add-to-list 'company-backends backend)))
+   #+END_SRC
+** Dash
+   #+BEGIN_SRC emacs-lisp
+     ;; Support for the http://kapeli.com/dash documentation browser
+
+     (defun jcf/dash-installed-p ()
+       "Return t if Dash is installed on this machine, or nil otherwise."
+       (let ((lsregister "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"))
+         (and (file-executable-p lsregister)
+              (not (string-equal
+                    ""
+                    (shell-command-to-string
+                     (concat lsregister " -dump|grep com.kapeli.dash")))))))
+
+     (when (and *is-a-mac* (not (package-installed-p 'dash-at-point)))
+       (message "Checking whether Dash is installed")
+       (when (jcf/dash-installed-p)
+         (require-package 'dash-at-point)))
+
+     (when (package-installed-p 'dash-at-point)
+       (global-set-key (kbd "C-c D") 'dash-at-point))
+   #+END_SRC
+** Dired
+   #+BEGIN_SRC emacs-lisp
+     (require-package 'dired+)
+
+     (setq diredp-hide-details-initially-flag nil)
+
+     (after-load 'dired
+     (require 'dired+)
+     (when (fboundp 'global-dired-hide-details-mode)
+     (global-dired-hide-details-mode -1))
+     (setq dired-recursive-deletes 'top)
+     (define-key dired-mode-map [mouse-2] 'dired-find-file)
+     (add-hook 'dired-mode-hook
+               (lambda () (guide-key/add-local-guide-key-sequence "%"))))
+   #+END_SRC
+** Electric pair mode
+   #+BEGIN_SRC emacs-lisp
+    (when (fboundp 'electric-pair-mode)
+      (setq-default electric-pair-mode 1))
+   #+END_SRC
+** erc
+   #+BEGIN_SRC emacs-lisp
+     (after-load 'erc
+       (setq erc-hide-list '("JOIN" "PART" "QUIT"))
+
+       (setq erc-timestamp-only-if-changed-flag nil)
+       (setq erc-timestamp-format "[%H:%M] ")
+       (setq erc-insert-timestamp-function 'erc-insert-timestamp-left)
+
+       (setq erc-truncate-mode t)
+
+       (add-hook 'window-configuration-change-hook
+                 (lambda ()
+                   (setq erc-fill-column (- (window-width) 2)))))
+    #+END_SRC
+** eshell
+   Always insert text at the prompt.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq eshell-scroll-to-bottom-on-input 'all)
    #+END_SRC
 
-   Key bindings:
+   Allow symbol names to be used for redirection targets.
 
    #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-    (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-    (global-set-key (kbd "C-+") 'mc/mark-next-like-this)
-    (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+     (setq eshell-buffer-shorthand t)
    #+END_SRC
 
-   From active region to multiple cursors:
+   This makes it possible to redirect output like so:
+
+   #+BEGIN_SRC shell-script
+     echo hello > '*scratch*
+   #+END_SRC
+
+   Ignore case when completing filenames.
 
    #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "C-c c r") 'set-rectangular-region-anchor)
-    (global-set-key (kbd "C-c c c") 'mc/edit-lines)
-    (global-set-key (kbd "C-c c e") 'mc/edit-ends-of-lines)
-    (global-set-key (kbd "C-c c a") 'mc/edit-beginnings-of-lines)
+     (setq eshell-cmpl-ignore-case t)
    #+END_SRC
-** Disable left and right arrow key bindings
-   #+BEGIN_SRC emacs-lisp
-    (global-unset-key [M-left])
-    (global-unset-key [M-right])
-   #+END_SRC
-** Delete to beginning of line
-   #+BEGIN_SRC emacs-lisp
-     (defun kill-back-to-indentation ()
-       "Kill from point back to the first non-whitespace character on
-       the line."
-       (interactive)
-       (let ((prev-pos (point)))
-         (back-to-indentation)
-         (kill-region (point) prev-pos)))
 
-     (global-set-key (kbd "C-M-<backspace>") 'kill-back-to-indentation)
-   #+END_SRC
-** Page break lines
+   Error when a glob matches nothing. This mirrors the default
+   behaviour of zsh.
+
    #+BEGIN_SRC emacs-lisp
-     (require-package 'page-break-lines)
-     (global-page-break-lines-mode)
-     (diminish 'page-break-lines-mode)
+     (setq eshell-error-if-no-glob t)
+   #+END_SRC
+
+   Make globs case-insensitive.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq eshell-glob-case-insensitive t)
+   #+END_SRC
+** Expand region
+   #+BEGIN_SRC emacs-lisp
+    (require-package 'expand-region)
+    (global-set-key (kbd "C-=") 'er/expand-region)
    #+END_SRC
 ** Fill column indicator
    #+BEGIN_SRC emacs-lisp
@@ -1306,187 +1598,34 @@
              (when (jcf/fci-enabled-p)
                (turn-on-fci-mode))))))
    #+END_SRC
-** Move lines
-   Shift lines up and down with M-up and M-down. When smartparens is
-   enabled, it will use those keybindings. For this reason, you might
-   prefer to use M-S-up and M-S-down, which will work even in lisp
-   modes.
+** Global Tags
+   Powered by [[http://www.gnu.org/software/global/][GNU Global]].
 
    #+BEGIN_SRC emacs-lisp
-     (require-package 'move-dup)
-     (global-set-key [M-up] 'md/move-lines-up)
-     (global-set-key [M-down] 'md/move-lines-down)
-     (global-set-key [M-S-up] 'md/move-lines-up)
-     (global-set-key [M-S-down] 'md/move-lines-down)
-
-     (global-set-key (kbd "C-c p") 'md/duplicate-down)
+     (require-package 'ggtags)
+     (ggtags-mode 1)
    #+END_SRC
-** Fix backward-up-list to understand quotes, see http://bit.ly/h7mdIL
+** Highlight symbols
    #+BEGIN_SRC emacs-lisp
-     (defun backward-up-sexp (arg)
-       "Jump up to the start of the ARG'th enclosing sexp."
-       (interactive "p")
-       (let ((ppss (syntax-ppss)))
-         (cond ((elt ppss 3)
-                (goto-char (elt ppss 8))
-                (backward-up-sexp (1- arg)))
-               ((backward-up-list arg)))))
-
-     (global-set-key [remap backward-up-list] 'backward-up-sexp) ; C-M-u, C-M-up
+    (require-package 'highlight-symbol)
+    (dolist (hook '(prog-mode-hook html-mode-hook))
+      (add-hook hook 'highlight-symbol-mode)
+      (add-hook hook 'highlight-symbol-nav-mode))
+    (eval-after-load 'highlight-symbol
+      '(diminish 'highlight-symbol-mode))
    #+END_SRC
-** Cut/copy current line if no region active
+** Hippie
    #+BEGIN_SRC emacs-lisp
-     (require-package 'whole-line-or-region)
+     (global-set-key (kbd "M-/") 'hippie-expand)
 
-     (whole-line-or-region-mode t)
-     (diminish 'whole-line-or-region-mode)
-     (make-variable-buffer-local 'whole-line-or-region-mode)
-
-     (defun suspend-mode-during-cua-rect-selection (mode-name)
-       "Add an advice to suspend `MODE-NAME' while selecting a CUA rectangle."
-       (let ((flagvar (intern (format "%s-was-active-before-cua-rectangle" mode-name)))
-             (advice-name (intern (format "suspend-%s" mode-name))))
-         (eval-after-load 'cua-rect
-           `(progn
-              (defvar ,flagvar nil)
-              (make-variable-buffer-local ',flagvar)
-              (defadvice cua--activate-rectangle (after ,advice-name activate)
-                (setq ,flagvar (and (boundp ',mode-name) ,mode-name))
-                (when ,flagvar
-                  (,mode-name 0)))
-              (defadvice cua--deactivate-rectangle (after ,advice-name activate)
-                (when ,flagvar
-                  (,mode-name 1)))))))
-
-     (suspend-mode-during-cua-rect-selection 'whole-line-or-region-mode)
+     (setq hippie-expand-try-functions-list
+           '(try-complete-file-name-partially
+             try-complete-file-name
+             try-expand-dabbrev
+             try-expand-dabbrev-all-buffers
+             try-expand-dabbrev-from-kill))
    #+END_SRC
-** Indentation-aware open line
-   #+BEGIN_SRC emacs-lisp
-     (defun jcf/open-line-with-reindent (n)
-       "A version of `open-line' which reindents the start and end
-     positions.
-
-     If there is a fill prefix and/or a `left-margin', insert them on the
-     new line if the line would have been blank. With arg N, insert N
-     newlines."
-       (interactive "*p")
-       (let* ((do-fill-prefix (and fill-prefix (bolp)))
-              (do-left-margin (and (bolp) (> (current-left-margin) 0)))
-              (loc (point-marker))
-              ;; Don't expand an abbrev before point.
-              (abbrev-mode nil))
-         (delete-horizontal-space t)
-         (newline n)
-         (indent-according-to-mode)
-         (when (eolp)
-           (delete-horizontal-space t))
-         (goto-char loc)
-         (while (> n 0)
-           (cond ((bolp)
-                  (if do-left-margin (indent-to (current-left-margin)))
-                  (if do-fill-prefix (insert-and-inherit fill-prefix))))
-           (forward-line 1)
-           (setq n (1- n)))
-         (goto-char loc)
-         (end-of-line)
-         (indent-according-to-mode)))
-
-     (global-set-key (kbd "C-o") 'jcf/open-line-with-reindent)
-   #+END_SRC
-** Randomise lines
-   #+BEGIN_SRC emacs-lisp
-     (defun sort-lines-random (beg end)
-       "Sort lines in region randomly."
-       (interactive "r")
-       (save-excursion
-         (save-restriction
-           (narrow-to-region beg end)
-           (goto-char (point-min))
-           (let ;; To make `end-of-line' and etc. to ignore fields.
-               ((inhibit-field-text-motion t))
-             (sort-subr nil 'forward-line 'end-of-line nil nil
-                        (lambda (s1 s2) (eq (random 2) 0)))))))
-   #+END_SRC
-** ~isearch~ improvements
-   There are a number of ~isearch~ improvements provided. As we're
-   typically using ~evil-mode~ and ~evil-search-forward~ they're not
-   particuarly useful but are kept around for posterity sake and in
-   case we're stuck in Emacs mode.
-*** Show number of matches
-    #+BEGIN_SRC emacs-lisp
-      (when (>= emacs-major-version 24)
-        (require-package 'anzu)
-        (global-anzu-mode t)
-        (diminish 'anzu-mode)
-        (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
-        (global-set-key [remap query-replace] 'anzu-query-replace))
-    #+END_SRC
-*** Use ~occur~ inside ~isearch~
-    #+BEGIN_SRC emacs-lisp
-      (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
-    #+END_SRC
-*** Search back/forth for symbol at point
-    #+BEGIN_SRC emacs-lisp
-      (defun isearch-yank-symbol ()
-        "*Put symbol at current point into search string."
-        (interactive)
-        (let ((sym (symbol-at-point)))
-          (if sym
-              (progn
-                (setq isearch-regexp t
-                      isearch-string (concat "\\_<" (regexp-quote (symbol-name sym)) "\\_>")
-                      isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
-                      isearch-yank-flag t))
-            (ding)))
-        (isearch-search-and-update))
-
-      (define-key isearch-mode-map "\C-\M-w" 'isearch-yank-symbol)
-    #+END_SRC
-*** Zap to isearch
-    http://www.emacswiki.org/emacs/ZapToISearch
-
-    #+BEGIN_SRC emacs-lisp
-      (defun zap-to-isearch (rbeg rend)
-        "Kill the region between the mark and the closest portion of the
-      isearch match string. The behaviour is meant to be analogous to
-      zap-to-char; let's call it zap-to-isearch.
-
-      The deleted region does not include the isearch word. This is meant to
-      be bound only in isearch mode. The point of this function is that
-      oftentimes you want to delete some portion of text, one end of which
-      happens to be an active isearch word.
-
-      The observation to make is that if you use isearch a lot to move the
-      cursor around (as you should, it is much more efficient than using the
-      arrows), it happens a lot that you could just delete the active region
-      between the mark and the point, not include the isearch word."
-        (interactive "r")
-        (when (not mark-active)
-          (error "Mark is not active"))
-        (let* ((isearch-bounds (list isearch-other-end (point)))
-               (ismin (apply 'min isearch-bounds))
-               (ismax (apply 'max isearch-bounds))
-               )
-          (if (< (mark) ismin)
-              (kill-region (mark) ismin)
-            (if (> (mark) ismax)
-                (kill-region ismax (mark))
-              (error "Internal error in isearch kill function.")))
-          (isearch-exit)
-          ))
-
-      (define-key isearch-mode-map [(meta z)] 'zap-to-isearch)
-
-      (defun isearch-exit-other-end (rbeg rend)
-        "Exit isearch, but at the other end of the search string.
-      This is useful when followed by an immediate kill."
-        (interactive "r")
-        (isearch-exit)
-        (goto-char isearch-other-end))
-
-      (define-key isearch-mode-map [(control return)] 'isearch-exit-other-end)
-    #+END_SRC
-** ~ibuffer~
+** ibuffer
 *** Go fullframe
     #+BEGIN_SRC emacs-lisp
       (require-package 'fullframe)
@@ -1550,47 +1689,55 @@
 *** Global keybinding
     #+BEGIN_SRC emacs-lisp
       (global-set-key (kbd "C-x C-b") 'ibuffer)
-    #+END_SRC
-** flycheck
-*** Emacs 23 support
-    #+BEGIN_SRC emacs-lisp
-      (when (eval-when-compile (>= emacs-major-version 24))
-        (require-package 'flycheck)
-        (add-hook 'after-init-hook 'global-flycheck-mode))
-    #+END_SRC
-*** Override default triggers
-    #+BEGIN_SRC emacs-lisp
-      (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
-            flycheck-idle-change-delay 0.8)
-    #+END_SRC
-** Spelling
+    #+END_SR
+** ido
    #+BEGIN_SRC emacs-lisp
-     (require 'ispell)
+     (require-package 'ido-vertical-mode)
 
-     (when (executable-find ispell-program-name)
-       (if (fboundp 'prog-mode)
-           (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-         (dolist (hook '(lisp-mode-hook
-                         emacs-lisp-mode-hook
-                         scheme-mode-hook
-                         clojure-mode-hook
-                         ruby-mode-hook
-                         yaml-mode
-                         python-mode-hook
-                         shell-mode-hook
-                         php-mode-hook
-                         css-mode-hook
-                         haskell-mode-hook
-                         caml-mode-hook
-                         nxml-mode-hook
-                         crontab-mode-hook
-                         perl-mode-hook
-                         tcl-mode-hook
-                         javascript-mode-hook))
-           (add-hook hook 'flyspell-prog-mode)))
+     (require 'ido)
+     (ido-mode t)
+     (ido-everywhere t)
+     (ido-vertical-mode 1)
+     (setq ido-enable-flex-matching t)
+     (setq ido-use-filename-at-point nil)
+     (setq ido-auto-merge-work-directories-length 0)
+     (setq ido-use-virtual-buffers t)
 
-       (after-load 'flyspell
-         (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)))
+     (when (eval-when-compile (>= emacs-major-version 24))
+      (require-package 'ido-ubiquitous)
+      (ido-ubiquitous-mode t))
+
+     ;; Use smex to handle M-x
+     (when (eval-when-compile (>= emacs-major-version 24))
+       (require-package 'smex)
+       ;; Change path for ~/.smex-items
+       (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+       (global-set-key [remap execute-extended-command] 'smex))
+
+     (require-package 'idomenu)
+
+     ;; Allow the same buffer to be open in different frames
+     (setq ido-default-buffer-method 'selected-window)
+
+     ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
+     (add-hook 'ido-setup-hook (lambda () (define-key ido-completion-map [up] 'previous-history-element)))
+   #+END_SRC
+** Key Chord
+   #+BEGIN_QUOTE
+   Key-chord lets you bind commands to combination of key-strokes. Here
+   a "key chord" means two keys pressed simultaneously, or a single key
+   quickly pressed twice.
+   #+END_QUOTE
+
+   http://www.emacswiki.org/emacs/KeyChord
+
+   #+BEGIN_SRC emacs-lisp
+     (require-package 'key-chord)
+
+     (setq key-chord-two-keys-delay 0.05)
+
+     (key-chord-mode 1)
+     (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
    #+END_SRC
 ** Multiple major modes
    #+BEGIN_SRC emacs-lisp
@@ -1599,24 +1746,282 @@
      (setq mmm-global-mode 'buffers-with-submode-classes)
      (setq mmm-submode-decoration-level 0)
    #+END_SRC
-** goto-address
-   Converts URLs in comments into clickable links.
+** mwe-log-commands
+   [[http://www.foldr.org/~michaelw/emacs/mwe-log-commands.el][~mwe-log-commands~]] is logs is designed for use during demos, logging
+   keystrokes into a designated buffer, along with the command bound to
+   them.
 
    #+BEGIN_SRC emacs-lisp
-     (setq goto-address-mail-face 'link)
-
-     (dolist (hook (if (fboundp 'prog-mode)
-                       '(prog-mode-hook ruby-mode-hook)
-                     '(find-file-hooks)))
-       (add-hook hook 'goto-address-prog-mode))
-  #+END_SRC
-** Make scripts executable
-   #+BEGIN_SRC emacs-lisp
-     (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+     (require-package 'mwe-log-commands)
    #+END_SRC
-** Perl-style regular expressions
+** Org mode
+*** Basics
+    #+BEGIN_SRC emacs-lisp
+      (when (< emacs-major-version 24)
+        (require-package 'org))
+      (require-package 'org-fstree)
+      (when *is-a-mac*
+        (require-package 'org-mac-link)
+        (autoload 'org-mac-grab-link "org-mac-link" nil t)
+        (require-package 'org-mac-iCal))
+
+
+      (define-key global-map (kbd "C-c l") 'org-store-link)
+      (define-key global-map (kbd "C-c a") 'org-agenda)
+
+      ;; Various preferences
+      (setq org-log-done t
+            org-completion-use-ido t
+            org-edit-timestamp-down-means-later t
+            org-agenda-start-on-weekday nil
+            org-agenda-span 14
+            org-agenda-include-diary t
+            org-agenda-window-setup 'current-window
+            org-fast-tag-selection-single-key 'expert
+            org-export-kill-product-buffer-when-displayed t
+            org-tags-column 80)
+
+      ;; Syntax highlight inline code blocks
+      (setq org-src-fontify-natively t)
+
+      ;; Workaround issues with exporting HTML.
+      ;;
+      ;;     org-html-fontify-code: Wrong number of arguments:
+      ;;       #[(_beg _end) "À " [font-lock-fontify-buffer] 1], 0
+      (defun org-font-lock-ensure ()
+        (font-lock-fontify-buffer))
+
+      ;; Where to keep org files
+      (setq org-directory "~/Dropbox/Org"
+            org-agenda-files '("~/Dropbox/Org/")
+            org-default-notes-file "~/Dropbox/Org/refile.org")
+
+      ; Refile targets include this file and any file contributing to the agenda - up to 5 levels deep
+      (setq org-refile-targets (quote ((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))))
+      ; Targets start with the file name - allows creating level 1 tasks
+      (setq org-refile-use-outline-path (quote file))
+      ; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
+      (setq org-outline-path-complete-in-steps t)
+
+
+      (setq org-todo-keywords
+            (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
+                    (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)"))))
+    #+END_SRC
+*** Org clock
+    #+BEGIN_SRC emacs-lisp
+      ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+      (setq org-clock-persistence-insinuate t)
+      (setq org-clock-persist t)
+      (setq org-clock-in-resume t)
+
+      ;; Change task state to STARTED when clocking in
+      (setq org-clock-in-switch-to-state "STARTED")
+      ;; Save clock data and notes in the LOGBOOK drawer
+      (setq org-clock-into-drawer t)
+      ;; Removes clocked tasks with 0:00 duration
+      (setq org-clock-out-remove-zero-time-clocks t)
+
+      ;; Show clock sums as hours and minutes, not "n days" etc.
+      (setq org-time-clocksum-format
+            '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+
+      ;; Show the clocked-in task - if any - in the header line
+      (defun jcf/show-org-clock-in-header-line ()
+        (setq-default header-line-format '((" " org-mode-line-string " "))))
+
+      (defun jcf/hide-org-clock-from-header-line ()
+        (setq-default header-line-format nil))
+
+      (add-hook 'org-clock-in-hook 'jcf/show-org-clock-in-header-line)
+      (add-hook 'org-clock-out-hook 'jcf/hide-org-clock-from-header-line)
+      (add-hook 'org-clock-cancel-hook 'jcf/hide-org-clock-from-header-line)
+
+      (after-load 'org-clock
+        (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
+        (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
+    #+END_SRC
+*** Pomodoro
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'org-pomodoro)
+      (after-load 'org-agenda
+        (define-key org-agenda-mode-map (kbd "P") 'org-pomodoro))
+    #+END_SRC
+*** iCal in agenda
+    Disabled for now.
+
+    #+BEGIN_SRC emacs-lisp
+      ;; (when (and *is-a-mac* (require 'org-mac-iCal nil t))
+      ;;   (setq org-agenda-include-diary t
+      ;;         org-agenda-custom-commands
+      ;;         '(("I" "Import diary from iCal" agenda ""
+      ;;            ((org-agenda-mode-hook #'org-mac-iCal)))))
+
+      ;;   (add-hook 'org-agenda-cleanup-fancy-diary-hook
+      ;;             (lambda ()
+      ;;               (goto-char (point-min))
+      ;;               (save-excursion
+      ;;                 (while (re-search-forward "^[a-z]" nil t)
+      ;;                   (goto-char (match-beginning 0))
+      ;;                   (insert "0:00-24:00 ")))
+      ;;               (while (re-search-forward "^ [a-z]" nil t)
+      ;;                 (goto-char (match-beginning 0))
+      ;;                 (save-excursion
+      ;;                   (re-search-backward "^[0-9]+:[0-9]+-[0-9]+:[0-9]+ " nil t))
+      ;;                 (insert (match-string 0))))))
+    #+END_SRC
+*** Bindings
+    #+BEGIN_SRC emacs-lisp
+      (after-load 'org
+        (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
+        (when *is-a-mac*
+          (define-key org-mode-map (kbd "M-h") nil))
+        (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
+        (when *is-a-mac*
+          (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
+   #+END_SRC
+** Page break lines
    #+BEGIN_SRC emacs-lisp
-     (setq-default regex-tool-backend 'perl)
+     (require-package 'page-break-lines)
+     (global-page-break-lines-mode)
+     (diminish 'page-break-lines-mode)
+   #+END_SRC
+** project-local-variables
+    The [[http://www.emacswiki.org/emacs/ProjectLocalVariables][~project-local-variables~]] package looks for a ~.emacs-project~
+    file in your current directory, and evaluates its contents.
+
+    This poses an obvious security risk as any arbitrary Lisp code will
+    be evaluated when found.
+
+    Consider replacing with the built-in [[http://www.emacswiki.org/emacs/DirectoryVariables][~directory-variables~]].
+
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'project-local-variables)
+    #+END_SRC
+** Projectile
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'projectile)
+      (projectile-global-mode)
+    #+END_SRC
+** Smart mode line
+   Disabled for now.
+
+   #+BEGIN_SRC emacs-lisp
+     ;; (require-package 'smart-mode-line)
+
+     ;; (setq sml/theme nil)
+     ;; (sml/setup)
+   #+END_SRC
+** SmartParens
+   #+BEGIN_SRC emacs-lisp
+     (require-package 'smartparens)
+
+     ;; I don't need paredit, but some package developers do!
+     (require-package 'paredit)
+
+     (after-load 'smartparens
+       (require 'paredit)
+       (disable-paredit-mode))
+
+     ;; Enable smartparens everywhere
+     (require 'smartparens-config)
+
+     (setq smartparens-strict-mode t)
+     (setq sp-autoinsert-if-followed-by-word t)
+     (setq sp-autoskip-closing-pair 'always)
+     (setq sp-base-key-bindings 'paredit)
+     (setq sp-hybrid-kill-entire-symbol nil)
+
+     (smartparens-global-mode 1)
+     (show-smartparens-global-mode +1)
+
+     (sp-use-paredit-bindings)
+
+     (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+       (sp-local-pair "*" "*" :bind "C-*")
+       (sp-local-tag "2" "**" "**")
+       (sp-local-tag "s" "```scheme" "```")
+       (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+
+     (sp-with-modes '(html-mode sgml-mode)
+       (sp-local-pair "<" ">"))
+
+     ;; Close a backtick with another backtick in clojure-mode
+     (sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
+
+     (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p))
+   #+END_SRC
+** The Silver Surfer (~ag~)
+   A [[https://github.com/ggreer/the_silver_searcher][code searching tool]] similar to ack, with a focus on speed.
+
+   Can be [[https://github.com/ggreer/the_silver_searcher#installation][installed]] via Homebrew on OS X.
+
+   #+BEGIN_SRC emacs-lisp
+     (when (executable-find "ag")
+       (require-package 'ag)
+       (require-package 'wgrep-ag)
+       (setq-default ag-highlight-search t)
+       (global-set-key (kbd "M-?") 'ag-project))
+   #+END_SRC
+*** Highlight escape sequences
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'highlight-escape-sequences)
+      (hes-mode)
+    #+END_SRC
+*** Guide key
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'guide-key)
+      (setq guide-key/guide-key-sequence
+            '("C-x r"
+              "C-x 4"
+              "C-x 5"
+              "C-c ;"
+              "C-c ; f"
+              "C-c ' f"
+              "C-x n"))
+      (guide-key-mode 1)
+      (diminish 'guide-key-mode)
+    #+END_SRC
+*** Editorconfig
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'editorconfig)
+      (add-to-list 'auto-mode-alist '("\\.editorconfig\\'" . conf-unix-mode))
+    #+END_SRC
+*** recentf
+    #+BEGIN_SRC emacs-lisp
+      (recentf-mode 1)
+      (setq recentf-max-saved-items 1000
+            recentf-exclude '("/tmp/" "/ssh:"))
+     #+END_SRC
+** Undo tree
+   #+BEGIN_SRC emacs-lisp
+    (require-package 'undo-tree)
+    (global-undo-tree-mode)
+    (diminish 'undo-tree-mode)
+   #+END_SRC
+** Unfill
+  #+BEGIN_SRC emacs-lisp
+    (require-package 'unfill)
+   #+END_SRC
+** Whitespace cleanup
+   #+BEGIN_SRC emacs-lisp
+    (require-package 'whitespace-cleanup-mode)
+    (global-whitespace-cleanup-mode t)
+   #+END_SRC
+** wgrep
+    [[https://github.com/mhayashi1120/Emacs-wgrep][~wgrep~]] makes the ~grep~, and ~ag~ buffers writable so you can make
+    changes to your search results.
+
+    #+BEGIN_SRC emacs-lisp
+      (require-package 'wgrep)
+    #+END_SRC
+** Yasnippet
+   #+BEGIN_SRC emacs-lisp
+     (require-package 'yasnippet)
+     (require-package 'string-utils)
+
+     (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+     (yas-global-mode 1)
    #+END_SRC
 * Sessions
 ** Setup Desktop
@@ -1695,150 +2100,6 @@
        (unless (boundp 'desktop-restore-frames)
          (require-package 'frame-restore)
          (frame-restore)))
-  #+END_SRC
-* Dired
-  #+BEGIN_SRC emacs-lisp
-    (require-package 'dired+)
-
-    (setq diredp-hide-details-initially-flag nil)
-
-    (after-load 'dired
-    (require 'dired+)
-    (when (fboundp 'global-dired-hide-details-mode)
-    (global-dired-hide-details-mode -1))
-    (setq dired-recursive-deletes 'top)
-    (define-key dired-mode-map [mouse-2] 'dired-find-file)
-    (add-hook 'dired-mode-hook
-              (lambda () (guide-key/add-local-guide-key-sequence "%"))))
-  #+END_SRC
-* Interactively Do Things
-  #+BEGIN_SRC emacs-lisp
-    (require-package 'ido-vertical-mode)
-
-    (require 'ido)
-    (ido-mode t)
-    (ido-everywhere t)
-    (ido-vertical-mode 1)
-    (setq ido-enable-flex-matching t)
-    (setq ido-use-filename-at-point nil)
-    (setq ido-auto-merge-work-directories-length 0)
-    (setq ido-use-virtual-buffers t)
-
-    (when (eval-when-compile (>= emacs-major-version 24))
-     (require-package 'ido-ubiquitous)
-     (ido-ubiquitous-mode t))
-
-    ;; Use smex to handle M-x
-    (when (eval-when-compile (>= emacs-major-version 24))
-      (require-package 'smex)
-      ;; Change path for ~/.smex-items
-      (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
-      (global-set-key [remap execute-extended-command] 'smex))
-
-    (require-package 'idomenu)
-
-    ;; Allow the same buffer to be open in different frames
-    (setq ido-default-buffer-method 'selected-window)
-
-    ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
-    (add-hook 'ido-setup-hook (lambda () (define-key ido-completion-map [up] 'previous-history-element)))
-  #+END_SRC
-* SmartParens
-  #+BEGIN_SRC emacs-lisp
-    (require-package 'smartparens)
-
-    ;; I don't need paredit, but some package developers do!
-    (require-package 'paredit)
-
-    (after-load 'smartparens
-      (require 'paredit)
-      (disable-paredit-mode))
-
-    ;; Enable smartparens everywhere
-    (require 'smartparens-config)
-
-    (setq smartparens-strict-mode t)
-    (setq sp-autoinsert-if-followed-by-word t)
-    (setq sp-autoskip-closing-pair 'always)
-    (setq sp-base-key-bindings 'paredit)
-    (setq sp-hybrid-kill-entire-symbol nil)
-
-    (smartparens-global-mode 1)
-    (show-smartparens-global-mode +1)
-
-    (sp-use-paredit-bindings)
-
-    (sp-with-modes '(markdown-mode gfm-mode rst-mode)
-      (sp-local-pair "*" "*" :bind "C-*")
-      (sp-local-tag "2" "**" "**")
-      (sp-local-tag "s" "```scheme" "```")
-      (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
-
-    (sp-with-modes '(html-mode sgml-mode)
-      (sp-local-pair "<" ">"))
-
-    ;; Close a backtick with another backtick in clojure-mode
-    (sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
-
-    (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p))
-  #+END_SRC
-* Tags
-  Powered by [[http://www.gnu.org/software/global/][GNU Global]].
-
-  #+BEGIN_SRC emacs-lisp
-    (require-package 'ggtags)
-    (ggtags-mode 1)
-  #+END_SRC
-* Projectile
-   #+BEGIN_SRC emacs-lisp
-     (require-package 'projectile)
-     (projectile-global-mode)
-   #+END_SRC
-* Hippie
-  #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "M-/") 'hippie-expand)
-
-    (setq hippie-expand-try-functions-list
-          '(try-complete-file-name-partially
-            try-complete-file-name
-            try-expand-dabbrev
-            try-expand-dabbrev-all-buffers
-            try-expand-dabbrev-from-kill))
-  #+END_SRC
-* Company
-  #+BEGIN_SRC emacs-lisp
-    (require-package 'company)
-    (add-hook 'after-init-hook 'global-company-mode)
-
-    (defvar jcf/completion-backends
-      '(company-go company-inf-ruby company-tern))
-
-    (dolist (package jcf/completion-backends)
-      (require-package package))
-
-    (after-load 'company
-      (diminish 'company-mode)
-
-      ;; Add completion backends
-      (dolist (backend jcf/completion-backends)
-        (add-to-list 'company-backends backend)))
-  #+END_SRC
-* Yasnippet
-  #+BEGIN_SRC emacs-lisp
-    (require-package 'yasnippet)
-    (require-package 'string-utils)
-
-    (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-    (yas-global-mode 1)
-  #+END_SRC
-* Smart mode line
-  Disabled for now.
-
-  #+BEGIN_SRC emacs-lisp
-    ;; (require-package 'smart-mode-line)
-
-    ;; (setq sml/theme nil)
-    ;; (sml/setup)
   #+END_SRC
 * Window management
 ** Winner
@@ -2024,248 +2285,6 @@
 
      (setq darcsum-whatsnew-switches "-l")
    #+END_SRC
-* The Silver Surfer (~ag~)
-  A [[https://github.com/ggreer/the_silver_searcher][code searching tool]] similar to ack, with a focus on speed.
-
-  Can be [[https://github.com/ggreer/the_silver_searcher#installation][installed]] via Homebrew on OS X.
-
-  #+BEGIN_SRC emacs-lisp
-    (when (executable-find "ag")
-      (require-package 'ag)
-      (require-package 'wgrep-ag)
-      (setq-default ag-highlight-search t)
-      (global-set-key (kbd "M-?") 'ag-project))
-  #+END_SRC
-** Highlight escape sequences
-   #+BEGIN_SRC emacs-lisp
-     (require-package 'highlight-escape-sequences)
-     (hes-mode)
-   #+END_SRC
-** Guide key
-   #+BEGIN_SRC emacs-lisp
-     (require-package 'guide-key)
-     (setq guide-key/guide-key-sequence
-           '("C-x r"
-             "C-x 4"
-             "C-x 5"
-             "C-c ;"
-             "C-c ; f"
-             "C-c ' f"
-             "C-x n"))
-     (guide-key-mode 1)
-     (diminish 'guide-key-mode)
-   #+END_SRC
-** Editorconfig
-   #+BEGIN_SRC emacs-lisp
-     (require-package 'editorconfig)
-     (add-to-list 'auto-mode-alist '("\\.editorconfig\\'" . conf-unix-mode))
-   #+END_SRC
-** recentf
-   #+BEGIN_SRC emacs-lisp
-     (recentf-mode 1)
-     (setq recentf-max-saved-items 1000
-           recentf-exclude '("/tmp/" "/ssh:"))
-    #+END_SRC
-* Org mode
-** Basics
-   #+BEGIN_SRC emacs-lisp
-     (when (< emacs-major-version 24)
-       (require-package 'org))
-     (require-package 'org-fstree)
-     (when *is-a-mac*
-       (require-package 'org-mac-link)
-       (autoload 'org-mac-grab-link "org-mac-link" nil t)
-       (require-package 'org-mac-iCal))
-
-
-     (define-key global-map (kbd "C-c l") 'org-store-link)
-     (define-key global-map (kbd "C-c a") 'org-agenda)
-
-     ;; Various preferences
-     (setq org-log-done t
-           org-completion-use-ido t
-           org-edit-timestamp-down-means-later t
-           org-agenda-start-on-weekday nil
-           org-agenda-span 14
-           org-agenda-include-diary t
-           org-agenda-window-setup 'current-window
-           org-fast-tag-selection-single-key 'expert
-           org-export-kill-product-buffer-when-displayed t
-           org-tags-column 80)
-
-     ;; Syntax highlight inline code blocks
-     (setq org-src-fontify-natively t)
-
-     ;; Workaround issues with exporting HTML.
-     ;;
-     ;;     org-html-fontify-code: Wrong number of arguments:
-     ;;       #[(_beg _end) "À " [font-lock-fontify-buffer] 1], 0
-     (defun org-font-lock-ensure ()
-       (font-lock-fontify-buffer))
-
-     ;; Where to keep org files
-     (setq org-directory "~/Dropbox/Org"
-           org-agenda-files '("~/Dropbox/Org/")
-           org-default-notes-file "~/Dropbox/Org/refile.org")
-
-     ; Refile targets include this file and any file contributing to the agenda - up to 5 levels deep
-     (setq org-refile-targets (quote ((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))))
-     ; Targets start with the file name - allows creating level 1 tasks
-     (setq org-refile-use-outline-path (quote file))
-     ; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
-     (setq org-outline-path-complete-in-steps t)
-
-
-     (setq org-todo-keywords
-           (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
-                   (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)"))))
-   #+END_SRC
-** Org clock
-   #+BEGIN_SRC emacs-lisp
-     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
-     (setq org-clock-persistence-insinuate t)
-     (setq org-clock-persist t)
-     (setq org-clock-in-resume t)
-
-     ;; Change task state to STARTED when clocking in
-     (setq org-clock-in-switch-to-state "STARTED")
-     ;; Save clock data and notes in the LOGBOOK drawer
-     (setq org-clock-into-drawer t)
-     ;; Removes clocked tasks with 0:00 duration
-     (setq org-clock-out-remove-zero-time-clocks t)
-
-     ;; Show clock sums as hours and minutes, not "n days" etc.
-     (setq org-time-clocksum-format
-           '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
-
-     ;; Show the clocked-in task - if any - in the header line
-     (defun jcf/show-org-clock-in-header-line ()
-       (setq-default header-line-format '((" " org-mode-line-string " "))))
-
-     (defun jcf/hide-org-clock-from-header-line ()
-       (setq-default header-line-format nil))
-
-     (add-hook 'org-clock-in-hook 'jcf/show-org-clock-in-header-line)
-     (add-hook 'org-clock-out-hook 'jcf/hide-org-clock-from-header-line)
-     (add-hook 'org-clock-cancel-hook 'jcf/hide-org-clock-from-header-line)
-
-     (after-load 'org-clock
-       (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
-       (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
-   #+END_SRC
-** Pomodoro
-   #+BEGIN_SRC emacs-lisp
-     (require-package 'org-pomodoro)
-     (after-load 'org-agenda
-       (define-key org-agenda-mode-map (kbd "P") 'org-pomodoro))
-   #+END_SRC
-** iCal in agenda
-   Disabled for now.
-
-   #+BEGIN_SRC emacs-lisp
-     ;; (when (and *is-a-mac* (require 'org-mac-iCal nil t))
-     ;;   (setq org-agenda-include-diary t
-     ;;         org-agenda-custom-commands
-     ;;         '(("I" "Import diary from iCal" agenda ""
-     ;;            ((org-agenda-mode-hook #'org-mac-iCal)))))
-
-     ;;   (add-hook 'org-agenda-cleanup-fancy-diary-hook
-     ;;             (lambda ()
-     ;;               (goto-char (point-min))
-     ;;               (save-excursion
-     ;;                 (while (re-search-forward "^[a-z]" nil t)
-     ;;                   (goto-char (match-beginning 0))
-     ;;                   (insert "0:00-24:00 ")))
-     ;;               (while (re-search-forward "^ [a-z]" nil t)
-     ;;                 (goto-char (match-beginning 0))
-     ;;                 (save-excursion
-     ;;                   (re-search-backward "^[0-9]+:[0-9]+-[0-9]+:[0-9]+ " nil t))
-     ;;                 (insert (match-string 0))))))
-   #+END_SRC
-** Bindings
-   #+BEGIN_SRC emacs-lisp
-     (after-load 'org
-       (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
-       (when *is-a-mac*
-         (define-key org-mode-map (kbd "M-h") nil))
-       (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
-       (when *is-a-mac*
-         (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
-  #+END_SRC
-* Utilities
-** eshell
-   Always insert text at the prompt.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq eshell-scroll-to-bottom-on-input 'all)
-   #+END_SRC
-
-   Allow symbol names to be used for redirection targets.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq eshell-buffer-shorthand t)
-   #+END_SRC
-
-   This makes it possible to redirect output like so:
-
-   #+BEGIN_SRC shell-script
-     echo hello > '*scratch*
-   #+END_SRC
-
-   Ignore case when completing filenames.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq eshell-cmpl-ignore-case t)
-   #+END_SRC
-
-   Error when a glob matches nothing. This mirrors the default
-   behaviour of zsh.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq eshell-error-if-no-glob t)
-   #+END_SRC
-
-   Make globs case-insensitive.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq eshell-glob-case-insensitive t)
-   #+END_SRC
-** erc
-   #+BEGIN_SRC emacs-lisp
-     (after-load 'erc
-       (setq erc-hide-list '("JOIN" "PART" "QUIT"))
-
-       (setq erc-timestamp-only-if-changed-flag nil)
-       (setq erc-timestamp-format "[%H:%M] ")
-       (setq erc-insert-timestamp-function 'erc-insert-timestamp-left)
-
-       (setq erc-truncate-mode t)
-
-       (add-hook 'window-configuration-change-hook
-                 (lambda ()
-                   (setq erc-fill-column (- (window-width) 2)))))
-    #+END_SRC
-** Dash
-   #+BEGIN_SRC emacs-lisp
-     ;; Support for the http://kapeli.com/dash documentation browser
-
-     (defun jcf/dash-installed-p ()
-       "Return t if Dash is installed on this machine, or nil otherwise."
-       (let ((lsregister "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"))
-         (and (file-executable-p lsregister)
-              (not (string-equal
-                    ""
-                    (shell-command-to-string
-                     (concat lsregister " -dump|grep com.kapeli.dash")))))))
-
-     (when (and *is-a-mac* (not (package-installed-p 'dash-at-point)))
-       (message "Checking whether Dash is installed")
-       (when (jcf/dash-installed-p)
-         (require-package 'dash-at-point)))
-
-     (when (package-installed-p 'dash-at-point)
-       (global-set-key (kbd "C-c D") 'dash-at-point))
-   #+END_SRC
 * Languages
 ** Clojure
    #+BEGIN_SRC emacs-lisp
@@ -2434,19 +2453,6 @@
            :back "\"")))
        (dolist (mode (list 'html-mode 'nxml-mode))
          (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
-    #+END_SRC
-*** SASS & SCSS
-    #+BEGIN_SRC emacs-lisp
-     (require-package 'sass-mode)
-     (require-package 'scss-mode)
-     (setq-default scss-compile-at-save nil)
-    #+END_SRC
-*** LESS
-    #+BEGIN_SRC emacs-lisp
-     ;;; LESS
-     (require-package 'less-css-mode)
-     (when (featurep 'js2-mode)
-       (require-package 'skewer-less))
     #+END_SRC
 *** Use Eldoc for syntax hints
     #+BEGIN_SRC emacs-lisp
@@ -2685,6 +2691,13 @@
        (after-load 'skewer-mode
          (add-hook 'skewer-mode-hook
                    (lambda () (inferior-js-keys-mode -1)))))
+   #+END_SRC
+** LESS
+   #+BEGIN_SRC emacs-lisp
+    ;;; LESS
+    (require-package 'less-css-mode)
+    (when (featurep 'js2-mode)
+      (require-package 'skewer-less))
    #+END_SRC
 ** Lisp
    #+BEGIN_SRC emacs-lisp
@@ -3105,6 +3118,12 @@
       ;;      (mmm-add-mode-ext-class 'ruby-mode "\\.rb\\'" 'ruby-heredoc-sql)))
       ;;
       ;; (add-to-list 'mmm-set-file-name-for-modes 'ruby-mode)
+   #+END_SRC
+** SASS
+   #+BEGIN_SRC emacs-lisp
+    (require-package 'sass-mode)
+    (require-package 'scss-mode)
+    (setq-default scss-compile-at-save nil)
    #+END_SRC
 ** Shell
 *** Add ~.zsh~ files to ~sh-mode~
