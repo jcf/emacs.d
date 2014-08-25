@@ -16,11 +16,11 @@
    Out of the box there are some pretty major enhancements to Emacs, including:
 
    - Great OS X support
-   - Org mode on top of Dropbox (`~/Dropbox/Org`)
+   - Org mode on top of Dropbox (~~/Dropbox/Org~)
    - Projectile ready to go
-   - Replacement of the built-in <kbd>M-x</kbd> with `smex`
+   - Replacement of the built-in ~M-x~ with ~smex~
    - Smartparens
-   - Use of `ido` everywhere
+   - Use of ~ido~ everywhere
 
    Support for a number of languages and file formats including but
    not limited to:
