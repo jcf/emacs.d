@@ -1768,10 +1768,16 @@
      (require-package 'mwe-log-commands)
    #+END_SRC
 ** Org mode
-*** Basics
+*** Installation
+
+    Always install Org from package to ensure we get a recent version.
+
     #+BEGIN_SRC emacs-lisp
-      (when (< emacs-major-version 24)
-        (require-package 'org))
+      (require-package 'org)
+    #+END_SRC
+
+*** Basics
+   #+BEGIN_SRC emacs-lisp
       (require-package 'org-fstree)
       (when *is-a-mac*
         (require-package 'org-mac-link)
