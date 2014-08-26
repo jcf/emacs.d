@@ -1702,7 +1702,7 @@
 *** Global keybinding
     #+BEGIN_SRC emacs-lisp
       (global-set-key (kbd "C-x C-b") 'ibuffer)
-    #+END_SR
+    #+END_SRC
 ** ido
    #+BEGIN_SRC emacs-lisp
      (require-package 'ido-vertical-mode)
