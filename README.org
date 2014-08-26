@@ -7,13 +7,16 @@
 
 * emacs.d
 ** Introduction
+
   *My evil Emacs configuration* generated from the documentation you
   see before you.
 
   I'm in the process of documenting everything, and grouping logic
   pieces of configuration. It's quite apparent having moved everything
   into Org how much I can improve on how things are organised.
+
 ** What's in the box?
+
    Out of the box there are some pretty major enhancements to Emacs, including:
 
    - Great OS X support
@@ -38,7 +41,9 @@
    - Ruby
    - Ruby on Rails
    - Textile
+
 ** Minimum Emacs version
+
    Emacs 23 or greater. Note that Emacs 24 is required for some
    functionality, and will likely become the minimum required version
    some time soon.
@@ -48,8 +53,10 @@
        (unless (>= emacs-major-version minver)
          (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
    #+END_SRC
+
 * Startup
 ** Benchmark begin
+
    Emacs startup time can be avoided through use of an Emacs client and
    server. There are occassions where Emacs has to be restarted
    however, and on these occassions it's nice when we don't have to
@@ -77,18 +84,25 @@
                                                                 require-start-time))
                           t)))))
    #+END_SRC
+
 ** Constants
+
    Settings that modify the behaviour of later configuration.
+
 *** Spell check
+
     Enable with ~t~, disable with ~nil~.
 
     #+BEGIN_SRC emacs-lisp
      (defconst *spell-check-support-enabled* t)
     #+END_SRC
+
 *** OS X
+
     #+BEGIN_SRC emacs-lisp
      (defconst *is-a-mac* (eq system-type 'darwin))
     #+END_SRC
+
 ** Compatibility
 *** Backport string-prefix-p
     #+BEGIN_SRC emacs-lisp
