@@ -1889,6 +1889,11 @@
       ;;                   (re-search-backward "^[0-9]+:[0-9]+-[0-9]+:[0-9]+ " nil t))
       ;;                 (insert (match-string 0))))))
     #+END_SRC
+*** Clojure support
+    #+BEGIN_SRC emacs-lisp
+      (require 'ob-clojure)
+      (setq org-babel-clojure-backend 'cider)
+    #+END_SRC
 *** Bindings
     #+BEGIN_SRC emacs-lisp
       (after-load 'org
