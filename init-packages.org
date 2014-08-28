@@ -1,0 +1,735 @@
+#+TITLE: emacs.d - Packages
+#+AUTHOR: James Conroy-Finn
+#+EMAIL: james@logi.cl
+#+STARTUP: showall
+#+OPTIONS: toc:2 num:nil ^:nil
+
+* Packages
+
+  The many packages we use are required and configured below.
+
+** Ace Jump
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    (require 'ace-jump-mode)
+    (global-set-key (kbd "C-;") 'ace-jump-mode)
+    (global-set-key (kbd "C-:") 'ace-jump-word-mode)
+   #+end_src
+
+** Company
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'company)
+     (add-hook 'after-init-hook 'global-company-mode)
+
+     (defvar jcf/completion-backends
+       '(company-go company-inf-ruby company-tern))
+
+     (dolist (package jcf/completion-backends)
+       (require package))
+
+     (after-load 'company
+       (diminish 'company-mode)
+
+       ;; Add completion backends
+       (dolist (backend jcf/completion-backends)
+         (add-to-list 'company-backends backend)))
+   #+end_src
+
+** Dash
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     ;; Support for the http://kapeli.com/dash documentation browser
+
+     (defun jcf/dash-installed-p ()
+       "Return t if Dash is installed on this machine, or nil otherwise."
+       (let ((lsregister "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"))
+         (and (file-executable-p lsregister)
+              (not (string-equal
+                    ""
+                    (shell-command-to-string
+                     (concat lsregister " -dump|grep com.kapeli.dash")))))))
+
+     (when (and *is-a-mac* (not (package-installed-p 'dash-at-point)))
+       (message "Checking whether Dash is installed")
+       (when (jcf/dash-installed-p)
+         (require 'dash-at-point)))
+
+     (when (package-installed-p 'dash-at-point)
+       (global-set-key (kbd "C-c D") 'dash-at-point))
+   #+end_src
+
+** Dired
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'dired+)
+
+     (setq diredp-hide-details-initially-flag nil)
+
+     (after-load 'dired
+     (require 'dired+)
+     (when (fboundp 'global-dired-hide-details-mode)
+     (global-dired-hide-details-mode -1))
+     (setq dired-recursive-deletes 'top)
+     (define-key dired-mode-map [mouse-2] 'dired-find-file)
+     (add-hook 'dired-mode-hook
+               (lambda () (guide-key/add-local-guide-key-sequence "%"))))
+   #+end_src
+
+** dsvn
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'dsvn)
+   #+end_src
+
+** Electric pair mode
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    (when (fboundp 'electric-pair-mode)
+      (setq-default electric-pair-mode 1))
+   #+end_src
+
+** erc
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (after-load 'erc
+       (setq erc-hide-list '("JOIN" "PART" "QUIT"))
+
+       (setq erc-timestamp-only-if-changed-flag nil)
+       (setq erc-timestamp-format "[%H:%M] ")
+       (setq erc-insert-timestamp-function 'erc-insert-timestamp-left)
+
+       (setq erc-truncate-mode t)
+
+       (add-hook 'window-configuration-change-hook
+                 (lambda ()
+                   (setq erc-fill-column (- (window-width) 2)))))
+    #+end_src
+
+** eshell
+
+   Always insert text at the prompt.
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (setq eshell-scroll-to-bottom-on-input 'all)
+   #+end_src
+
+   Allow symbol names to be used for redirection targets.
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (setq eshell-buffer-shorthand t)
+   #+end_src
+
+   This makes it possible to redirect output like so:
+
+   #+BEGIN_SRC shell-script
+     echo hello > '*scratch*
+   #+end_src
+
+   Ignore case when completing filenames.
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (setq eshell-cmpl-ignore-case t)
+   #+end_src
+
+   Error when a glob matches nothing. This mirrors the default
+   behaviour of zsh.
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (setq eshell-error-if-no-glob t)
+   #+end_src
+
+   Make globs case-insensitive.
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (setq eshell-glob-case-insensitive t)
+   #+end_src
+
+** Expand region
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    (require 'expand-region)
+    (global-set-key (kbd "C-=") 'er/expand-region)
+   #+end_src
+
+** Fill column indicator
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (when (eval-when-compile (> emacs-major-version 23))
+       (require 'fill-column-indicator)
+       (defun jcf/prog-mode-fci-settings ()
+         (turn-on-fci-mode)
+         (when show-trailing-whitespace
+           (set (make-local-variable 'whitespace-style) '(face trailing))
+           (whitespace-mode 1)))
+
+       ;;(add-hook 'prog-mode-hook 'jcf/prog-mode-fci-settings)
+
+       (defun jcf/fci-enabled-p ()
+         (and (boundp 'fci-mode) fci-mode))
+
+       (defvar jcf/fci-mode-suppressed nil)
+       (defadvice popup-create (before suppress-fci-mode activate)
+         "Suspend fci-mode while popups are visible"
+         (let ((fci-enabled (jcf/fci-enabled-p)))
+           (when fci-enabled
+             (set (make-local-variable 'jcf/fci-mode-suppressed) fci-enabled)
+             (turn-off-fci-mode))))
+       (defadvice popup-delete (after restore-fci-mode activate)
+         "Restore fci-mode when all popups have closed"
+         (when (and jcf/fci-mode-suppressed
+                    (null popup-instances))
+           (setq jcf/fci-mode-suppressed nil)
+           (turn-on-fci-mode)))
+
+       ;; Regenerate fci-mode line images after switching themes
+       (defadvice enable-theme (after recompute-fci-face activate)
+         (dolist (buffer (buffer-list))
+           (with-current-buffer buffer
+             (when (jcf/fci-enabled-p)
+               (turn-on-fci-mode))))))
+   #+end_src
+
+** Global Tags
+
+   Powered by [[http://www.gnu.org/software/global/][GNU Global]].
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'ggtags)
+     (ggtags-mode 1)
+   #+end_src
+
+** gnuplot
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'gnuplot)
+   #+end_src
+
+** google-this
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'google-this)
+   #+end_src
+
+** Highlight symbols
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    (require 'highlight-symbol)
+    (dolist (hook '(prog-mode-hook html-mode-hook))
+      (add-hook hook 'highlight-symbol-mode)
+      (add-hook hook 'highlight-symbol-nav-mode))
+    (eval-after-load 'highlight-symbol
+      '(diminish 'highlight-symbol-mode))
+   #+end_src
+
+** Hippie
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (global-set-key (kbd "M-/") 'hippie-expand)
+
+     (setq hippie-expand-try-functions-list
+           '(try-complete-file-name-partially
+             try-complete-file-name
+             try-expand-dabbrev
+             try-expand-dabbrev-all-buffers
+             try-expand-dabbrev-from-kill))
+   #+end_src
+
+** htmlize
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'htmlize)
+   #+end_src
+
+** ibuffer
+
+*** Go fullframe
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'fullframe)
+      (after-load 'ibuffer
+       (fullframe ibuffer ibuffer-quit))
+    #+end_src
+
+*** Version-control support
+
+    Explicitly require ~ibuffer-vc~ to get its column definitions,
+    as they can't be autoloaded.
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'ibuffer-vc)
+      (after-load 'ibuffer
+        (require 'ibuffer-vc))
+    #+end_src
+
+*** Filters
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (defun ibuffer-set-up-preferred-filters ()
+        (ibuffer-vc-set-filter-groups-by-vc-root)
+        (unless (eq ibuffer-sorting-mode 'filename/process)
+          (ibuffer-do-sort-by-filename/process)))
+
+      (add-hook 'ibuffer-hook 'ibuffer-set-up-preferred-filters)
+    #+end_src
+
+*** Human readable file sizes
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (after-load 'ibuffer
+        (define-ibuffer-column size-h
+          (:name "Size" :inline t)
+          (cond
+           ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+           ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
+           (t (format "%8d" (buffer-size))))))
+    #+end_src
+
+*** ~ibuffer-formats~
+
+    Toggle with ~`~.
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (setq ibuffer-formats
+            '((mark modified read-only vc-status-mini " "
+                    (name 18 18 :left :elide)
+                    " "
+                    (size-h 9 -1 :right)
+                    " "
+                    (mode 16 16 :left :elide)
+                    " "
+                    filename-and-process)
+              (mark modified read-only vc-status-mini " "
+                    (name 18 18 :left :elide)
+                    " "
+                    (size-h 9 -1 :right)
+                    " "
+                    (mode 16 16 :left :elide)
+                    " "
+                    (vc-status 16 16 :left)
+                    " "
+                    filename-and-process)))
+
+      (setq ibuffer-filter-group-name-face 'font-lock-doc-face)
+    #+end_src
+
+*** Global keybinding
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (global-set-key (kbd "C-x C-b") 'ibuffer)
+    #+end_src
+
+** ido
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'ido-vertical-mode)
+
+     (require 'ido)
+     (ido-mode t)
+     (ido-everywhere t)
+     (ido-vertical-mode 1)
+     (setq ido-enable-flex-matching t)
+     (setq ido-use-filename-at-point nil)
+     (setq ido-auto-merge-work-directories-length 0)
+     (setq ido-use-virtual-buffers t)
+
+     (when (eval-when-compile (>= emacs-major-version 24))
+      (require 'ido-ubiquitous)
+      (ido-ubiquitous-mode t))
+
+     ;; Use smex to handle M-x
+     (when (eval-when-compile (>= emacs-major-version 24))
+       (require 'smex)
+       ;; Change path for ~/.smex-items
+       (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+       (global-set-key [remap execute-extended-command] 'smex))
+
+     (require 'idomenu)
+
+     ;; Allow the same buffer to be open in different frames
+     (setq ido-default-buffer-method 'selected-window)
+
+     ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
+     (add-hook 'ido-setup-hook (lambda () (define-key ido-completion-map [up] 'previous-history-element)))
+   #+end_src
+
+** Key Chord
+
+   #+BEGIN_QUOTE
+   Key-chord lets you bind commands to combination of key-strokes. Here
+   a "key chord" means two keys pressed simultaneously, or a single key
+   quickly pressed twice.
+   #+END_QUOTE
+
+   http://www.emacswiki.org/emacs/KeyChord
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'key-chord)
+
+     (setq key-chord-two-keys-delay 0.05)
+
+     (key-chord-mode 1)
+     (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+   #+end_src
+
+** Multiple major modes
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'mmm-mode)
+     (require 'mmm-auto)
+     (setq mmm-global-mode 'buffers-with-submode-classes)
+     (setq mmm-submode-decoration-level 0)
+   #+end_src
+
+** mwe-log-commands
+
+   [[http://www.foldr.org/~michaelw/emacs/mwe-log-commands.el][~mwe-log-commands~]] is logs is designed for use during demos, logging
+   keystrokes into a designated buffer, along with the command bound to
+   them.
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'mwe-log-commands)
+   #+end_src
+
+** Org mode
+
+*** Installation
+
+    Always install Org from package to ensure we get a recent version.
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'org)
+    #+end_src
+
+*** Basics
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'org-fstree)
+      (when *is-a-mac*
+        (require 'org-mac-link)
+        (autoload 'org-mac-grab-link "org-mac-link" nil t)
+        (require 'org-mac-iCal))
+
+
+      (define-key global-map (kbd "C-c l") 'org-store-link)
+      (define-key global-map (kbd "C-c a") 'org-agenda)
+
+      ;; Various preferences
+      (setq org-log-done t
+            org-completion-use-ido t
+            org-edit-timestamp-down-means-later t
+            org-agenda-start-on-weekday nil
+            org-agenda-span 14
+            org-agenda-include-diary t
+            org-agenda-window-setup 'current-window
+            org-fast-tag-selection-single-key 'expert
+            org-export-kill-product-buffer-when-displayed t
+            org-tags-column 80)
+
+      ;; Syntax highlight inline code blocks
+      (setq org-src-fontify-natively t)
+
+      ;; Workaround issues with exporting HTML.
+      ;;
+      ;;     org-html-fontify-code: Wrong number of arguments:
+      ;;       #[(_beg _end) "À " [font-lock-fontify-buffer] 1], 0
+      (defun org-font-lock-ensure ()
+        (font-lock-fontify-buffer))
+
+      ;; Where to keep org files
+      (setq org-directory "~/Dropbox/Org"
+            org-agenda-files '("~/Dropbox/Org/")
+            org-default-notes-file "~/Dropbox/Org/refile.org")
+
+      ; Refile targets include this file and any file contributing to the agenda - up to 5 levels deep
+      (setq org-refile-targets (quote ((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))))
+      ; Targets start with the file name - allows creating level 1 tasks
+      (setq org-refile-use-outline-path (quote file))
+      ; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
+      (setq org-outline-path-complete-in-steps t)
+
+
+      (setq org-todo-keywords
+            (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
+                    (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)"))))
+    #+end_src
+
+*** Org clock
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+      (setq org-clock-persistence-insinuate t)
+      (setq org-clock-persist t)
+      (setq org-clock-in-resume t)
+
+      ;; Change task state to STARTED when clocking in
+      (setq org-clock-in-switch-to-state "STARTED")
+      ;; Save clock data and notes in the LOGBOOK drawer
+      (setq org-clock-into-drawer t)
+      ;; Removes clocked tasks with 0:00 duration
+      (setq org-clock-out-remove-zero-time-clocks t)
+
+      ;; Show clock sums as hours and minutes, not "n days" etc.
+      (setq org-time-clocksum-format
+            '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+
+      ;; Show the clocked-in task - if any - in the header line
+      (defun jcf/show-org-clock-in-header-line ()
+        (setq-default header-line-format '((" " org-mode-line-string " "))))
+
+      (defun jcf/hide-org-clock-from-header-line ()
+        (setq-default header-line-format nil))
+
+      (add-hook 'org-clock-in-hook 'jcf/show-org-clock-in-header-line)
+      (add-hook 'org-clock-out-hook 'jcf/hide-org-clock-from-header-line)
+      (add-hook 'org-clock-cancel-hook 'jcf/hide-org-clock-from-header-line)
+
+      (after-load 'org-clock
+        (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
+        (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
+    #+end_src
+
+*** Pomodoro
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'org-pomodoro)
+      (after-load 'org-agenda
+        (define-key org-agenda-mode-map (kbd "P") 'org-pomodoro))
+    #+end_src
+
+*** iCal in agenda
+
+    Disabled for now.
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      ;; (when (and *is-a-mac* (require 'org-mac-iCal nil t))
+      ;;   (setq org-agenda-include-diary t
+      ;;         org-agenda-custom-commands
+      ;;         '(("I" "Import diary from iCal" agenda ""
+      ;;            ((org-agenda-mode-hook #'org-mac-iCal)))))
+
+      ;;   (add-hook 'org-agenda-cleanup-fancy-diary-hook
+      ;;             (lambda ()
+      ;;               (goto-char (point-min))
+      ;;               (save-excursion
+      ;;                 (while (re-search-forward "^[a-z]" nil t)
+      ;;                   (goto-char (match-beginning 0))
+      ;;                   (insert "0:00-24:00 ")))
+      ;;               (while (re-search-forward "^ [a-z]" nil t)
+      ;;                 (goto-char (match-beginning 0))
+      ;;                 (save-excursion
+      ;;                   (re-search-backward "^[0-9]+:[0-9]+-[0-9]+:[0-9]+ " nil t))
+      ;;                 (insert (match-string 0))))))
+    #+end_src
+
+*** Clojure support
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'ob-clojure)
+      (setq org-babel-clojure-backend 'cider)
+    #+end_src
+
+*** Bindings
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (after-load 'org
+        (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
+        (when *is-a-mac*
+          (define-key org-mode-map (kbd "M-h") nil))
+        (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
+        (when *is-a-mac*
+          (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
+   #+end_src
+
+** Page break lines
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'page-break-lines)
+     (global-page-break-lines-mode)
+     (diminish 'page-break-lines-mode)
+   #+end_src
+
+** project-local-variables
+
+    The [[http://www.emacswiki.org/emacs/ProjectLocalVariables][~project-local-variables~]] package looks for a ~.emacs-project~
+    file in your current directory, and evaluates its contents.
+
+    This poses an obvious security risk as any arbitrary Lisp code will
+    be evaluated when found.
+
+    Consider replacing with the built-in [[http://www.emacswiki.org/emacs/DirectoryVariables][~directory-variables~]].
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'project-local-variables)
+    #+end_src
+
+** Projectile
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'projectile)
+      (projectile-global-mode)
+    #+end_src
+
+** regex-tool
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'regex-tool)
+   #+end_src
+** Scratch
+
+   When Emacs starts up, it contains a buffer named *scratch*, which
+   is provided for evaluating Emacs Lisp expressions
+   interactively. Its major mode is Lisp Interaction mode. You can
+   also enable Lisp Interaction mode by typing ~M-x
+   lisp-interaction-mode~.
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'scratch)
+   #+end_src
+
+** Smart mode line
+
+   Disabled for now.
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     ;; (require 'smart-mode-line)
+
+     ;; (setq sml/theme nil)
+     ;; (sml/setup)
+   #+end_src
+
+** SmartParens
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'smartparens)
+
+     ;; I don't need paredit, but some package developers do!
+     (require 'paredit)
+
+     (after-load 'smartparens
+       (require 'paredit)
+       (disable-paredit-mode))
+
+     ;; Enable smartparens everywhere
+     (require 'smartparens-config)
+
+     (setq smartparens-strict-mode t)
+     (setq sp-autoinsert-if-followed-by-word t)
+     (setq sp-autoskip-closing-pair 'always)
+     (setq sp-base-key-bindings 'paredit)
+     (setq sp-hybrid-kill-entire-symbol nil)
+
+     (smartparens-global-mode 1)
+     (show-smartparens-global-mode +1)
+
+     (sp-use-paredit-bindings)
+
+     (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+       (sp-local-pair "*" "*" :bind "C-*")
+       (sp-local-tag "2" "**" "**")
+       (sp-local-tag "s" "```scheme" "```")
+       (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+
+     (sp-with-modes '(html-mode sgml-mode)
+       (sp-local-pair "<" ">"))
+
+     ;; Close a backtick with another backtick in clojure-mode
+     (sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
+
+     (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p))
+   #+end_src
+
+** The Silver Surfer (~ag~)
+
+   A [[https://github.com/ggreer/the_silver_searcher][code searching tool]] similar to ack, with a focus on speed.
+
+   Can be [[https://github.com/ggreer/the_silver_searcher#installation][installed]] via Homebrew on OS X.
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (when (executable-find "ag")
+       (require 'ag)
+       (require 'wgrep-ag)
+       (setq-default ag-highlight-search t)
+       (global-set-key (kbd "M-?") 'ag-project))
+   #+end_src
+
+*** Highlight escape sequences
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'highlight-escape-sequences)
+      (hes-mode)
+    #+end_src
+
+*** Guide key
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'guide-key)
+      (setq guide-key/guide-key-sequence
+            '("C-x r"
+              "C-x 4"
+              "C-x 5"
+              "C-c ;"
+              "C-c ; f"
+              "C-c ' f"
+              "C-x n"))
+      (guide-key-mode 1)
+      (diminish 'guide-key-mode)
+    #+end_src
+
+*** Editorconfig
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'editorconfig)
+      (add-to-list 'auto-mode-alist '("\\.editorconfig\\'" . conf-unix-mode))
+    #+end_src
+
+*** recentf
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (recentf-mode 1)
+      (setq recentf-max-saved-items 1000
+            recentf-exclude '("/tmp/" "/ssh:"))
+     #+end_src
+
+** Undo tree
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    (require 'undo-tree)
+    (global-undo-tree-mode)
+    (diminish 'undo-tree-mode)
+   #+end_src
+
+** Unfill
+
+  #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    (require 'unfill)
+   #+end_src
+
+** wgrep
+
+    [[https://github.com/mhayashi1120/Emacs-wgrep][~wgrep~]] makes the ~grep~, and ~ag~ buffers writable so you can make
+    changes to your search results.
+
+    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+      (require 'wgrep)
+    #+end_src
+
+** Whitespace cleanup
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    (require 'whitespace-cleanup-mode)
+    (global-whitespace-cleanup-mode t)
+   #+end_src
+
+** Yasnippet
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (require 'yasnippet)
+     (require 'string-utils)
+
+     (let ((snippets-dir (expand-file-name "snippets" user-emacs-directory)))
+       (if (f-directory? snippets-dir)
+           (setq yas-snippet-dirs snippets-dir)))
+
+     (yas-global-mode 1)
+   #+end_src

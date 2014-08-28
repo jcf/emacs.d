@@ -1,0 +1,151 @@
+#+TITLE: emacs.d - Version Control
+#+AUTHOR: James Conroy-Finn
+#+EMAIL: james@logi.cl
+#+STARTUP: showall
+#+OPTIONS: toc:2 num:nil ^:nil
+
+* Version Control
+
+** diff-hl
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'diff-hl)
+     (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
+     (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode)
+   #+END_SRC
+
+** Git
+
+*** Setup Magit
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'magit)
+     (require 'git-blame)
+     (require 'git-commit-mode)
+     (require 'git-rebase-mode)
+     (require 'gitignore-mode)
+     (require 'gitconfig-mode)
+     (require 'git-messenger)
+
+     (setq-default
+      magit-save-some-buffers nil
+      magit-process-popup-time 10
+      magit-diff-refine-hunk t
+      magit-completing-read-function 'magit-ido-completing-read)
+
+     (after-load 'magit
+       (diminish 'magit-auto-revert-mode))
+    #+END_SRC
+
+*** Emacs-style magit-status binding
+
+    #+BEGIN_SRC emacs-lisp
+     ;; Hint: customize `magit-repo-dirs' so that you can use C-u M-F12 to
+     ;; quickly open magit on any one of your projects.
+     (global-set-key [(meta f12)] 'magit-status)
+    #+END_SRC
+
+*** Go to parent section binding
+
+    #+BEGIN_SRC emacs-lisp
+     (after-load 'magit
+       (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-goto-parent-section))
+    #+END_SRC
+
+*** Fullframe
+
+    #+BEGIN_SRC emacs-lisp
+     (require 'fullframe)
+     (after-load 'magit
+       (fullframe magit-status magit-mode-quit-window))
+    #+END_SRC
+
+*** ~git-wip~
+
+    Disabled because I found it irritating.
+
+    #+BEGIN_SRC emacs-lisp
+     ;; (after-load 'magit
+     ;;   (global-magit-wip-save-mode)
+     ;;   (diminish 'magit-wip-save-mode))
+    #+END_SRC
+
+*** Disable ~command-h~ on OS X
+
+    #+BEGIN_SRC emacs-lisp
+     (when *is-a-mac*
+       (after-load 'magit
+         (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+    #+END_SRC
+
+*** ~git-grep~ binding
+
+    #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "C-x v f") 'vc-git-grep)
+    #+END_SRC
+
+*** Subversion support (~git-svn~)
+
+    #+BEGIN_SRC emacs-lisp
+      (require 'magit-svn)
+      (autoload 'magit-svn-enabled "magit-svn")
+
+      (defun jcf/maybe-enable-magit-svn-mode ()
+        (when (magit-svn-enabled)
+          (magit-svn-mode)))
+
+      (add-hook 'magit-status-mode-hook #'jcf/maybe-enable-magit-svn-mode)
+
+      (after-load 'compile
+        (dolist
+            (defn (list '(git-svn-updated "^\t[A-Z]\t\\(.*\\)$" 1 nil nil 0 1)
+                        '(git-svn-needs-update "^\\(.*\\): needs update$" 1 nil nil 2 1)))
+          (add-to-list 'compilation-error-regexp-alist-alist defn)
+          (add-to-list 'compilation-error-regexp-alist (car defn))))
+
+      (defvar git-svn--available-commands nil "Cached list of git svn subcommands")
+
+      (defun git-svn (dir)
+        "Run a git svn subcommand in DIR."
+        (interactive "DSelect directory: ")
+        (unless git-svn--available-commands
+          (setq git-svn--available-commands
+                (jcf/string-all-matches
+                 "^  \\([a-z\\-]+\\) +"
+                 (shell-command-to-string "git svn help") 1)))
+        (let* ((default-directory (vc-git-root dir))
+               (compilation-buffer-name-function (lambda (major-mode-name) "*git-svn*")))
+          (compile (concat "git svn "
+                           (ido-completing-read "git-svn command: "
+                                                git-svn--available-commands nil t)))))
+    #+END_SRC
+
+*** TODO Messenger - explain what this is for
+
+    #+BEGIN_SRC emacs-lisp
+     (require 'git-messenger)
+     (global-set-key (kbd "C-x v p") #'git-messenger:popup-message)
+    #+END_SRC
+
+*** GitHub
+
+    #+BEGIN_SRC emacs-lisp
+     (require 'gh)
+     (require 'yagist)
+     (require 'github-browse-file)
+     (require 'bug-reference-github)
+     (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
+   #+END_SRC
+
+** Darcs
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'darcsum)
+     (require 'vc-darcs)
+
+     (add-to-list 'vc-handled-backends 'DARCS)
+     (autoload 'vc-darcs-find-file-hook "vc-darcs")
+     (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
+
+     (setq darcsum-whatsnew-switches "-l")
+   #+END_SRC

@@ -1,0 +1,113 @@
+#+TITLE: emacs.d - OS X
+#+AUTHOR: James Conroy-Finn
+#+EMAIL: james@logi.cl
+#+STARTUP: showall
+#+OPTIONS: toc:2 num:nil ^:nil
+#+LINK: dotfiles https://github.com/jcf/dotfiles
+#+LINK: source-code-pro http://store1.adobe.com/cfusion/store/html/index.cfm?event=displayFontPackage&code=1960
+
+* OS X
+
+  All things specific to OS X are kept here, and only load this file
+  if we're on a Mac.
+
+** Fullscreen via the keyboard
+
+   Toggle native OS X fullscreen with Command-Option-f.
+
+   #+begin_src emacs-lisp :tangle init-osx.el :comments link
+     (when (fboundp 'toggle-frame-fullscreen)
+       (global-set-key (kbd "M-ƒ") 'toggle-frame-fullscreen))
+   #+end_src
+
+** Set default font
+
+   Source Code Pro is a highly legible and pleasant font to work with.
+
+   It is installed automatically by my [[dotfiles]] and can be downloaded
+   for free from [[source-code-pro][Adobe]].
+
+   #+begin_src emacs-lisp :tangle init-osx.el :comments link
+     (set-frame-font "-*-Source Code Pro-normal-normal-normal-*-12-*-*-*-m-0-iso10646-1")
+   #+end_src
+
+** Input
+
+   Sets up a number of Mac-specific key bindings and mouse settings.
+
+   1. Use ~command~ as ~meta~
+   2. Leave ~option~ alone
+   3. Make mouse wheel/trackpad scrolling less jerky
+   4. ~M-`~ to switch frame
+   5. Hide Emacs with ~M-h~
+   6. Hide others with ~M-H~
+   7. Copy and paste with ~M-c~ and ~M-v~ respectively
+
+   #+begin_src emacs-lisp :tangle init-osx.el :comments link
+     (when *is-a-mac*
+       (setq mac-command-modifier 'meta)
+       (setq mac-option-modifier 'none)
+       (setq mouse-wheel-scroll-amount '(1
+                                         ((shift) . 5)
+                                         ((control))))
+       (global-set-key (kbd "M-`") 'ns-next-frame)
+       (global-set-key (kbd "M-h") 'ns-do-hide-emacs)
+       (after-load 'nxml-mode
+         (define-key nxml-mode-map (kbd "M-h") nil))
+       ;; What describe-key reports for cmd-option-h
+       (global-set-key (kbd "M-ˍ") 'ns-do-hide-others)
+       (global-set-key (kbd "M-v") 'cua-paste)
+       (global-set-key (kbd "M-c") 'cua-copy-region))
+   #+end_src
+
+** Hook locate upto Spotlight
+
+  #+begin_src emacs-lisp :tangle init-osx.el :comments link
+    (setq-default locate-command "mdfind")
+  #+end_src
+
+** Proxy
+
+   Pick up ~http_proxy~ & ~https_proxy~ from Mac system config using
+   [[http://www.cs.usyd.edu.au/~massad/project-proxy-config.html][proxy-config]].
+
+   #+begin_src emacs-lisp :tangle init-osx.el :comments link
+     (when (and *is-a-mac* (executable-find "proxy-config"))
+       (defun mac-configured-proxy (proto)
+         (jcf/string-rtrim
+          (shell-command-to-string
+           (concat "proxy-config " (cdr (assoc-string proto '(("http" . "-h")
+                                                              ("https" . "-s"))))))))
+
+       (defun extract-host-and-port (url-string)
+         (if (string-match "^[a-z]+://\\([^/]+\\)" url-string)
+           (match-string 1 url-string)
+           url-string))
+
+       (defun assq-delete-all-with-test (k l &optional test)
+         (let ((test-func (or test #'eq)))
+           (loop for entry in l
+                 unless (funcall test-func k (car entry))
+                 collect entry)))
+
+       (defun mac-set-proxy-vars ()
+         (interactive)
+         (require 'url)
+         (loop for proto in '("http" "https")
+               for proxy = (mac-configured-proxy proto)
+               do
+               (setenv (concat proto "_proxy" proxy))
+               (setq url-proxy-services
+                     (append (assq-delete-all-with-test proto
+                                                        url-proxy-services
+                                                        #'equal)
+                             (if (not (equal "" proxy))
+                                 (list (cons proto (extract-host-and-port proxy)))))))
+         (message "Proxy variables updated")))
+   #+end_src
+
+** Location
+
+   #+begin_src emacs-lisp :tangle init-osx.el :comments link
+     (require 'osx-location)
+   #+end_src

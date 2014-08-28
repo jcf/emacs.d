@@ -1,0 +1,517 @@
+#+TITLE: emacs.d - Genesis
+#+AUTHOR: James Conroy-Finn
+#+EMAIL: james@logi.cl
+#+STARTUP: showall
+#+OPTIONS: toc:2 num:nil ^:nil
+
+* Genesis
+
+  In the beginning Org mode configured the basics and the
+  essentials. These were the fundamentals that make Emacs behave the
+  way we want.
+
+** The basics
+
+   These settings are the first steps towards making Emacs behave the
+   way we want. Each variable has corresponding documentation
+   accessible via ~describe-variable~.
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (setq-default
+      buffers-menu-max-size 30
+      case-fold-search t
+      column-number-mode t
+      compilation-scroll-output t
+      delete-selection-mode t
+      indent-tabs-mode nil
+      line-spacing 0.2
+      make-backup-files nil
+      mouse-yank-at-point t
+      next-line-add-newlines nil
+      require-final-newline t
+      save-interprogram-paste-before-kill t
+      scroll-preserve-screen-position 'always
+      set-mark-command-repeat-pop t
+      show-trailing-whitespace t
+      tooltip-delay 1.5
+      truncate-lines nil
+      truncate-partial-width-windows nil
+      visible-bell t)
+   #+end_src
+
+** grep
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (setq-default
+      grep-highlight-matches t
+      grep-scroll-output t)
+   #+end_src
+
+** ediff
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (setq-default
+      ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain)
+   #+END_SRC
+
+** Blink cursor
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (setq-default
+      blink-cursor-delay 0
+      blink-cursor-interval 0.4)
+   #+END_SRC
+
+** Bookmark file
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (setq-default
+      bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory))
+   #+END_SRC
+
+** Auto revert
+
+  #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (global-auto-revert-mode)
+    (setq global-auto-revert-non-file-buffers t
+          auto-revert-verbose nil)
+  #+END_SRC
+
+** Transient mark
+
+  #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (transient-mark-mode t)
+  #+END_SRC
+
+** Highlight trailing whitespace
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (defun jcf/no-trailing-whitespace ()
+      "Turn off display of trailing whitespace in this buffer."
+      (setq show-trailing-whitespace nil))
+
+    ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
+    (dolist (hook '(special-mode-hook
+                    eshell-mode-hook
+                    eww-mode
+                    term-mode-hook
+                    comint-mode-hook
+                    compilation-mode-hook
+                    twittering-mode-hook
+                    minibuffer-setup-hook))
+      (add-hook hook #'jcf/no-trailing-whitespace))
+   #+END_SRC
+
+** Newline behaviour
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (global-set-key (kbd "RET") 'newline-and-indent)
+     (defun jcf/newline-at-end-of-line ()
+       "Move to end of line, enter a newline, and reindent."
+       (interactive)
+       (move-end-of-line 1)
+       (newline-and-indent))
+
+     (global-set-key (kbd "S-<return>") 'jcf/newline-at-end-of-line)
+   #+END_SRC
+
+** Workaround for subword not being available
+
+   See https://github.com/purcell/emacs.d/issues/138 for more
+   information.
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (when (eval-when-compile (string< "24.3.1" emacs-version))
+       (after-load 'subword
+         (diminish 'subword-mode)))
+   #+END_SRC
+
+** Prettify symbols
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (when (fboundp 'global-prettify-symbols-mode)
+       (global-prettify-symbols-mode))
+   #+END_SRC
+
+** Zap up to char
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
+    (global-set-key (kbd "M-Z") 'zap-up-to-char)
+   #+END_SRC
+
+** Don't disable narrowing commands
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (put 'narrow-to-region 'disabled nil)
+    (put 'narrow-to-page 'disabled nil)
+    (put 'narrow-to-defun 'disabled nil)
+   #+END_SRC
+
+** Show matching parens
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (show-paren-mode 1)
+   #+END_SRC
+
+** Don't disable case-change functions
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (put 'upcase-region 'disabled nil)
+    (put 'downcase-region 'disabled nil)
+   #+END_SRC
+
+** CUA selection mode for rectangles
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (cua-selection-mode t)
+   #+END_SRC
+
+** Selection bindings
+
+*** M-x without meta.
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (global-set-key (kbd "C-x C-m") 'execute-extended-command)
+   #+END_SRC
+
+*** Vim-like alternatives to M-^ and C-u M-^.
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (global-set-key (kbd "C-c j") 'join-line)
+    (global-set-key (kbd "C-c J") (lambda () (interactive) (join-line 1)))
+
+    (global-set-key (kbd "C-.") 'set-mark-command)
+    (global-set-key (kbd "C-x C-.") 'pop-global-mark)
+   #+END_SRC
+
+** Multiple cursors
+
+*** Installation
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (require 'multiple-cursors)
+   #+END_SRC
+
+*** Mark bindings
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+    (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+    (global-set-key (kbd "C-+") 'mc/mark-next-like-this)
+    (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+   #+END_SRC
+
+*** From active region to multiple cursors
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (global-set-key (kbd "C-c c r") 'set-rectangular-region-anchor)
+    (global-set-key (kbd "C-c c c") 'mc/edit-lines)
+    (global-set-key (kbd "C-c c e") 'mc/edit-ends-of-lines)
+    (global-set-key (kbd "C-c c a") 'mc/edit-beginnings-of-lines)
+   #+END_SRC
+
+** Disable left and right arrow key bindings
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    (global-unset-key [M-left])
+    (global-unset-key [M-right])
+   #+END_SRC
+
+** Delete to beginning of line
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (defun kill-back-to-indentation ()
+       "Kill from point back to the first non-whitespace character on
+       the line."
+       (interactive)
+       (let ((prev-pos (point)))
+         (back-to-indentation)
+         (kill-region (point) prev-pos)))
+
+     (global-set-key (kbd "C-M-<backspace>") 'kill-back-to-indentation)
+   #+END_SRC
+
+** Move lines
+
+   Shift lines up and down with M-up and M-down. When smartparens is
+   enabled, it will use those keybindings. For this reason, you might
+   prefer to use M-S-up and M-S-down, which will work even in lisp
+   modes.
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (require 'move-dup)
+     (global-set-key [M-up] 'md/move-lines-up)
+     (global-set-key [M-down] 'md/move-lines-down)
+     (global-set-key [M-S-up] 'md/move-lines-up)
+     (global-set-key [M-S-down] 'md/move-lines-down)
+
+     (global-set-key (kbd "C-c p") 'md/duplicate-down)
+   #+END_SRC
+
+** Fix backward-up-list to understand quotes, see http://bit.ly/h7mdIL
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (defun backward-up-sexp (arg)
+       "Jump up to the start of the ARG'th enclosing sexp."
+       (interactive "p")
+       (let ((ppss (syntax-ppss)))
+         (cond ((elt ppss 3)
+                (goto-char (elt ppss 8))
+                (backward-up-sexp (1- arg)))
+               ((backward-up-list arg)))))
+
+     (global-set-key [remap backward-up-list] 'backward-up-sexp) ; C-M-u, C-M-up
+   #+END_SRC
+
+** Cut/copy current line if no region active
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (require 'whole-line-or-region)
+
+     (whole-line-or-region-mode t)
+     (diminish 'whole-line-or-region-mode)
+     (make-variable-buffer-local 'whole-line-or-region-mode)
+
+     (defun suspend-mode-during-cua-rect-selection (mode-name)
+       "Add an advice to suspend `MODE-NAME' while selecting a CUA rectangle."
+       (let ((flagvar (intern (format "%s-was-active-before-cua-rectangle" mode-name)))
+             (advice-name (intern (format "suspend-%s" mode-name))))
+         (eval-after-load 'cua-rect
+           `(progn
+              (defvar ,flagvar nil)
+              (make-variable-buffer-local ',flagvar)
+              (defadvice cua--activate-rectangle (after ,advice-name activate)
+                (setq ,flagvar (and (boundp ',mode-name) ,mode-name))
+                (when ,flagvar
+                  (,mode-name 0)))
+              (defadvice cua--deactivate-rectangle (after ,advice-name activate)
+                (when ,flagvar
+                  (,mode-name 1)))))))
+
+     (suspend-mode-during-cua-rect-selection 'whole-line-or-region-mode)
+   #+END_SRC
+
+** Indentation-aware open line
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (defun jcf/open-line-with-reindent (n)
+       "A version of `open-line' which reindents the start and end
+     positions.
+
+     If there is a fill prefix and/or a `left-margin', insert them on the
+     new line if the line would have been blank. With arg N, insert N
+     newlines."
+       (interactive "*p")
+       (let* ((do-fill-prefix (and fill-prefix (bolp)))
+              (do-left-margin (and (bolp) (> (current-left-margin) 0)))
+              (loc (point-marker))
+              ;; Don't expand an abbrev before point.
+              (abbrev-mode nil))
+         (delete-horizontal-space t)
+         (newline n)
+         (indent-according-to-mode)
+         (when (eolp)
+           (delete-horizontal-space t))
+         (goto-char loc)
+         (while (> n 0)
+           (cond ((bolp)
+                  (if do-left-margin (indent-to (current-left-margin)))
+                  (if do-fill-prefix (insert-and-inherit fill-prefix))))
+           (forward-line 1)
+           (setq n (1- n)))
+         (goto-char loc)
+         (end-of-line)
+         (indent-according-to-mode)))
+
+     (global-set-key (kbd "C-o") 'jcf/open-line-with-reindent)
+   #+END_SRC
+
+** Randomise lines
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (defun sort-lines-random (beg end)
+       "Sort lines in region randomly."
+       (interactive "r")
+       (save-excursion
+         (save-restriction
+           (narrow-to-region beg end)
+           (goto-char (point-min))
+           (let ;; To make `end-of-line' and etc. to ignore fields.
+               ((inhibit-field-text-motion t))
+             (sort-subr nil 'forward-line 'end-of-line nil nil
+                        (lambda (s1 s2) (eq (random 2) 0)))))))
+   #+END_SRC
+
+** isearch improvements
+
+   There are a number of ~isearch~ improvements provided. As we're
+   typically using ~evil-mode~ and ~evil-search-forward~ they're not
+   particuarly useful but are kept around for posterity sake and in
+   case we're stuck in Emacs mode.
+
+*** Show number of matches
+
+    #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+      (when (>= emacs-major-version 24)
+        (require 'anzu)
+        (global-anzu-mode t)
+        (diminish 'anzu-mode)
+        (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
+        (global-set-key [remap query-replace] 'anzu-query-replace))
+    #+END_SRC
+
+*** Use ~occur~ inside ~isearch~
+
+    #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+      (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+    #+END_SRC
+
+*** Search back/forth for symbol at point
+
+    #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+      (defun isearch-yank-symbol ()
+        "*Put symbol at current point into search string."
+        (interactive)
+        (let ((sym (symbol-at-point)))
+          (if sym
+              (progn
+                (setq isearch-regexp t
+                      isearch-string (concat "\\_<" (regexp-quote (symbol-name sym)) "\\_>")
+                      isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
+                      isearch-yank-flag t))
+            (ding)))
+        (isearch-search-and-update))
+
+      (define-key isearch-mode-map "\C-\M-w" 'isearch-yank-symbol)
+    #+END_SRC
+
+*** Zap to isearch
+
+    http://www.emacswiki.org/emacs/ZapToISearch
+
+    #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+      (defun zap-to-isearch (rbeg rend)
+        "Kill the region between the mark and the closest portion of the
+      isearch match string. The behaviour is meant to be analogous to
+      zap-to-char; let's call it zap-to-isearch.
+
+      The deleted region does not include the isearch word. This is meant to
+      be bound only in isearch mode. The point of this function is that
+      oftentimes you want to delete some portion of text, one end of which
+      happens to be an active isearch word.
+
+      The observation to make is that if you use isearch a lot to move the
+      cursor around (as you should, it is much more efficient than using the
+      arrows), it happens a lot that you could just delete the active region
+      between the mark and the point, not include the isearch word."
+        (interactive "r")
+        (when (not mark-active)
+          (error "Mark is not active"))
+        (let* ((isearch-bounds (list isearch-other-end (point)))
+               (ismin (apply 'min isearch-bounds))
+               (ismax (apply 'max isearch-bounds))
+               )
+          (if (< (mark) ismin)
+              (kill-region (mark) ismin)
+            (if (> (mark) ismax)
+                (kill-region ismax (mark))
+              (error "Internal error in isearch kill function.")))
+          (isearch-exit)
+          ))
+
+      (define-key isearch-mode-map [(meta z)] 'zap-to-isearch)
+
+      (defun isearch-exit-other-end (rbeg rend)
+        "Exit isearch, but at the other end of the search string.
+      This is useful when followed by an immediate kill."
+        (interactive "r")
+        (isearch-exit)
+        (goto-char isearch-other-end))
+
+      (define-key isearch-mode-map [(control return)] 'isearch-exit-other-end)
+    #+END_SRC
+
+** flycheck
+
+    #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+      (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
+            flycheck-idle-change-delay 0.8)
+    #+END_SRC
+
+** Spelling
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (require 'ispell)
+
+     (when (executable-find ispell-program-name)
+       (if (fboundp 'prog-mode)
+           (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+         (dolist (hook '(lisp-mode-hook
+                         emacs-lisp-mode-hook
+                         scheme-mode-hook
+                         clojure-mode-hook
+                         ruby-mode-hook
+                         yaml-mode
+                         python-mode-hook
+                         shell-mode-hook
+                         php-mode-hook
+                         css-mode-hook
+                         haskell-mode-hook
+                         caml-mode-hook
+                         nxml-mode-hook
+                         crontab-mode-hook
+                         perl-mode-hook
+                         tcl-mode-hook
+                         javascript-mode-hook))
+           (add-hook hook 'flyspell-prog-mode)))
+
+       (after-load 'flyspell
+         (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)))
+   #+END_SRC
+
+** goto-address
+
+   Convert URLs in comments into clickable links.
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (setq goto-address-mail-face 'link)
+
+     (dolist (hook (if (fboundp 'prog-mode)
+                       '(prog-mode-hook ruby-mode-hook)
+                     '(find-file-hooks)))
+       (add-hook hook 'goto-address-prog-mode))
+  #+END_SRC
+
+** Make scripts executable
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+   #+END_SRC
+
+** Perl-style regular expressions
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (setq-default regex-tool-backend 'perl)
+   #+END_SRC
+
+** Start a server
+
+   By running an Emacs server we can have new Emacs instances start
+   instantly.
+
+   This is made possible by the editor configuration in the [[https://github.com/jcf/prezto][jcf/prezto]]
+   repo, combined with the emacsserver executable in [[https://github.com/jcf/dotfiles][jcf/dotfiles]].
+
+   - https://github.com/jcf/dotfiles/blob/master/roles/emacs/files/emacsserver
+   - https://github.com/jcf/prezto/blob/14354ea203fa3f7035208cb0d76ca8e600258d39/runcoms/zprofile#L25
+
+   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+     (defun jcf/start-server ()
+       (require 'server)
+       (unless (server-running-p)
+         (server-start)))
+
+     (add-hook 'after-init-hook 'jcf/start-server)
+   #+end_src

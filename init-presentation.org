@@ -1,0 +1,242 @@
+#+TITLE: emacs.d - Presentation
+#+AUTHOR: James Conroy-Finn
+#+EMAIL: james@logi.cl
+#+STARTUP: showall
+#+OPTIONS: toc:2 num:nil ^:nil
+#+LINK: zenburn https://github.com/bbatsov/zenburn-emacs
+
+* Presentation
+
+  With the amount of time we spend in Emacs it's important to make it
+  a pleasent place to be.
+
+  We start by selecting a nice dark theme with support for a large
+  number of the packages we use on a daily basis. [[zenburn][Zenburn]] is its
+  name.
+
+  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+    (require 'zenburn-theme)
+    (load-theme 'zenburn t)
+  #+end_src
+
+** Helpful hooks
+
+   These hooks make it easy to update interface customisations when
+   Emacs redraws.
+
+   #+BEGIN_SRC emacs-lisp :tangle init-presentation.el :comments link
+     (defvar after-make-console-frame-hooks '()
+       "Hooks to run after creating a new TTY frame")
+     (defvar after-make-window-system-frame-hooks '()
+       "Hooks to run after creating a new window-system frame")
+
+     (defun run-after-make-frame-hooks (frame)
+       "Run configured hooks in response to the newly-created FRAME.
+     Selectively runs either `after-make-console-frame-hooks' or
+     `after-make-window-system-frame-hooks'"
+       (with-selected-frame frame
+         (run-hooks (if window-system
+                        'after-make-window-system-frame-hooks
+                      'after-make-console-frame-hooks))))
+
+     (add-hook 'after-make-frame-functions 'run-after-make-frame-hooks)
+   #+END_SRC
+
+** Disable GUI features
+
+  Although we run Emacs outside of the console we disable a lot of
+  the GUI features because they don't support the keyboard-driven
+  approach with Vim-style bindings that we are aiming for.
+
+  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+    (setq use-file-dialog nil)
+    (setq use-dialog-box nil)
+    (setq inhibit-startup-screen t)
+    (setq inhibit-startup-echo-area-message t)
+  #+end_src
+
+  When ~tool-bar-mode~ is available we disable it because it takes up
+  valueable space and never use it.
+
+  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+    (when (fboundp 'tool-bar-mode)
+      (tool-bar-mode -1))
+  #+end_src
+
+  We do the same with the scrollbar for the same reasons.
+
+  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+     (when (fboundp 'set-scroll-bar-mode)
+       (set-scroll-bar-mode nil))
+  #+end_src
+
+  By default the fringe is pretty wide, so we squash it down a
+  little (the fringe is the gutter to the left and right of every
+  pane in Emacs).
+
+  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+    (when (fboundp 'fringe-mode)
+      (fringe-mode 4))
+   #+end_src
+
+  Free up the space allocated for Menu Bars.
+
+  #+begin_quote
+  The number of lines to allocate at the top of the frame for a menu
+  bar. The default is 1 if Menu Bar mode is enabled, and 0
+  otherwise. See [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Menu-Bars.html#Menu-Bars][Menu Bars]] for more information.
+  #+end_quote
+
+  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (with-selected-frame frame
+                  (unless window-system
+                    (set-frame-parameter nil 'menu-bar-lines 0)))))
+  #+END_SRC
+
+** Highlight empty lines
+
+  To highlight empty lines in the current buffer we highlight them in
+  the left fringe.
+
+  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+    (setq indicate-empty-lines t)
+  #+end_src
+
+** Opacity
+
+   I don't think I've ever used this, but it's a novel feature to
+   have. For that reason alone I keep this around.
+
+   To make Emacs more transparent press Command-Control-8.
+
+   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+     (defun jcf/adjust-opacity (frame incr)
+       (let* ((oldalpha (or (frame-parameter frame 'alpha) 100))
+              (newalpha (+ incr oldalpha)))
+         (when (and (<= frame-alpha-lower-limit newalpha) (>= 100 newalpha))
+           (modify-frame-parameters frame (list (cons 'alpha newalpha))))))
+
+     (global-set-key (kbd "M-C-8") '(lambda () (interactive) (jcf/adjust-opacity nil -5)))
+     (global-set-key (kbd "M-C-9") '(lambda () (interactive) (jcf/adjust-opacity nil 5)))
+     (global-set-key (kbd "M-C-0") '(lambda () (interactive) (modify-frame-parameters nil `((alpha . 100)))))
+   #+end_src
+
+** Frame title
+
+   Set the title of the current frame to an abbreviated version of the
+   buffer name.
+
+   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+     (setq frame-title-format
+           '((:eval (if (buffer-file-name)
+                        (abbreviate-file-name (buffer-file-name))
+                      "%b"))))
+   #+end_src
+
+** Line spacing
+
+   Non-zero values for ~line-spacing~ can mess up ansi-term and
+   similar modes, so we zero it explicitly in those cases.
+
+   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+     (add-hook 'term-mode-hook
+               (lambda ()
+                 (set (make-local-variable 'line-spacing)
+                      0)))
+   #+end_src
+
+** Uniquify buffer names
+
+   Improved naming of buffers for files with identical names.
+
+   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+     (require 'uniquify)
+
+     (setq
+      uniquify-buffer-name-style 'reverse
+      uniquify-separator " • "
+      uniquify-after-kill-buffer-p t
+      uniquify-ignore-buffers-re "^\\*")
+   #+end_src
+
+** Yes or No
+
+   Use the abbreviated form of yes/no confirmation.
+
+   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+     (fset 'yes-or-no-p 'y-or-n-p)
+   #+end_src
+
+** Character sets
+
+   Provides an way to control the font Emacs uses for symbols. By
+   default, does nothing.
+
+   To force use of default font set
+   ~jcf/force-default-font-for-symbols~ to ~t~.
+
+   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+     (defcustom jcf/force-default-font-for-symbols nil
+       "When non-nil, force Emacs to use your default font for symbols."
+       :type 'boolean)
+
+     (defun jcf/maybe-use-default-font-for-symbols ()
+       "Force Emacs to render symbols using the default font, if so configured."
+       (when jcf/force-default-font-for-symbols
+         (set-fontset-font "fontset-default" 'symbol (face-attribute 'default :family))))
+
+     (add-hook 'after-init-hook 'jcf/maybe-use-default-font-for-symbols)
+   #+end_src
+
+** Font sizes
+
+   Provides a mechanism for changing font size gracefully while Emacs
+   is running.
+
+   Two functions are made available:
+
+   1. ~jcf/increase-default-font-height~
+   2. ~jcf/decrease-default-font-height~
+
+   These functions are bound to Command-Control-= and
+   Command-Control-- respectively.
+
+   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+     (require 'cl)
+
+     (defun jcf/font-name-replace-size (font-name new-size)
+       (let ((parts (split-string font-name "-")))
+         (setcar (nthcdr 7 parts) (format "%d" new-size))
+         (mapconcat 'identity parts "-")))
+
+     (defun jcf/increment-default-font-height (delta)
+       "Adjust the default font height by DELTA on every frame.
+     Emacs will keep the pixel size of the frame approximately the
+     same.  DELTA should be a multiple of 10, to match the units used
+     by the :height face attribute."
+       (let* ((new-height (+ (face-attribute 'default :height) delta))
+              (new-point-height (/ new-height 10)))
+         (dolist (f (frame-list))
+           (with-selected-frame f
+             ;; Latest 'set-frame-font supports a "frames" arg, but
+             ;; we cater to Emacs 23 by looping instead.
+             (set-frame-font (jcf/font-name-replace-size
+                              (face-font 'default)
+                              new-point-height)
+                             t)))
+         (set-face-attribute 'default nil :height new-height)
+         (message "default font size is now %d" new-point-height)))
+
+     (defun jcf/increase-default-font-height ()
+       (interactive)
+       (jcf/increment-default-font-height 10))
+
+     (defun jcf/decrease-default-font-height ()
+       (interactive)
+       (jcf/increment-default-font-height -10))
+
+     (global-set-key (kbd "C-M-=") 'jcf/increase-default-font-height)
+     (global-set-key (kbd "C-M--") 'jcf/decrease-default-font-height)
+   #+END_SRC

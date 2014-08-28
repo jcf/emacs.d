@@ -1,0 +1,1084 @@
+#+TITLE: emacs.d - Languages
+#+AUTHOR: James Conroy-Finn
+#+EMAIL: james@logi.cl
+#+STARTUP: showall
+#+OPTIONS: toc:2 num:nil ^:nil
+
+* Languages
+
+  We encounter a large number of programming languages on a daily
+  basis, and Emacs has support for all of them.
+
+  This module installs packages necessary to support the languages
+  we're likely to encounter, and configures them for effective use.
+
+** Clojure
+
+*** Packages
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'clojure-mode)
+      (require 'clj-refactor)
+      (require 'clojure-test-mode)
+      (require 'cljsbuild-mode)
+      (require 'elein)
+      (require 'typed-clojure-mode)
+    #+end_src
+
+*** Slime
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (defun slime-clojure-repl-setup ()
+        "Some REPL setup additional to that in durendal."
+        (when (string-equal (slime-lisp-implementation-name) "clojure")
+          (when (slime-inferior-process)
+            (message "Setting up repl for clojure")
+            (slime-redirect-inferior-output))
+
+          (set-syntax-table clojure-mode-syntax-table)
+          (setq lisp-indent-function 'clojure-indent-function)
+          (let (font-lock-mode)
+            (clojure-mode-font-lock-setup))))
+
+      (after-load 'slime-repl
+        (add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup))
+    #+end_src
+
+*** Hooks
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (after-load 'clojure-mode
+        (add-hook 'clojure-mode-hook 'jcf/lisp-setup)
+        ;; Undo activation of Paredit by clojure-mode
+        (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
+        (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+        (add-hook 'clojure-mode-hook 'typed-clojure-mode)
+        (add-hook 'clojure-mode-hook 'subword-mode))
+    #+end_src
+
+*** Clojurescript
+
+    Use clojure-mode for clojurescript, since clojurescript-mode pulls
+    in Slime.
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (add-auto-mode 'clojure-mode "\\.cljs\\'")
+    #+end_src
+
+*** Cider
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'emacs '(24))
+
+      (require 'cider)
+      (require 'slamhound)
+   #+end_src
+
+*** NREPL
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (setq nrepl-popup-stacktraces nil)
+
+      (after-load 'cider
+        (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+        (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+        (add-hook 'cider-repl-mode-hook 'subword-mode)
+
+        ;; nrepl isn't based on comint
+        (add-hook 'cider-repl-mode-hook
+                  (lambda () (setq show-trailing-whitespace nil))))
+    #+end_src
+
+** Common-Lisp
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     ;; See http://bc.tech.coop/blog/070927.html
+     (add-auto-mode 'lisp-mode "\\.cl\\'")
+     (add-hook 'lisp-mode-hook (lambda ()
+                                 (unless (featurep 'slime)
+                                   (require 'slime)
+                                   (normal-mode))))
+
+     (after-load 'slime
+       (when (executable-find "sbcl")
+         (add-to-list 'slime-lisp-implementations
+                      '(sbcl ("sbcl") :coding-system utf-8-unix)))
+       (when (executable-find "lisp")
+         (add-to-list 'slime-lisp-implementations
+                      '(cmucl ("lisp") :coding-system iso-latin-1-unix))))
+
+     ;; From http://bc.tech.coop/blog/070515.html
+     (defun lispdoc ()
+       "Searches lispdoc.com for SYMBOL, which is by default the symbol currently under the curser"
+       (interactive)
+       (let* ((word-at-point (word-at-point))
+              (symbol-at-point (symbol-at-point))
+              (default (symbol-name symbol-at-point))
+              (inp (read-from-minibuffer
+                    (if (or word-at-point symbol-at-point)
+                        (concat "Symbol (default " default "): ")
+                      "Symbol (no default): "))))
+         (if (and (string= inp "") (not word-at-point) (not
+                                                        symbol-at-point))
+             (message "you didn't enter a symbol!")
+           (let ((search-type (read-from-minibuffer
+                               "full-text (f) or basic (b) search (default b)? ")))
+             (browse-url (concat "http://lispdoc.com?q="
+                                 (if (string= inp "")
+                                     default
+                                   inp)
+                                 "&search="
+                                 (if (string-equal search-type "f")
+                                     "full+text+search"
+                                   "basic+search")))))))
+
+     (define-key lisp-mode-map (kbd "C-c l") 'lispdoc)
+   #+end_src
+
+** Configuration
+
+   Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (add-auto-mode 'conf-mode "Procfile")
+   #+end_src
+
+** Crontab
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'crontab-mode)
+     (add-auto-mode 'crontab-mode "\\.?cron\\(tab\\)?\\'")
+   #+end_src
+
+** CSS
+
+*** Indentation
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (setq css-indent-offset 2)
+   #+end_src
+
+*** Colourise CSS colour literals
+
+    Note that ~rainbow-mode~ needs ~color.el~, bundled with Emacs
+    >= 24.
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (when (eval-when-compile (>= emacs-major-version 24))
+        (require 'rainbow-mode)
+        (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
+          (add-hook hook 'rainbow-mode)))
+    #+end_src
+
+*** Embedded CSS support
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'mmm-mode)
+
+     (after-load 'mmm-vars
+       (mmm-add-group
+        'html-css
+        '((css-cdata
+           :submode css-mode
+           :face mmm-code-submode-face
+           :front "<style[^>]*>[ \t\n]*\\(//\\)?<!\\[CDATA\\[[ \t]*\n?"
+           :back "[ \t]*\\(//\\)?]]>[ \t\n]*</style>"
+           :insert ((?j js-tag nil @ "<style type=\"text/css\">"
+                        @ "\n" _ "\n" @ "</script>" @)))
+          (css
+           :submode css-mode
+           :face mmm-code-submode-face
+           :front "<style[^>]*>[ \t]*\n?"
+           :back "[ \t]*</style>"
+           :insert ((?j js-tag nil @ "<style type=\"text/css\">"
+                        @ "\n" _ "\n" @ "</style>" @)))
+          (css-inline
+           :submode css-mode
+           :face mmm-code-submode-face
+           :front "style=\""
+           :back "\"")))
+       (dolist (mode (list 'html-mode 'nxml-mode))
+         (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
+    #+end_src
+
+*** Use Eldoc for syntax hints
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'css-eldoc)
+      (autoload 'turn-on-css-eldoc "css-eldoc")
+      (add-hook 'css-mode-hook 'turn-on-css-eldoc)
+    #+end_src
+
+** CSV
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'csv-mode)
+     (require 'csv-nav)
+
+     (add-auto-mode 'csv-mode "\\.[Cc][Ss][Vv]\\'")
+
+     (setq csv-separators '("," ";" "|" " "))
+   #+end_src
+
+** Cucumber
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'feature-mode)
+   #+end_src
+
+** Erlang
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (ignore-errors
+       (require 'erlang))
+
+     (when (package-installed-p 'erlang)
+       (require 'erlang-start))
+   #+end_src
+
+** Golang
+
+   It is assumed your ~GOPATH~, and ~PATH~ are already setup. If this
+   is not the case you can set the relevant environment variables using
+   something like:
+
+   #+BEGIN_SRC go
+     (setenv "GOPATH" (expand-file-name "Go" (getenv "HOME")))
+     (setenv "PATH" (concat (getenv "PATH") ":"
+     (expand-file-name "bin" (getenv "GOPATH"))))
+   #+end_src
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'go-mode)
+   #+end_src
+
+   Require goflymake if it's installed. This dependency is managed
+   outside of Emacs. You can install goflymake like so:
+
+   #+BEGIN_SRC sh
+      go get -u github.com/dougm/goflymake
+   #+end_src
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (defvar go-flymake-path
+       (expand-file-name "src/github.com/dougm/goflymake" (getenv "GOPATH")))
+
+     (defun jcf-setup-go-flymake ()
+       "Add PATH to 'load-path', and require go-flymake."
+       (add-to-list 'load-path go-flymake-path)
+       (require 'go-flymake))
+
+     (if (file-exists-p go-flymake-path) (jcf-setup-go-flymake))
+   #+end_src
+
+   Format our code automatically when saving.
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (add-hook 'before-save-hook #'gofmt-before-save)
+   #+end_src
+
+** Haml
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'haml-mode)
+
+     (after-load 'haml-mode
+       (define-key haml-mode-map (kbd "C-o") 'open-line)
+       (when (fboundp 'electric-indent-mode)
+         (add-hook 'haml-mode-hook (lambda () (electric-indent-mode -1)))))
+   #+end_src
+
+** Haskell
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'haskell-mode)
+
+     (when (> emacs-major-version 23)
+       (require 'flycheck-hdevtools)
+       (require 'flycheck-haskell))
+     (after-load 'flycheck
+       (require 'flycheck-hdevtools))
+
+     (dolist (hook '(haskell-mode-hook inferior-haskell-mode-hook))
+       (add-hook hook 'turn-on-haskell-doc-mode))
+
+     (add-auto-mode 'haskell-mode "\\.ghci\\'")
+
+     (require 'hi2)
+     ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+     (add-hook 'haskell-mode-hook 'turn-on-hi2)
+
+     (add-hook 'haskell-mode-hook (lambda () (subword-mode +1)))
+
+     (setq-default haskell-stylish-on-save t)
+
+     (after-load 'haskell-mode
+       (define-key haskell-mode-map (kbd "C-c h") 'hoogle)
+       (define-key haskell-mode-map (kbd "C-o") 'open-line))
+
+     (when (eval-when-compile (>= emacs-major-version 24))
+       (require 'ghci-completion)
+       (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion))
+
+     (eval-after-load 'page-break-lines
+       '(push 'haskell-mode page-break-lines-modes))
+
+     ;; Make compilation-mode understand "at blah.hs:11:34-50" lines output by GHC
+     (after-load 'compile
+       (let ((alias 'ghc-at-regexp))
+         (add-to-list
+          'compilation-error-regexp-alist-alist
+          (list alias " at \\(.*\\.\\(?:l?[gh]hs\\|hi\\)\\):\\([0-9]+\\):\\([0-9]+\\)-[0-9]+$" 1 2 3 0 1))
+         (add-to-list
+          'compilation-error-regexp-alist alias)))
+   #+end_src
+
+** HTML
+
+   See [[Ruby]] configuration for ERB setup.
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'tidy)
+     (add-hook 'html-mode-hook (lambda () (tidy-build-menu html-mode-map)))
+
+     (require 'tagedit)
+     (after-load 'sgml-mode
+       (tagedit-add-paredit-like-keybindings)
+       (add-hook 'sgml-mode-hook (lambda () (tagedit-mode 1))))
+
+     (add-auto-mode 'html-mode "\\.(jsp|tmpl)\\'")
+   #+end_src
+
+** Javascript
+
+*** Basics
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'json-mode)
+     (when (>= emacs-major-version 24)
+       (require 'js2-mode)
+       (require 'coffee-mode)
+       (require 'jsx-mode))
+     (require 'js-comint)
+
+     (defcustom preferred-javascript-mode
+       (first (remove-if-not #'fboundp '(js2-mode js-mode)))
+       "Javascript mode to use for .js files."
+       :type 'symbol
+       :group 'programming
+       :options '(js2-mode js-mode))
+     (defvar preferred-javascript-indent-level 2)
+    #+end_src
+
+   Need to first remove from list if present, since elpa adds entries
+   too, which may be in an arbitrary order.
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (eval-when-compile (require 'cl))
+     (setq auto-mode-alist (cons `("\\.js\\(\\.erb\\)?\\'" . ,preferred-javascript-mode)
+                                 (loop for entry in auto-mode-alist
+                                       unless (eq preferred-javascript-mode (cdr entry))
+                                       collect entry)))
+    #+end_src
+
+*** ~js2-mode~
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (after-load 'js2-mode
+       (add-hook 'js2-mode-hook '(lambda () (setq mode-name "JS2"))))
+
+     (setq-default
+      js2-basic-offset preferred-javascript-indent-level
+      js2-bounce-indent-p nil)
+
+     (after-load 'js2-mode
+       (js2-imenu-extras-setup))
+    #+end_src
+
+*** ~js-mode~
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (setq-default js-indent-level preferred-javascript-indent-level)
+
+
+     (add-to-list 'interpreter-mode-alist (cons "node" preferred-javascript-mode))
+
+     
+     ;; Javascript nests {} and () a lot, so I find this helpful
+
+     (require 'rainbow-delimiters)
+     (dolist (hook '(js2-mode-hook js-mode-hook json-mode-hook))
+       (add-hook hook 'rainbow-delimiters-mode))
+
+
+     
+     ;;; Coffeescript
+
+     (after-load 'coffee-mode
+       (setq coffee-js-mode preferred-javascript-mode
+             coffee-tab-width preferred-javascript-indent-level))
+
+     (when (fboundp 'coffee-mode)
+       (add-to-list 'auto-mode-alist '("\\.coffee\\.erb\\'" . coffee-mode)))
+
+
+     
+     ;;; JSX
+     (add-auto-mode 'jsx-mode "\\.jsx\\'")
+
+     
+     ;;; JSON
+     (add-auto-mode 'json-mode "\\.bowerrc\\'" "\\.csslintrc\\'" "\\.jshintrc\\'")
+
+
+     ;; ---------------------------------------------------------------------------
+     ;; Run and interact with an inferior JS via js-comint.el
+     ;; ---------------------------------------------------------------------------
+
+     (setq inferior-js-program-command "js")
+
+     (defvar inferior-js-minor-mode-map (make-sparse-keymap))
+     (define-key inferior-js-minor-mode-map "\C-x\C-e" 'js-send-last-sexp)
+     (define-key inferior-js-minor-mode-map "\C-\M-x" 'js-send-last-sexp-and-go)
+     (define-key inferior-js-minor-mode-map "\C-cb" 'js-send-buffer)
+     (define-key inferior-js-minor-mode-map "\C-c\C-b" 'js-send-buffer-and-go)
+     (define-key inferior-js-minor-mode-map "\C-cl" 'js-load-file-and-go)
+
+     (define-minor-mode inferior-js-keys-mode
+       "Bindings for communicating with an inferior js interpreter."
+       nil " InfJS" inferior-js-minor-mode-map)
+
+     (dolist (hook '(js2-mode-hook js-mode-hook))
+       (add-hook hook 'inferior-js-keys-mode))
+
+     ;; ---------------------------------------------------------------------------
+     ;; Alternatively, use skewer-mode
+     ;; ---------------------------------------------------------------------------
+
+     (when (and (>= emacs-major-version 24) (featurep 'js2-mode))
+       (require 'skewer-mode)
+       (after-load 'skewer-mode
+         (add-hook 'skewer-mode-hook
+                   (lambda () (inferior-js-keys-mode -1)))))
+   #+end_src
+
+** LESS
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    ;;; LESS
+    (require 'less-css-mode)
+    (when (featurep 'js2-mode)
+      (require 'skewer-less))
+   #+end_src
+
+** Lisp
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'elisp-slime-nav)
+     (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+       (add-hook hook 'elisp-slime-nav-mode))
+
+     (require 'lively)
+
+     (setq-default initial-scratch-message
+                   (concat ";; Happy hacking " (or user-login-name "") "!\n\n"))
+
+
+     
+     ;; Make C-x C-e run 'eval-region if the region is active
+
+     (defun jcf/eval-last-sexp-or-region (beg end prefix)
+       "Eval region from BEG to END if active, otherwise the last sexp."
+       (interactive "r\nP")
+       (if (use-region-p)
+           (eval-region beg end)
+         (pp-eval-last-sexp prefix)))
+
+     (global-set-key (kbd "M-:") 'pp-eval-expression)
+
+     (after-load 'lisp-mode
+       (define-key emacs-lisp-mode-map (kbd "C-x C-e") 'jcf/eval-last-sexp-or-region))
+
+     (require 'ipretty)
+     (ipretty-mode 1)
+
+
+     ;; ----------------------------------------------------------------------------
+     ;; Hippie-expand
+     ;; ----------------------------------------------------------------------------
+
+     (defun my/emacs-lisp-module-name ()
+       "Search the buffer for `provide' declaration."
+       (save-excursion
+         (goto-char (point-min))
+         (when (search-forward-regexp "^(provide '" nil t)
+           (symbol-name (symbol-at-point)))))
+
+     ;; Credit to Chris Done for this one.
+     (defun my/try-complete-lisp-symbol-without-namespace (old)
+       "Hippie expand \"try\" function which expands \"-foo\" to \"modname-foo\" in elisp."
+       (unless old
+         (he-init-string (he-lisp-symbol-beg) (point))
+         (when (string-prefix-p "-" he-search-string)
+           (let ((mod-name (my/emacs-lisp-module-name)))
+             (when mod-name
+               (setq he-expand-list (list (concat mod-name he-search-string)))))))
+       (when he-expand-list
+         (he-substitute-string (car he-expand-list))
+         (setq he-expand-list nil)
+         t))
+
+     (defun set-up-hippie-expand-for-elisp ()
+       "Locally set `hippie-expand' completion functions for use with Emacs Lisp."
+       (make-local-variable 'hippie-expand-try-functions-list)
+       (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol t)
+       (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol-partially t)
+       (add-to-list 'hippie-expand-try-functions-list 'my/try-complete-lisp-symbol-without-namespace t))
+
+
+     ;; ----------------------------------------------------------------------------
+     ;; Automatic byte compilation
+     ;; ----------------------------------------------------------------------------
+
+     (require 'auto-compile)
+     (auto-compile-on-save-mode 1)
+     (auto-compile-on-load-mode 1)
+
+     ;; ----------------------------------------------------------------------------
+     ;; Highlight current sexp
+     ;; ----------------------------------------------------------------------------
+
+     (require 'hl-sexp)
+
+     ;; Prevent flickery behaviour due to hl-sexp-mode unhighlighting before each command
+     (after-load 'hl-sexp
+       (defadvice hl-sexp-mode (after unflicker (&optional turn-on) activate)
+         (when turn-on
+           (remove-hook 'pre-command-hook #'hl-sexp-unhighlight))))
+
+
+     
+     ;;; Support byte-compilation in a sub-process, as
+     ;;; required by highlight-cl
+
+     (defun jcf/byte-compile-file-batch (filename)
+       "Byte-compile FILENAME in batch mode, ie. a clean sub-process."
+       (interactive "fFile to byte-compile in batch mode: ")
+       (let ((emacs (car command-line-args)))
+         (compile
+          (concat
+           emacs " "
+           (mapconcat
+            'shell-quote-argument
+            (list "-Q" "-batch" "-f" "batch-byte-compile" filename)
+            " ")))))
+
+
+     ;; ----------------------------------------------------------------------------
+     ;; Enable desired features for all lisp modes
+     ;; ----------------------------------------------------------------------------
+     (require 'rainbow-delimiters)
+     (require 'paredit) ; Redshank requires paredit
+     (require 'redshank)
+     (after-load 'redshank
+       (diminish 'redshank-mode))
+
+
+     (defun jcf/lisp-setup ()
+       "Enable features useful in any Lisp mode."
+       (turn-on-eldoc-mode)
+       (redshank-mode)
+       (smartparens-strict-mode +1)
+       (rainbow-delimiters-mode +1)
+       (disable-paredit-mode))
+
+     (defun jcf/emacs-lisp-setup ()
+       "Enable features useful when working with elisp."
+       (elisp-slime-nav-mode t)
+       (set-up-hippie-expand-for-elisp)
+       (disable-paredit-mode))
+
+     (defconst jcf/elispy-modes
+       '(emacs-lisp-mode ielm-mode)
+       "Major modes relating to elisp.")
+
+     (defconst jcf/lispy-modes
+       (append jcf/elispy-modes
+               '(lisp-mode inferior-lisp-mode lisp-interaction-mode))
+       "All lispy major modes.")
+
+     (require 'derived)
+
+     (dolist (hook (mapcar #'derived-mode-hook-name jcf/lispy-modes))
+       (add-hook hook 'jcf/lisp-setup))
+
+     (dolist (hook (mapcar #'derived-mode-hook-name jcf/elispy-modes))
+       (add-hook hook 'jcf/emacs-lisp-setup))
+
+     (defun jcf/maybe-check-parens ()
+       "Run `check-parens' if this is a lispy mode."
+       (when (memq major-mode jcf/lispy-modes)
+         (check-parens)))
+
+     (add-hook 'after-save-hook #'jcf/maybe-check-parens)
+
+     (require 'eldoc-eval)
+     (require 'eldoc-eval)
+
+     (add-to-list 'auto-mode-alist '("\\.emacs-project\\'" . emacs-lisp-mode))
+     (add-to-list 'auto-mode-alist '("archive-contents\\'" . emacs-lisp-mode))
+
+     (require 'cl-lib-highlight)
+     (after-load 'lisp-mode
+       (cl-lib-highlight-initialize))
+
+     ;; ----------------------------------------------------------------------------
+     ;; Delete .elc files when reverting the .el from VC or magit
+     ;; ----------------------------------------------------------------------------
+
+     ;; When .el files are open, we can intercept when they are modified
+     ;; by VC or magit in order to remove .elc files that are likely to
+     ;; be out of sync.
+
+     ;; This is handy while actively working on elisp files, though
+     ;; obviously it doesn't ensure that unopened files will also have
+     ;; their .elc counterparts removed - VC hooks would be necessary for
+     ;; that.
+
+     (defvar jcf/vc-reverting nil
+       "Whether or not VC or Magit is currently reverting buffers.")
+
+     (defadvice revert-buffer (after jcf/maybe-remove-elc activate)
+       "If reverting from VC, delete any .elc file that will now be out of sync."
+       (when jcf/vc-reverting
+         (when (and (eq 'emacs-lisp-mode major-mode)
+                    buffer-file-name
+                    (string= "el" (file-name-extension buffer-file-name)))
+           (let ((elc (concat buffer-file-name "c")))
+             (when (file-exists-p elc)
+               (message "Removing out-of-sync elc file %s" (file-name-nondirectory elc))
+               (delete-file elc))))))
+
+     (defadvice magit-revert-buffers (around jcf/reverting activate)
+       (let ((jcf/vc-reverting t))
+         ad-do-it))
+     (defadvice vc-revert-buffer-internal (around jcf/reverting activate)
+       (let ((jcf/vc-reverting t))
+         ad-do-it))
+
+
+     
+     (require 'macrostep)
+
+     (after-load 'lisp-mode
+       (define-key emacs-lisp-mode-map (kbd "C-c e") 'macrostep-expand))
+
+     
+
+     ;; A quick way to jump to the definition of a function given its key binding
+     (global-set-key (kbd "C-h K") 'find-function-on-key)
+   #+end_src
+
+** Lua
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'lua-mode)
+   #+end_src
+
+** Markdown
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'markdown-mode)
+
+     (setq auto-mode-alist
+           (cons '("\\.\\(md\\|markdown\\)\\'" . markdown-mode) auto-mode-alist))
+
+     (require 'pandoc-mode)
+
+     (after-load 'markdown-mode
+       (add-hook 'markdown-mode-hook 'turn-on-pandoc)
+       (add-hook 'markdown-mode-hook
+                 (lambda () (guide-key/add-local-guide-key-sequence "C-c /"))))
+   #+end_src
+
+** NXML
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (add-auto-mode
+      'nxml-mode
+      (concat "\\."
+              (regexp-opt
+               '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss"
+                 "gpx" "tcx" "plist"))
+              "\\'"))
+     (setq magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist))
+     (fset 'xml-mode 'nxml-mode)
+     (add-hook 'nxml-mode-hook (lambda ()
+                                 (set (make-local-variable 'ido-use-filename-at-point) nil)))
+     (setq nxml-slash-auto-complete-flag t)
+   #+end_src
+
+*** Pretty printing
+
+    http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-mode/
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (defun jcf/pp-xml-region (begin end)
+        "Pretty format XML markup in region. The function inserts linebreaks
+      to separate tags that have nothing but whitespace between them.  It
+      then indents the markup by using nxml's indentation rules."
+        (interactive "r")
+        (save-excursion
+            (nxml-mode)
+            (goto-char begin)
+            (while (search-forward-regexp "\>[ \\t]*\<" nil t)
+              (backward-char) (insert "\n"))
+            (indent-region begin end)))
+    #+end_src
+
+*** tidy integration
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'tidy)
+      (add-hook 'nxml-mode-hook (lambda () (tidy-build-menu nxml-mode-map)))
+   #+end_src
+
+** PHP
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'php-mode)
+     (require 'smarty-mode)
+   #+end_src
+
+** Python
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (setq auto-mode-alist
+           (append '(("SConstruct\\'" . python-mode)
+                     ("SConscript\\'" . python-mode))
+                   auto-mode-alist))
+   #+end_src
+
+** Rails
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'rinari)
+     (after-load 'rinari
+       (diminish 'rinari-minor-mode "Rin"))
+     (global-rinari-mode)
+
+     (defun update-rails-ctags ()
+       (interactive)
+       (let ((default-directory (or (rinari-root) default-directory)))
+         (shell-command (concat "ctags -a -e -f " rinari-tags-file-name " --tag-relative -R app lib vendor test"))))
+   #+end_src
+
+** Ruby
+
+*** Basics
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'ruby-mode)
+      (require 'ruby-hash-syntax)
+
+      (add-auto-mode 'ruby-mode
+                     "Gemfile\\'"
+                     "Kirkfile\\'"
+                     "Rakefile\\'"
+                     "\\.builder\\'"
+                     "\\.gemspec\\'"
+                     "\\.irbrc\\'"
+                     "\\.pryrc\\'"
+                     "\\.rake\\'"
+                     "\\.rjs\\'"
+                     "\\.ru\\'"
+                     "\\.rxml\\'")
+
+      (setq ruby-use-encoding-map nil)
+
+      (after-load 'ruby-mode
+        (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
+        (define-key ruby-mode-map (kbd "TAB") 'indent-for-tab-command)
+
+        ;; Stupidly the non-bundled ruby-mode isn't a derived mode of
+        ;; prog-mode: we run the latter's hooks anyway in that case.
+        (add-hook 'ruby-mode-hook
+                  (lambda ()
+                    (unless (derived-mode-p 'prog-mode)
+                      (run-hooks 'prog-mode-hook)))))
+
+      (add-hook 'ruby-mode-hook 'subword-mode)
+    #+end_src
+
+*** TODO hippie-expand ignores : for names in ruby-mode
+
+*** Inferior Ruby
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'inf-ruby)
+    #+end_src
+
+*** Compilation
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      ;;; Ruby compilation
+      (require 'ruby-compilation)
+
+      (after-load 'ruby-mode
+        (let ((m ruby-mode-map))
+          (define-key m [S-f7] 'ruby-compilation-this-buffer)
+          (define-key m [f7] 'ruby-compilation-this-test)
+          (define-key m [f6] 'recompile)))
+    #+end_src
+
+*** Robe
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'robe)
+      (after-load 'ruby-mode
+        (add-hook 'ruby-mode-hook 'robe-mode))
+    #+end_src
+
+*** Ri
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'yari)
+      (defalias 'ri 'yari)
+    #+end_src
+
+*** YAML
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'yaml-mode)
+    #+end_src
+
+*** ERB
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'mmm-mode)
+      (defun jcf/ensure-mmm-erb-loaded ()
+        (require 'mmm-erb))
+
+      (require 'derived)
+
+      (defun jcf/set-up-mode-for-erb (mode)
+        (add-hook (derived-mode-hook-name mode) 'jcf/ensure-mmm-erb-loaded)
+        (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
+
+      (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
+        (dolist (mode html-erb-modes)
+          (jcf/set-up-mode-for-erb mode)
+          (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
+          (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
+
+      (mapc 'jcf/set-up-mode-for-erb
+            '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
+
+      (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
+
+      (add-auto-mode 'html-erb-mode "\\.rhtml\\'" "\\.html\\.erb\\'")
+      (add-to-list 'auto-mode-alist '("\\.jst\\.ejs\\'"  . html-erb-mode))
+      (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
+
+      (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
+        (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))
+    #+end_src
+
+*** RSpec
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'rspec-mode)
+
+      (after-load 'ruby-mode
+        (rspec-mode 1))
+    #+end_src
+
+*** Bundler
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (require 'bundler)
+    #+end_src
+
+*** TODO Inline SQL - fix or remove
+
+    Adds support for syntax highlighting SQL in Ruby heredocs, for example:
+
+    #+BEGIN_SRC ruby
+      sql = <<-SQL
+        SELECT * FROM users
+        WHERE users.email = 'james@logi.cl'
+        LIMIT 1
+      SQL
+    #+end_src
+
+    Needs to run after rinari to avoid clobbering font-lock-keywords?
+    Disabled for now.
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      ;; (require 'mmm-mode)
+      ;; (eval-after-load 'mmm-mode
+      ;;   '(progn
+      ;;      (mmm-add-classes
+      ;;       '((ruby-heredoc-sql
+      ;;          :submode sql-mode
+      ;;          :front "<<-?[\'\"]?\\(SQL\\)[\'\"]?"
+      ;;          :save-matches 1
+      ;;          :front-offset (end-of-line 1)
+      ;;          :back "^[ \t]*~1$"
+      ;;          :delimiter-mode nil)))
+      ;;      (mmm-add-mode-ext-class 'ruby-mode "\\.rb\\'" 'ruby-heredoc-sql)))
+      ;;
+      ;; (add-to-list 'mmm-set-file-name-for-modes 'ruby-mode)
+   #+end_src
+
+** SASS
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    (require 'sass-mode)
+    (require 'scss-mode)
+    (setq-default scss-compile-at-save nil)
+   #+end_src
+
+** Shell
+
+*** Add ~.zsh~ files to ~sh-mode~
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (add-auto-mode 'sh-mode "\\.zsh\\'")
+    #+end_src
+
+*** Prezto support
+
+    Recognise Prezto runcoms.
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (defvar jcf-pretzo-files '("zlogin"
+                                 "zlogout"
+                                 "zpretzorc"
+                                 "zprofile"
+                                 "zshenv"
+                                 "zshrc"))
+
+      (mapc (lambda (file)
+              (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
+            jcf-pretzo-files)
+    #+end_src
+
+    Use Z-Shell when we're editing a Prezto runcom.
+
+    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+      (add-hook
+       'sh-mode-hook
+       (lambda ()
+         (if (and buffer-file-name
+                  (member (file-name-nondirectory buffer-file-name) jcf-pretzo-files))
+             (sh-set-shell "zsh"))))
+    #+end_src
+
+** Slim
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'slim-mode)
+   #+end_src
+
+** Slime
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'slime)
+     ;; package.el compiles the contrib subdir, but the compilation order
+     ;; causes problems, so we remove the .elc files there. See
+     ;; http://lists.common-lisp.net/pipermail/slime-devel/2012-February/018470.html
+     (mapc #'delete-file
+           (file-expand-wildcards (concat user-emacs-directory "elpa/slime-2*/contrib/*.elc")))
+
+     (require 'slime-company)
+     (require 'hippie-expand-slime)
+
+     
+     ;;; Lisp buffers
+
+     (defun jcf/slime-setup ()
+       "Mode setup function for slime lisp buffers."
+       (set-up-slime-hippie-expand))
+
+     (after-load 'slime
+       (setq slime-protocol-version 'ignore)
+       (setq slime-net-coding-system 'utf-8-unix)
+       (slime-setup '(slime-repl slime-fuzzy slime-company))
+       (setq slime-complete-symbol*-fancy t)
+       (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+       (add-hook 'slime-mode-hook 'jcf/slime-setup))
+
+     
+     ;;; REPL
+
+     (defun jcf/slime-repl-setup ()
+       "Mode setup function for slime REPL."
+       (jcf/lisp-setup)
+       (set-up-slime-hippie-expand)
+       (set-up-slime-ac t)
+       (setq show-trailing-whitespace nil))
+
+     (after-load 'slime-repl
+       ;; Bind TAB to `indent-for-tab-command', as in regular Slime buffers.
+       (define-key slime-repl-mode-map (kbd "TAB") 'indent-for-tab-command)
+
+       (add-hook 'slime-repl-mode-hook 'jcf/slime-repl-setup))
+   #+end_src
+
+** SQL
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'sql-indent)
+     (after-load 'sql
+       (require 'sql-indent))
+
+     (defun jcf/pop-to-sqli-buffer ()
+       "Switch to the corresponding sqli buffer."
+       (interactive)
+       (if sql-buffer
+           (progn
+             (pop-to-buffer sql-buffer)
+             (goto-char (point-max)))
+         (sql-set-sqli-buffer)
+         (when sql-buffer
+           (jcf/pop-to-sqli-buffer))))
+
+     (after-load 'sql
+       (define-key sql-mode-map (kbd "C-c C-z") 'jcf/pop-to-sqli-buffer)
+       (add-hook 'sql-interactive-mode-hook 'jcf/never-indent)
+       (when (package-installed-p 'dash-at-point)
+         (defun jcf/maybe-set-dash-db-docset ()
+           (when (eq sql-product 'postgres)
+             (setq dash-at-point-docset "psql")))
+
+         (add-hook 'sql-mode-hook 'jcf/maybe-set-dash-db-docset)
+         (add-hook 'sql-interactive-mode-hook 'jcf/maybe-set-dash-db-docset)
+         (defadvice sql-set-product (after set-dash-docset activate)
+           (jcf/maybe-set-dash-db-docset))))
+
+     (setq-default sql-input-ring-file-name
+                   (expand-file-name ".sqli_history" user-emacs-directory))
+
+     (after-load 'page-break-lines
+       (push 'sql-mode page-break-lines-modes))
+   #+end_src
+
+** TCL
+
+   Minimal TCL support for creating Portfiles, used in [[https://guide.macports.org/chunked/development.html][MacPorts
+   development]].
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (add-auto-mode 'tcl-mode "Portfile\\'")
+   #+end_src
+
+** Textile
+
+   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+     (require 'textile-mode)
+
+     (autoload 'textile-mode "textile-mode" "Mode for editing Textile documents" t)
+     (setq auto-mode-alist
+           (cons '("\\.textile\\'" . textile-mode) auto-mode-alist))
+   #+end_src

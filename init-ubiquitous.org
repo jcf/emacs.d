@@ -1,0 +1,73 @@
+#+TITLE: emacs.d - Ubiquitous
+#+AUTHOR: James Conroy-Finn
+#+EMAIL: james@logi.cl
+#+STARTUP: showall
+#+OPTIONS: toc:2 num:nil ^:nil
+#+LINK: f https://github.com/rejeep/f.el
+#+LINK: s https://github.com/magnars/s.el
+#+LINK: diminish http://www.eskimo.com/~seldon/diminish.el
+
+* Ubiquitous
+
+  Here we setup configuration and packages that are going to be so
+  widely used we pretend they're built into Emacs.
+
+** OS X
+
+   There are a number of packages and configurations that only make
+   sense on OS X. Although I don't use Emacs on Linux very often, and
+   never on Windows it makes sense to ensure Emacs will run in these
+   environments.
+
+   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
+     (defconst *is-a-mac* (eq system-type 'darwin))
+   #+end_src
+
+** Packages
+
+   [[s][s]] provides useful string utility functions.
+
+   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
+     (require 's)
+   #+end_src
+
+   [[f][f]] is a modern API for working with files and directories.
+
+   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
+     (require 'f)
+   #+end_src
+
+   [[diminish]] helps declutter our modeline by either by removing or
+   abbreviating minor mode indicators.
+
+   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
+     (require 'diminish)
+   #+end_src
+
+   [[https://github.com/purcell/exec-path-from-shell][~exec-path-from-shell~]] to pull ~PATH~ configuration from the user's
+   shell.
+
+   From the exec-path-from-shell [[https://github.com/purcell/exec-path-from-shell/blob/dccbb54b18950d64885daea9e98e49f15af1f0c9/README.md][README]]:
+
+   #+BEGIN_QUOTE
+   On OS X, an Emacs instance started from the graphical user
+   interface will have a different environment than a shell in a
+   terminal window, because OS X does not run a shell during the
+   login. Obviously this will lead to unexpected results when calling
+   external utilities like make from Emacs.
+   #+END_QUOTE
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'exec-path-from-shell)
+
+     (after-load 'exec-path-from-shell
+       (dolist (var '("GPG_AGENT_INFO"
+                      "LANG"
+                      "LC_CTYPE"
+                      "SSH_AGENT_PID"
+                      "SSH_AUTH_SOCK"))
+         (add-to-list 'exec-path-from-shell-variables var)))
+
+     (when (memq window-system '(mac ns))
+       (exec-path-from-shell-initialize))
+   #+END_SRC
