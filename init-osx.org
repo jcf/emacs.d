@@ -11,6 +11,13 @@
   All things specific to OS X are kept here, and only load this file
   if we're on a Mac.
 
+** Setup PATH
+
+   #+BEGIN_SRC emacs-lisp :tangle init-osx.el :comments link
+     (when (memq window-system '(mac ns))
+       (exec-path-from-shell-initialize))
+   #+END_SRC
+
 ** Fullscreen via the keyboard
 
    Toggle native OS X fullscreen with Command-Option-f.
