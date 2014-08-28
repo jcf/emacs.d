@@ -118,7 +118,6 @@
      (depends-on "clj-refactor")
      (depends-on "cljsbuild-mode")
      (depends-on "clojure-mode")
-     (depends-on "clojure-test-mode")
      (depends-on "coffee-mode")
      (depends-on "company")
      (depends-on "company-go")
@@ -292,6 +291,19 @@
   keep things manageable configuration is split up into a number of
   files.
 
+** OS X
+
+   There are a number of packages and configurations that only make
+   sense on OS X. Although I don't use Emacs on Linux very often, and
+   never on Windows it makes sense to ensure Emacs will run in these
+   environments.
+
+   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
+     (defconst *is-a-mac* (eq system-type 'darwin))
+   #+end_src
+
+** Load Org files
+
   To give you an idea of why, my original literate Emacs config racked
   up over 3000 lines in a single Org file.
 
@@ -303,17 +315,20 @@
       (org-babel-load-file (expand-file-name (format "init-%s.org" s)
                                              jcf/config-dir)))
 
-    (jcf/load-org "defuns")
-    (jcf/load-org "genesis")
-    (jcf/load-org "ubiquitous")
-    (jcf/load-org "presentation")
-    (jcf/load-org "evil")
-    (when *is-a-mac*
-      (jcf/load-org "osx"))
-    (jcf/load-org "packages")
-    (jcf/load-org "sessions")
-    (jcf/load-org "window-management")
-    (jcf/load-org "version-control")
-    (jcf/load-org "languages")
-    (jcf/load-org "locales")
+    (add-hook
+     'after-init-hook
+     (lambda ()
+       (jcf/load-org "defuns")
+       (jcf/load-org "genesis")
+       (jcf/load-org "ubiquitous")
+       (jcf/load-org "presentation")
+       (jcf/load-org "evil")
+       (when *is-a-mac*
+         (jcf/load-org "osx"))
+       (jcf/load-org "packages")
+       (jcf/load-org "sessions")
+       (jcf/load-org "window-management")
+       (jcf/load-org "version-control")
+       (jcf/load-org "languages")
+       (jcf/load-org "locales")))
   #+end_src

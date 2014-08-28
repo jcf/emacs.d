@@ -18,7 +18,6 @@
 (depends-on "clj-refactor")
 (depends-on "cljsbuild-mode")
 (depends-on "clojure-mode")
-(depends-on "clojure-test-mode")
 (depends-on "coffee-mode")
 (depends-on "company")
 (depends-on "company-go")

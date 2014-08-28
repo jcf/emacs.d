@@ -32,7 +32,7 @@
 
 ;; init\.el:1 ends here
 
-;; [[file:~/.emacs.d/README.org::*init.el][init\.el:1]]
+;; [[file:~/.emacs.d/README.org::*Load%20Org%20files][Load\ Org\ files:1]]
 
 (defvar jcf/config-dir
   (file-name-directory (or load-file-name (buffer-file-name))))
@@ -41,18 +41,21 @@
   (org-babel-load-file (expand-file-name (format "init-%s.org" s)
                                          jcf/config-dir)))
 
-(jcf/load-org "defuns")
-(jcf/load-org "genesis")
-(jcf/load-org "ubiquitous")
-(jcf/load-org "presentation")
-(jcf/load-org "evil")
-(when *is-a-mac*
-  (jcf/load-org "osx"))
-(jcf/load-org "packages")
-(jcf/load-org "sessions")
-(jcf/load-org "window-management")
-(jcf/load-org "version-control")
-(jcf/load-org "languages")
-(jcf/load-org "locales")
+(add-hook
+ 'after-init-hook
+ (lambda ()
+   (jcf/load-org "defuns")
+   (jcf/load-org "genesis")
+   (jcf/load-org "ubiquitous")
+   (jcf/load-org "presentation")
+   (jcf/load-org "evil")
+   (when *is-a-mac*
+     (jcf/load-org "osx"))
+   (jcf/load-org "packages")
+   (jcf/load-org "sessions")
+   (jcf/load-org "window-management")
+   (jcf/load-org "version-control")
+   (jcf/load-org "languages")
+   (jcf/load-org "locales")))
 
-;; init\.el:1 ends here
+;; Load\ Org\ files:1 ends here

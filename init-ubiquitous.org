@@ -12,17 +12,6 @@
   Here we setup configuration and packages that are going to be so
   widely used we pretend they're built into Emacs.
 
-** OS X
-
-   There are a number of packages and configurations that only make
-   sense on OS X. Although I don't use Emacs on Linux very often, and
-   never on Windows it makes sense to ensure Emacs will run in these
-   environments.
-
-   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
-     (defconst *is-a-mac* (eq system-type 'darwin))
-   #+end_src
-
 ** Packages
 
    [[s][s]] provides useful string utility functions.

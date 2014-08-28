@@ -19,7 +19,6 @@
     #+begin_src emacs-lisp :tangle init-languages.el :comments link
       (require 'clojure-mode)
       (require 'clj-refactor)
-      (require 'clojure-test-mode)
       (require 'cljsbuild-mode)
       (require 'elein)
       (require 'typed-clojure-mode)
