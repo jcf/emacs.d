@@ -118,7 +118,6 @@
 (depends-on "page-break-lines")
 (depends-on "pallet")
 (depends-on "pandoc-mode")
-(depends-on "paredit")
 (depends-on "paredit") ; Redshank requires paredit
 (depends-on "php-mode")
 (depends-on "popwin")
