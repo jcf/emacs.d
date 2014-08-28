@@ -145,7 +145,6 @@
 (depends-on "slamhound")
 (depends-on "slim-mode")
 (depends-on "slime" :git "git://github.com/slime/slime.git")
-(depends-on "slime-company")
 (depends-on "smartparens")
 (depends-on "smarty-mode")
 (depends-on "smex")

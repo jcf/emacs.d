@@ -982,12 +982,10 @@
 
 ** Slime
 
-   Require slime, and make sure autodoc is available because
-   ~slime-company~ requires it.
+   Require slime to get the party started.
 
    #+begin_src emacs-lisp :tangle init-languages.el :comments link
      (require 'slime)
-     (add-to-list 'slime-contribs 'slime-autodoc)
    #+end_src
 
    package.el compiles the contrib subdir, but the compilation order
@@ -1003,7 +1001,6 @@
    Require some useful packages that extend Slime.
 
    #+begin_src emacs-lisp :tangle init-languages.el :comments link
-     (require 'slime-company)
      (require 'hippie-expand-slime)
    #+end_src
 
@@ -1017,7 +1014,7 @@
      (after-load 'slime
        (setq slime-protocol-version 'ignore)
        (setq slime-net-coding-system 'utf-8-unix)
-       (slime-setup '(slime-fancy slime-repl slime-fuzzy slime-company))
+       (slime-setup '(slime-fancy slime-repl slime-fuzzy))
        (setq slime-complete-symbol*-fancy t)
        (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
        (add-hook 'slime-mode-hook 'jcf/slime-setup))
