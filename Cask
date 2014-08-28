@@ -101,6 +101,7 @@
 (depends-on "lua-mode")
 (depends-on "macrostep")
 (depends-on "magit")
+(depends-on "magit-gh-pulls")
 (depends-on "magit-svn")
 (depends-on "markdown-mode")
 (depends-on "mmm-mode")
