@@ -268,7 +268,6 @@
      (depends-on "yari")
      (depends-on "yasnippet")
      (depends-on "zenburn-theme")
-
    #+end_src
 
    To generate the Cask file for the first time you need to run
