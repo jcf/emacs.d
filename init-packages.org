@@ -145,6 +145,16 @@
      (setq eshell-glob-case-insensitive t)
    #+end_src
 
+   Tell Node.js, and hence ~npm~ to avoid use of escape codes because
+   they don't print well.
+
+   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+     (add-hook
+      'eshell-mode-hook
+      '(lambda ()
+         (eshell/export "NODE_NO_READLINE=1")))
+   #+end_src
+
 ** Expand region
 
    #+begin_src emacs-lisp :tangle init-packages.el :comments link
