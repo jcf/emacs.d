@@ -143,11 +143,12 @@
      (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
    #+end_src
 
-   Add pull request support.
+   Add pull request support. Disabled because authentication is a
+   complete and utter mess.
 
    #+begin_src emacs-lisp
      (require 'magit-gh-pulls)
-     (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
+     ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
    #+end_src
 
 ** Darcs
