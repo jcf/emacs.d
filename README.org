@@ -68,8 +68,15 @@
    follows:
 
    #+begin_src emacs-lisp :tangle no
-     (depends-on name version fetcher url)
+     (depends-on name fetcher url)
    #+end_src
+
+   To fetch an imaginary package called ~bicycle~ via Git you could
+   use the following incantation of ~depends-on~:
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (depends-on "bicycle" :git "git://github.com/bicycle/bicycle.git")
+   #+END_SRC
 
    ~fetcher~ must be one of the values in [[cask-fetchers][~cask-fetchers~]], which at
    the time of writing consists of:
