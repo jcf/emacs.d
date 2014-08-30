@@ -53,8 +53,8 @@
   (file-name-directory (or load-file-name (buffer-file-name))))
 
 (defun jcf/load-org (s)
-  (org-babel-load-file (expand-file-name (format "init-%s.org" s)
-                                         jcf/config-dir)))
+  (org-babel-load-file
+   (expand-file-name (format "init-%s.org" s) jcf/config-dir)))
 
 (add-hook
  'after-init-hook
