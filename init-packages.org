@@ -380,7 +380,7 @@
    lisp-interaction-mode~.
 
    #+begin_src emacs-lisp
-     (require 'scratch)
+     (use-package scratch)
    #+end_src
 
 ** Smart mode line
