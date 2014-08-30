@@ -508,7 +508,7 @@
     changes to your search results.
 
     #+begin_src emacs-lisp
-      (require 'wgrep)
+      (use-package wgrep)
     #+end_src
 
 ** Whitespace cleanup
