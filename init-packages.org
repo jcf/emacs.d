@@ -112,8 +112,8 @@
 ** Expand region
 
    #+begin_src emacs-lisp
-    (require 'expand-region)
-    (global-set-key (kbd "C-=") 'er/expand-region)
+     (use-package expand-region :bind
+       ("C-=" . er/expand-region))
    #+end_src
 
 ** Fill column indicator
