@@ -209,11 +209,8 @@
 ** Erlang
 
    #+begin_src emacs-lisp
-     (ignore-errors
-       (require 'erlang))
-
-     (when (package-installed-p 'erlang)
-       (require 'erlang-start))
+     (use-package erlang :config
+       (use-package erlang-start))
    #+end_src
 
 ** Golang
