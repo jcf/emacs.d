@@ -61,7 +61,7 @@
 ** dsvn
 
    #+begin_src emacs-lisp
-     (require 'dsvn)
+     (use-package dsvn)
    #+end_src
 
 ** Electric pair mode
