@@ -912,5 +912,6 @@
 ** YAML
 
     #+begin_src emacs-lisp
-      (use-package yaml-mode)
+      (use-package yaml-mode
+        :commands yaml-mode)
     #+end_src
