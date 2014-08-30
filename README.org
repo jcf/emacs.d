@@ -289,6 +289,14 @@
   keep things manageable configuration is split up into a number of
   files.
 
+** cl
+
+   Require some common-lisp functions and macros straight away.
+
+   #+begin_src emacs-lisp :tangle init.el :comments link
+     (require 'cl)
+   #+end_src
+
 ** OS X
 
    There are a number of packages and configurations that only make
@@ -306,6 +314,9 @@
   up over 3000 lines in a single Org file.
 
   #+begin_src emacs-lisp :tangle init.el :comments link
+    (require 'org-install)
+    (require 'ob-tangle)
+
     (defvar jcf/config-dir
       (file-name-directory (or load-file-name (buffer-file-name))))
 
