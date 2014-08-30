@@ -245,12 +245,13 @@
 ** Haml
 
    #+begin_src emacs-lisp
-     (require 'haml-mode)
-
-     (after-load 'haml-mode
-       (define-key haml-mode-map (kbd "C-o") 'open-line)
-       (when (fboundp 'electric-indent-mode)
-         (add-hook 'haml-mode-hook (lambda () (electric-indent-mode -1)))))
+     (use-package haml-mode
+       :commands haml-mode
+       :config
+       (progn
+         (define-key haml-mode-map (kbd "C-o") 'open-line)
+         (when (fboundp 'electric-indent-mode)
+           (add-hook 'haml-mode-hook (lambda () (electric-indent-mode -1))))))
    #+end_src
 
 ** Haskell
