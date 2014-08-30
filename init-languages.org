@@ -673,6 +673,7 @@
          (fset 'xml-mode 'nxml-mode)))
 
      (use-package tidy
+       :commands (tidy-buffer tidy-current-line)
        :init
        (add-hook 'nxml-mode-hook (lambda () (tidy-build-menu nxml-mode-map))))
    #+end_src
