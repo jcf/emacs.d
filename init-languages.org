@@ -801,7 +801,7 @@
 ** Slim
 
    #+begin_src emacs-lisp
-     (require 'slim-mode)
+     (use-package slim-mode)
    #+end_src
 
 ** Slime
