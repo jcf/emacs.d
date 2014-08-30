@@ -399,42 +399,45 @@
 ** SmartParens
 
    #+begin_src emacs-lisp
-     (require 'smartparens)
+     (use-package smartparens
+       :init
+       (progn
+         ;; I don't need paredit, but some package developers do!
+         (require 'paredit)
 
-     ;; I don't need paredit, but some package developers do!
-     (require 'paredit)
+         ;; Enable smartparens everywhere
+         (require 'smartparens-config)
 
-     (after-load 'smartparens
-       (require 'paredit)
-       (disable-paredit-mode))
+         (setq
+          smartparens-strict-mode t
+          sp-autoinsert-if-followed-by-word t
+          sp-autoskip-closing-pair 'always
+          sp-base-key-bindings 'paredit
+          sp-hybrid-kill-entire-symbol nil)
 
-     ;; Enable smartparens everywhere
-     (require 'smartparens-config)
+         (smartparens-global-mode 1)
+         (show-smartparens-global-mode +1)
 
-     (setq smartparens-strict-mode t)
-     (setq sp-autoinsert-if-followed-by-word t)
-     (setq sp-autoskip-closing-pair 'always)
-     (setq sp-base-key-bindings 'paredit)
-     (setq sp-hybrid-kill-entire-symbol nil)
+         (sp-use-paredit-bindings))
 
-     (smartparens-global-mode 1)
-     (show-smartparens-global-mode +1)
+       :config
+       (progn
+         (require 'paredit)
+         (disable-paredit-mode)
 
-     (sp-use-paredit-bindings)
+         (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+           (sp-local-pair "*" "*" :bind "C-*")
+           (sp-local-tag "2" "**" "**")
+           (sp-local-tag "s" "```scheme" "```")
+           (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
 
-     (sp-with-modes '(markdown-mode gfm-mode rst-mode)
-       (sp-local-pair "*" "*" :bind "C-*")
-       (sp-local-tag "2" "**" "**")
-       (sp-local-tag "s" "```scheme" "```")
-       (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+         (sp-with-modes '(html-mode sgml-mode)
+           (sp-local-pair "<" ">"))
 
-     (sp-with-modes '(html-mode sgml-mode)
-       (sp-local-pair "<" ">"))
+         ;; Close a backtick with another backtick in clojure-mode
+         (sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
 
-     ;; Close a backtick with another backtick in clojure-mode
-     (sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
-
-     (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p))
+         (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p))))
    #+end_src
 
 ** The Silver Surfer (~ag~)
