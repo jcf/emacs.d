@@ -201,72 +201,57 @@
 
 ** ibuffer
 
-*** Version-control support
-
-    Explicitly require ~ibuffer-vc~ to get its column definitions,
-    as they can't be autoloaded.
-
-    #+begin_src emacs-lisp
-      (require 'ibuffer-vc)
-      (after-load 'ibuffer
-        (require 'ibuffer-vc))
-    #+end_src
-
-*** Filters
+    - Version-control support
+    - Setup filters
+    - Use human readable file sizes
+    - Customise formats (toggle with ~`~)
+    - Bind to "C-x C-b"
 
     #+begin_src emacs-lisp
-      (defun ibuffer-set-up-preferred-filters ()
-        (ibuffer-vc-set-filter-groups-by-vc-root)
-        (unless (eq ibuffer-sorting-mode 'filename/process)
-          (ibuffer-do-sort-by-filename/process)))
+      (use-package ibuffer
+        :init
+        (use-package ibuffer-vc
+          :init
+          (progn
+            (setq
+             ibuffer-filter-group-name-face 'font-lock-doc-face
+             ibuffer-formats
+             '((mark modified read-only vc-status-mini " "
+                     (name 18 18 :left :elide)
+                     " "
+                     (size-h 9 -1 :right)
+                     " "
+                     (mode 16 16 :left :elide)
+                     " "
+                     filename-and-process)
+               (mark modified read-only vc-status-mini " "
+                     (name 18 18 :left :elide)
+                     " "
+                     (size-h 9 -1 :right)
+                     " "
+                     (mode 16 16 :left :elide)
+                     " "
+                     (vc-status 16 16 :left)
+                     " "
+                     filename-and-process)))
 
-      (add-hook 'ibuffer-hook 'ibuffer-set-up-preferred-filters)
-    #+end_src
+            (after-load 'ibuffer
+              (define-ibuffer-column size-h
+                (:name "Size" :inline t)
+                (cond
+                 ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+                 ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
+                 (t (format "%8d" (buffer-size))))))
 
-*** Human readable file sizes
+            (defun ibuffer-set-up-preferred-filters ()
+              (ibuffer-vc-set-filter-groups-by-vc-root)
+              (unless (eq ibuffer-sorting-mode 'filename/process)
+                (ibuffer-do-sort-by-filename/process)))
 
-    #+begin_src emacs-lisp
-      (after-load 'ibuffer
-        (define-ibuffer-column size-h
-          (:name "Size" :inline t)
-          (cond
-           ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
-           ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
-           (t (format "%8d" (buffer-size))))))
-    #+end_src
+            (add-hook 'ibuffer-hook 'ibuffer-set-up-preferred-filters)))
 
-*** ~ibuffer-formats~
-
-    Toggle with ~`~.
-
-    #+begin_src emacs-lisp
-      (setq ibuffer-formats
-            '((mark modified read-only vc-status-mini " "
-                    (name 18 18 :left :elide)
-                    " "
-                    (size-h 9 -1 :right)
-                    " "
-                    (mode 16 16 :left :elide)
-                    " "
-                    filename-and-process)
-              (mark modified read-only vc-status-mini " "
-                    (name 18 18 :left :elide)
-                    " "
-                    (size-h 9 -1 :right)
-                    " "
-                    (mode 16 16 :left :elide)
-                    " "
-                    (vc-status 16 16 :left)
-                    " "
-                    filename-and-process)))
-
-      (setq ibuffer-filter-group-name-face 'font-lock-doc-face)
-    #+end_src
-
-*** Global keybinding
-
-    #+begin_src emacs-lisp
-      (global-set-key (kbd "C-x C-b") 'ibuffer)
+        :bind
+        ("C-x C-b" . ibuffer))
     #+end_src
 
 ** ido
