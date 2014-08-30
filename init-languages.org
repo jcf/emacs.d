@@ -865,6 +865,7 @@
 
    #+begin_src emacs-lisp
      (use-package sql
+       :commands sql-mode
        :config
        (progn
          (use-package sql-indent)
