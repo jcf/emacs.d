@@ -83,51 +83,30 @@
 
 ** eshell
 
-   Always insert text at the prompt.
+   Eshell provides an Emacs Lisp enabled shell.
+
+   - Always insert text at the prompt.
+   - Allow symbol names to be used for redirection targets.
+   - This makes it possible to redirect output like so:
+   - Ignore case when completing filenames.
+   - Error when a glob matches nothing. This mirrors the default
+     behaviour of zsh.
+   - Make globs case-insensitive.
+
+   ~NODE_NO_READLINE=1~ tells Node.js, and hence ~npm~ to avoid use of
+   escape codes because they don't print well.
 
    #+begin_src emacs-lisp
-     (setq eshell-scroll-to-bottom-on-input 'all)
-   #+end_src
-
-   Allow symbol names to be used for redirection targets.
-
-   #+begin_src emacs-lisp
-     (setq eshell-buffer-shorthand t)
-   #+end_src
-
-   This makes it possible to redirect output like so:
-
-   #+BEGIN_SRC shell-script
-     echo hello > '*scratch*
-   #+end_src
-
-   Ignore case when completing filenames.
-
-   #+begin_src emacs-lisp
-     (setq eshell-cmpl-ignore-case t)
-   #+end_src
-
-   Error when a glob matches nothing. This mirrors the default
-   behaviour of zsh.
-
-   #+begin_src emacs-lisp
-     (setq eshell-error-if-no-glob t)
-   #+end_src
-
-   Make globs case-insensitive.
-
-   #+begin_src emacs-lisp
-     (setq eshell-glob-case-insensitive t)
-   #+end_src
-
-   Tell Node.js, and hence ~npm~ to avoid use of escape codes because
-   they don't print well.
-
-   #+begin_src emacs-lisp
-     (add-hook
-      'eshell-mode-hook
-      '(lambda ()
-         (eshell/export "NODE_NO_READLINE=1")))
+     (use-package eshell
+       :init
+       (setq
+        eshell-buffer-shorthand t
+        eshell-cmpl-ignore-case t
+        eshell-error-if-no-glob t
+        eshell-glob-case-insensitive t
+        eshell-scroll-to-bottom-on-input 'all)
+       :config
+       (eshell/export "NODE_NO_READLINE=1"))
    #+end_src
 
 ** Expand region
