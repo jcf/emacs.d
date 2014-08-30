@@ -490,9 +490,10 @@
 ** Undo tree
 
    #+begin_src emacs-lisp
-    (require 'undo-tree)
-    (global-undo-tree-mode)
-    (diminish 'undo-tree-mode)
+     (use-package undo-tree
+       :diminish undo-tree
+       :init
+       (global-undo-tree-mode))
    #+end_src
 
 ** Unfill
