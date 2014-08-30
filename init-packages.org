@@ -355,7 +355,7 @@
     Consider replacing with the built-in [[http://www.emacswiki.org/emacs/DirectoryVariables][~directory-variables~]].
 
     #+begin_src emacs-lisp
-      (require 'project-local-variables)
+      (use-package project-local-variables)
     #+end_src
 
 ** Projectile
