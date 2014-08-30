@@ -153,62 +153,43 @@
 
 ** CSS
 
-*** Indentation
+  #+begin_src emacs-lisp
+    (use-package css-mode
+      :init
+      (setq css-indent-offset 2)
+      :config
+      (progn
+        (use-package rainbow-mode
+          :init
+          (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
+            (add-hook hook 'rainbow-mode)))
 
-   #+begin_src emacs-lisp
-     (setq css-indent-offset 2)
-   #+end_src
+        (use-package css-eldoc)
 
-*** Colourise CSS colour literals
-
-    Note that ~rainbow-mode~ needs ~color.el~, bundled with Emacs
-    >= 24.
-
-    #+begin_src emacs-lisp
-      (when (eval-when-compile (>= emacs-major-version 24))
-        (require 'rainbow-mode)
-        (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
-          (add-hook hook 'rainbow-mode)))
-    #+end_src
-
-*** Embedded CSS support
-
-    #+begin_src emacs-lisp
-     (require 'mmm-mode)
-
-     (after-load 'mmm-vars
-       (mmm-add-group
-        'html-css
-        '((css-cdata
-           :submode css-mode
-           :face mmm-code-submode-face
-           :front "<style[^>]*>[ \t\n]*\\(//\\)?<!\\[CDATA\\[[ \t]*\n?"
-           :back "[ \t]*\\(//\\)?]]>[ \t\n]*</style>"
-           :insert ((?j js-tag nil @ "<style type=\"text/css\">"
-                        @ "\n" _ "\n" @ "</script>" @)))
-          (css
-           :submode css-mode
-           :face mmm-code-submode-face
-           :front "<style[^>]*>[ \t]*\n?"
-           :back "[ \t]*</style>"
-           :insert ((?j js-tag nil @ "<style type=\"text/css\">"
-                        @ "\n" _ "\n" @ "</style>" @)))
-          (css-inline
-           :submode css-mode
-           :face mmm-code-submode-face
-           :front "style=\""
-           :back "\"")))
-       (dolist (mode (list 'html-mode 'nxml-mode))
-         (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
-    #+end_src
-
-*** Use Eldoc for syntax hints
-
-    #+begin_src emacs-lisp
-      (require 'css-eldoc)
-      (autoload 'turn-on-css-eldoc "css-eldoc")
-      (add-hook 'css-mode-hook 'turn-on-css-eldoc)
-    #+end_src
+        (use-package mmm-vars
+          :config
+          (mmm-add-group
+           'html-css
+           '((css-cdata
+              :submode css-mode
+              :face mmm-code-submode-face
+              :front "<style[^>]*>[ \t\n]*\\(//\\)?<!\\[CDATA\\[[ \t]*\n?"
+              :back "[ \t]*\\(//\\)?]]>[ \t\n]*</style>"
+              :insert ((?j js-tag nil @ "<style type=\"text/css\">"
+                           @ "\n" _ "\n" @ "</script>" @)))
+             (css
+              :submode css-mode
+              :face mmm-code-submode-face
+              :front "<style[^>]*>[ \t]*\n?"
+              :back "[ \t]*</style>"
+              :insert ((?j js-tag nil @ "<style type=\"text/css\">"
+                           @ "\n" _ "\n" @ "</style>" @)))
+             (css-inline
+              :submode css-mode
+              :face mmm-code-submode-face
+              :front "style=\""
+              :back "\""))))))
+  #+end_src
 
 ** CSV
 
