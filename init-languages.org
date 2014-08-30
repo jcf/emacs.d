@@ -226,32 +226,20 @@
    #+end_src
 
    #+begin_src emacs-lisp
-     (require 'go-mode)
-   #+end_src
+     (use-package go-mode
+       :config
+       (progn
+         (defvar jcf/go-flymake-path
+           (expand-file-name "src/github.com/dougm/goflymake" (getenv "GOPATH")))
 
-   Require goflymake if it's installed. This dependency is managed
-   outside of Emacs. You can install goflymake like so:
+         (defvar jcf/go-flymake-exists?
+           (file-exists-p go-flymake-path))
 
-   #+BEGIN_SRC sh
-      go get -u github.com/dougm/goflymake
-   #+end_src
+         (use-package go-flymake
+           :if jcf/go-flymake-exists?
+           :config (add-to-list 'load-path jcf/go-flymake-path))
 
-   #+begin_src emacs-lisp
-     (defvar go-flymake-path
-       (expand-file-name "src/github.com/dougm/goflymake" (getenv "GOPATH")))
-
-     (defun jcf-setup-go-flymake ()
-       "Add PATH to 'load-path', and require go-flymake."
-       (add-to-list 'load-path go-flymake-path)
-       (require 'go-flymake))
-
-     (if (file-exists-p go-flymake-path) (jcf-setup-go-flymake))
-   #+end_src
-
-   Format our code automatically when saving.
-
-   #+begin_src emacs-lisp
-     (add-hook 'before-save-hook #'gofmt-before-save)
+         (add-hook 'before-save-hook #'gofmt-before-save)))
    #+end_src
 
 ** Haml
