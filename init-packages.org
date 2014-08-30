@@ -388,10 +388,12 @@
    Disabled for now.
 
    #+begin_src emacs-lisp
-     ;; (require 'smart-mode-line)
-
-     ;; (setq sml/theme nil)
-     ;; (sml/setup)
+     (use-package smart-mode-line
+       :disabled t
+       :init
+       (progn
+         (setq sml/theme nil)
+         (sml/setup)))
    #+end_src
 
 ** SmartParens
