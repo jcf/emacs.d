@@ -8,6 +8,13 @@
 
   The many packages we use are required and configured below.
 
+  We can control the amount of output ~use-package~ generates by
+  setting ~use-package-verbose~ to true.
+
+  #+begin_src emacs-lisp
+    (setq use-package-verbose t)
+  #+end_src
+
 ** Ace Jump
 
    #+begin_src emacs-lisp
@@ -42,8 +49,8 @@
 
    #+begin_src emacs-lisp
      (use-package dired
-       :init
-       (setq dired-recursive-deletes 'top)
+       :commands dired
+       :init (setq dired-recursive-deletes 'top)
 
        :config
        (progn
@@ -51,23 +58,23 @@
          (guide-key/add-local-guide-key-sequence "%")
 
          (use-package dired+
-           :init
-           (setq diredp-hide-details-initially-flag nil)
-           :config
-           (global-dired-hide-details-mode -1))))
-
+           :commands dired
+           :init (setq diredp-hide-details-initially-flag nil)
+           :config (global-dired-hide-details-mode -1))))
    #+end_src
 
 ** dsvn
 
    #+begin_src emacs-lisp
-     (use-package dsvn)
+     (use-package dsvn
+       :commands svn-status)
    #+end_src
 
 ** erc
 
    #+begin_src emacs-lisp
      (use-package erc
+       :commands erc
        :init
        (setq
         erc-hide-list '("JOIN" "PART" "QUIT")
@@ -158,7 +165,9 @@
 ** gnuplot
 
    #+begin_src emacs-lisp
-     (use-package gnuplot)
+     (use-package gnuplot
+       :commands gnuplot-mode
+       :mode "\\.gp$")
    #+end_src
 
 ** google-this
