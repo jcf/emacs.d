@@ -368,8 +368,9 @@
 ** regex-tool
 
    #+begin_src emacs-lisp
-     (require 'regex-tool)
+     (use-package regex-tool)
    #+end_src
+
 ** Scratch
 
    When Emacs starts up, it contains a buffer named *scratch*, which
