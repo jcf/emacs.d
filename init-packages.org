@@ -447,11 +447,17 @@
    Can be [[https://github.com/ggreer/the_silver_searcher#installation][installed]] via Homebrew on OS X.
 
    #+begin_src emacs-lisp
-     (when (executable-find "ag")
-       (require 'ag)
-       (require 'wgrep-ag)
-       (setq-default ag-highlight-search t)
-       (global-set-key (kbd "M-?") 'ag-project))
+     (defvar executable-ag-available?
+       (executable-find "ag"))
+
+     (use-package ag
+       :if executable-ag-available?
+       :init
+       (progn
+         (require 'wgrep-ag)
+         (setq-default ag-highlight-search t))
+       :bind
+       ("M-?" . ag-project))
    #+end_src
 
 ** Highlight escape sequences
