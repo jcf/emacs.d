@@ -338,9 +338,10 @@
 ** Page break lines
 
    #+begin_src emacs-lisp
-     (require 'page-break-lines)
-     (global-page-break-lines-mode)
-     (diminish 'page-break-lines-mode)
+     (use-package page-break-lines
+       :diminish page-break-lines-mode
+       :init
+       (global-page-break-lines-mode))
    #+end_src
 
 ** project-local-variables
