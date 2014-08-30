@@ -57,11 +57,24 @@
 
 *** Clojurescript
 
-    Use clojure-mode for clojurescript, since clojurescript-mode pulls
-    in Slime.
+    Define our own ~clojurescript-mode~ that is derived from
+    ~clojure-mode~.
+
+    We disable Company mode because you can't complete Clojurescript
+    via a normal Clojure REPL, and if you try Emacs hangs until
+    Company times out.
 
     #+begin_src emacs-lisp
-      (add-auto-mode 'clojure-mode "\\.cljs\\'")
+      (define-derived-mode clojurescript-mode clojure-mode
+        "Clojurescript"
+        "Extends clojure-mode with Clojurescript-specific settings."
+        (company-mode -1))
+    #+end_src
+
+    Use ~clojurescript-mode~ for files with a ~cljs~ extension.
+
+    #+begin_src emacs-lisp
+      (add-auto-mode 'clojurescript-mode "\\.cljs\\'")
     #+end_src
 
 *** Cider
