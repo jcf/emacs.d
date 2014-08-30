@@ -14,15 +14,21 @@
   easily become "C-x C-c". Must be set before requiring
   ~helm-config~.
 
+** Prefix
+
   #+begin_src emacs-lisp
     (setq helm-command-prefix-key "C-c h")
   #+end_src
+
+** Require built-ins
 
   #+begin_src emacs-lisp
     (require 'helm-config)
     (require 'helm-files)
     (require 'helm-grep)
   #+end_src
+
+** Keybindings
 
   #+begin_src emacs-lisp
     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
@@ -35,6 +41,8 @@
     (define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
     (define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
   #+end_src
+
+** Configuration
 
   #+begin_src emacs-lisp
     (setq
