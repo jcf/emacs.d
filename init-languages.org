@@ -592,17 +592,16 @@
 ** Markdown
 
    #+begin_src emacs-lisp
-     (require 'markdown-mode)
+     (use-package markdown-mode
+       :mode "\\.\\(md\\|markdown\\)\\'"
+       :commands markdown-mode
+       :config
+       (progn
+         (use-package pandoc-mode :init
+           (add-hook 'markdown-mode-hook 'turn-on-pandoc))
 
-     (setq auto-mode-alist
-           (cons '("\\.\\(md\\|markdown\\)\\'" . markdown-mode) auto-mode-alist))
-
-     (require 'pandoc-mode)
-
-     (after-load 'markdown-mode
-       (add-hook 'markdown-mode-hook 'turn-on-pandoc)
-       (add-hook 'markdown-mode-hook
-                 (lambda () (guide-key/add-local-guide-key-sequence "C-c /"))))
+         (add-hook 'markdown-mode-hook
+                   (lambda () (guide-key/add-local-guide-key-sequence "C-c /")))))
    #+end_src
 
 ** NXML
