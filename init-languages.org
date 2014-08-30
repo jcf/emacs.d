@@ -672,142 +672,70 @@
 ** Rails
 
    #+begin_src emacs-lisp
-     (require 'rinari)
-     (after-load 'rinari
-       (diminish 'rinari-minor-mode "Rin"))
-     (global-rinari-mode)
-
-     (defun update-rails-ctags ()
-       (interactive)
-       (let ((default-directory (or (rinari-root) default-directory)))
-         (shell-command (concat "ctags -a -e -f " rinari-tags-file-name " --tag-relative -R app lib vendor test"))))
+     (use-package rinari
+       :diminish (rinari . "Rin")
+       :init
+       (global-rinari-mode))
    #+end_src
 
 ** Ruby
 
-*** Basics
+   #+begin_src emacs-lisp
+     (use-package ruby-mode
+       :mode (("Gemfile\\'" . ruby-mode)
+              ("Kirkfile\\'" . ruby-mode)
+              ("Rakefile\\'" . ruby-mode)
+              ("\\.builder\\'" . ruby-mode)
+              ("\\.gemspec\\'" . ruby-mode)
+              ("\\.irbrc\\'" . ruby-mode)
+              ("\\.pryrc\\'" . ruby-mode)
+              ("\\.rake\\'" . ruby-mode)
+              ("\\.rjs\\'" . ruby-mode)
+              ("\\.ru\\'" . ruby-mode)
+              ("\\.rxml\\'" . ruby-mode))
 
-    #+begin_src emacs-lisp
-      (require 'ruby-mode)
-      (require 'ruby-hash-syntax)
+       :init
+       (setq ruby-use-encoding-map nil)
 
-      (add-auto-mode 'ruby-mode
-                     "Gemfile\\'"
-                     "Kirkfile\\'"
-                     "Rakefile\\'"
-                     "\\.builder\\'"
-                     "\\.gemspec\\'"
-                     "\\.irbrc\\'"
-                     "\\.pryrc\\'"
-                     "\\.rake\\'"
-                     "\\.rjs\\'"
-                     "\\.ru\\'"
-                     "\\.rxml\\'")
+       :config
+       (progn
+         (use-package inf-ruby)
+         (use-package ruby-hash-syntax)
 
-      (setq ruby-use-encoding-map nil)
+         (after-load 'ruby-mode
+           (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
+           (define-key ruby-mode-map (kbd "TAB") 'indent-for-tab-command))
 
-      (after-load 'ruby-mode
-        (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
-        (define-key ruby-mode-map (kbd "TAB") 'indent-for-tab-command)
+         (add-hook 'ruby-mode-hook 'subword-mode)
 
-        ;; Stupidly the non-bundled ruby-mode isn't a derived mode of
-        ;; prog-mode: we run the latter's hooks anyway in that case.
-        (add-hook 'ruby-mode-hook
-                  (lambda ()
-                    (unless (derived-mode-p 'prog-mode)
-                      (run-hooks 'prog-mode-hook)))))
+         (use-package robe
+           :commands ruby-mode
+           :config (add-hook 'ruby-mode-hook 'robe-mode))
 
-      (add-hook 'ruby-mode-hook 'subword-mode)
-    #+end_src
+         (use-package ruby-compilation
+           :commands ruby-mode
+           :config
+           (let ((m ruby-mode-map))
+             (define-key m [S-f7] 'ruby-compilation-this-buffer)
+             (define-key m [f7] 'ruby-compilation-this-test)
+             (define-key m [f6] 'recompile)))
 
-*** TODO hippie-expand ignores : for names in ruby-mode
+         (use-package 'yari
+           :init (defalias 'ri 'yari))
 
-*** Inferior Ruby
+         (use-package rspec-mode
+           :commands ruby-mode
+           :config (rspec-mode 1))
 
-    #+begin_src emacs-lisp
-      (require 'inf-ruby)
-    #+end_src
+         (use-package bundler)
 
-*** Compilation
-
-    #+begin_src emacs-lisp
-      ;;; Ruby compilation
-      (require 'ruby-compilation)
-
-      (after-load 'ruby-mode
-        (let ((m ruby-mode-map))
-          (define-key m [S-f7] 'ruby-compilation-this-buffer)
-          (define-key m [f7] 'ruby-compilation-this-test)
-          (define-key m [f6] 'recompile)))
-    #+end_src
-
-*** Robe
-
-    #+begin_src emacs-lisp
-      (require 'robe)
-      (after-load 'ruby-mode
-        (add-hook 'ruby-mode-hook 'robe-mode))
-    #+end_src
-
-*** Ri
-
-    #+begin_src emacs-lisp
-      (require 'yari)
-      (defalias 'ri 'yari)
-    #+end_src
-
-*** YAML
-
-    #+begin_src emacs-lisp
-      (require 'yaml-mode)
-    #+end_src
-
-*** ERB
-
-    #+begin_src emacs-lisp
-      (require 'mmm-mode)
-      (defun jcf/ensure-mmm-erb-loaded ()
-        (require 'mmm-erb))
-
-      (require 'derived)
-
-      (defun jcf/set-up-mode-for-erb (mode)
-        (add-hook (derived-mode-hook-name mode) 'jcf/ensure-mmm-erb-loaded)
-        (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
-
-      (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
-        (dolist (mode html-erb-modes)
-          (jcf/set-up-mode-for-erb mode)
-          (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
-          (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
-
-      (mapc 'jcf/set-up-mode-for-erb
-            '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
-
-      (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
-
-      (add-auto-mode 'html-erb-mode "\\.rhtml\\'" "\\.html\\.erb\\'")
-      (add-to-list 'auto-mode-alist '("\\.jst\\.ejs\\'"  . html-erb-mode))
-      (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
-
-      (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
-        (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))
-    #+end_src
-
-*** RSpec
-
-    #+begin_src emacs-lisp
-      (require 'rspec-mode)
-
-      (after-load 'ruby-mode
-        (rspec-mode 1))
-    #+end_src
-
-*** Bundler
-
-    #+begin_src emacs-lisp
-      (require 'bundler)
-    #+end_src
+         ;; Stupidly the non-bundled ruby-mode isn't a derived mode of
+         ;; prog-mode: we run the latter's hooks anyway in that case.
+         (add-hook 'ruby-mode-hook
+                   (lambda ()
+                     (unless (derived-mode-p 'prog-mode)
+                       (run-hooks 'prog-mode-hook))))))
+   #+end_src
 
 *** TODO Inline SQL - fix or remove
 
@@ -841,6 +769,43 @@
       ;; (add-to-list 'mmm-set-file-name-for-modes 'ruby-mode)
    #+end_src
 
+** YAML
+
+    #+begin_src emacs-lisp
+      (use-package yaml-mode)
+    #+end_src
+
+** ERB
+
+    #+begin_src emacs-lisp
+      (require 'mmm-mode)
+      (defun jcf/ensure-mmm-erb-loaded ()
+        (require 'mmm-erb))
+
+      (require 'derived)
+
+      (defun jcf/set-up-mode-for-erb (mode)
+        (add-hook (derived-mode-hook-name mode) 'jcf/ensure-mmm-erb-loaded)
+        (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
+
+      (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
+        (dolist (mode html-erb-modes)
+          (jcf/set-up-mode-for-erb mode)
+          (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
+          (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
+
+      (mapc 'jcf/set-up-mode-for-erb
+            '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
+
+      (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
+
+      (add-auto-mode 'html-erb-mode "\\.rhtml\\'" "\\.html\\.erb\\'")
+      (add-to-list 'auto-mode-alist '("\\.jst\\.ejs\\'"  . html-erb-mode))
+      (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
+
+      (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
+        (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))
+    #+end_src
 ** SASS
 
    #+begin_src emacs-lisp
