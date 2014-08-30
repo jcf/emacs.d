@@ -779,9 +779,9 @@
 ** SASS
 
    #+begin_src emacs-lisp
-    (require 'sass-mode)
-    (require 'scss-mode)
-    (setq-default scss-compile-at-save nil)
+     (use-package sass-mode)
+     (use-package scss-mode :init
+       (setq-default scss-compile-at-save nil))
    #+end_src
 
 ** Shell
