@@ -17,6 +17,7 @@
 (depends-on "clojure-mode")
 (depends-on "coffee-mode")
 (depends-on "company")
+(depends-on "company-ghc")
 (depends-on "company-go")
 (depends-on "company-inf-ruby")
 (depends-on "crontab-mode")
