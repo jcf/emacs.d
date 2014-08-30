@@ -304,15 +304,21 @@
    See [[Ruby]] configuration for ERB setup.
 
    #+begin_src emacs-lisp
-     (require 'tidy)
-     (add-hook 'html-mode-hook (lambda () (tidy-build-menu html-mode-map)))
+     (use-package html-mode
+       :commands html-mode
+       :mode "\\.(jsp|tmpl)\\'"
+       :config
+       (progn
+         (use-package tidy
+           :config
+           (add-hook 'html-mode-hook (lambda () (tidy-build-menu html-mode-map))))
 
-     (require 'tagedit)
-     (after-load 'sgml-mode
-       (tagedit-add-paredit-like-keybindings)
-       (add-hook 'sgml-mode-hook (lambda () (tagedit-mode 1))))
-
-     (add-auto-mode 'html-mode "\\.(jsp|tmpl)\\'")
+         (use-package tagedit
+           :commands sgml-mode
+           :config
+           (progn
+             (tagedit-add-paredit-like-keybindings)
+             (add-hook 'sgml-mode-hook (lambda () (tagedit-mode 1)))))))
    #+end_src
 
 ** Javascript
