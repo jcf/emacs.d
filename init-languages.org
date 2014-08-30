@@ -208,6 +208,40 @@
      (use-package feature-mode)
    #+end_src
 
+** ERB
+
+    #+begin_src emacs-lisp
+      (use-package mmm-mode)
+
+      (use-package mmm-erb
+        :mode (("\\.rhtml\\'" . html-erb-mode)
+               ("\\.html\\.erb\\'" . html-erb-mode)
+               ("\\.jst\\.ejs\\'" . html-erb-mode))
+
+        :init
+        (progn
+          (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
+          (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
+
+          (defun jcf/set-up-mode-for-erb (mode)
+            (add-hook (derived-mode-hook-name mode) 'jcf/ensure-mmm-erb-loaded)
+            (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
+
+          (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
+            (dolist (mode html-erb-modes)
+              (jcf/set-up-mode-for-erb mode)
+              (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
+              (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
+
+          (require 'derived)
+
+          (mapc 'jcf/set-up-mode-for-erb
+                '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
+
+          (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
+            (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))))
+    #+end_src
+
 ** Erlang
 
    #+begin_src emacs-lisp
@@ -736,46 +770,6 @@
                        (run-hooks 'prog-mode-hook))))))
    #+end_src
 
-** YAML
-
-    #+begin_src emacs-lisp
-      (use-package yaml-mode)
-    #+end_src
-
-** ERB
-
-    #+begin_src emacs-lisp
-      (use-package mmm-mode)
-
-      (use-package mmm-erb
-        :mode (("\\.rhtml\\'" . html-erb-mode)
-               ("\\.html\\.erb\\'" . html-erb-mode)
-               ("\\.jst\\.ejs\\'" . html-erb-mode))
-
-        :init
-        (progn
-          (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
-          (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
-
-          (defun jcf/set-up-mode-for-erb (mode)
-            (add-hook (derived-mode-hook-name mode) 'jcf/ensure-mmm-erb-loaded)
-            (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
-
-          (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
-            (dolist (mode html-erb-modes)
-              (jcf/set-up-mode-for-erb mode)
-              (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
-              (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
-
-          (require 'derived)
-
-          (mapc 'jcf/set-up-mode-for-erb
-                '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
-
-          (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
-            (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))))
-    #+end_src
-
 ** SASS
 
    #+begin_src emacs-lisp
@@ -912,3 +906,9 @@
        :commands textile-mode
        :mode "\\.textile\\'")
    #+end_src
+
+** YAML
+
+    #+begin_src emacs-lisp
+      (use-package yaml-mode)
+    #+end_src
