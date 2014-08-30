@@ -372,87 +372,97 @@
    Treat Cask file like elisp.
 
    #+begin_src emacs-lisp
-     (add-auto-mode 'emacs-lisp-mode "Cask\\'")
+     (use-package lisp-mode
+       :mode (("Cask\\'" . emacs-lisp-mode)
+              ("\\.emacs-project\\'" . emacs-lisp-mode)
+              ("archive-contents\\'" . emacs-lisp-mode))
+
+       :init
+       (progn
+         (require 'elisp-slime-nav)
+         (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+           (add-hook hook 'elisp-slime-nav-mode))
+
+         (require 'lively)
+
+         (setq-default initial-scratch-message
+                       (concat ";; Happy hacking " (or user-login-name "") "!\n\n"))
+
+         (defun jcf/eval-last-sexp-or-region (beg end prefix)
+           "Eval region from BEG to END if active, otherwise the last sexp."
+           (interactive "r\nP")
+           (if (use-region-p)
+               (eval-region beg end)
+             (pp-eval-last-sexp prefix)))
+
+         (global-set-key (kbd "M-:") 'pp-eval-expression)
+
+         (after-load 'lisp-mode
+           (define-key emacs-lisp-mode-map (kbd "C-x C-e")
+             'jcf/eval-last-sexp-or-region))
+
+         (defun jcf/emacs-lisp-module-name ()
+           "Search the buffer for `provide' declaration."
+           (save-excursion
+             (goto-char (point-min))
+             (when (search-forward-regexp "^(provide '" nil t)
+               (symbol-name (symbol-at-point)))))
+
+         ;; Credit to Chris Done for this one.
+         (defun jcf/try-complete-lisp-symbol-without-namespace (old)
+           "Hippie expand \"try\" function which expands \"-foo\" to
+           \"modname-foo\" in elisp."
+           (unless old
+             (he-init-string (he-lisp-symbol-beg) (point))
+             (when (string-prefix-p "-" he-search-string)
+               (let ((mod-name (jcf/emacs-lisp-module-name)))
+                 (when mod-name
+                   (setq he-expand-list (list (concat mod-name he-search-string)))))))
+           (when he-expand-list
+             (he-substitute-string (car he-expand-list))
+             (setq he-expand-list nil)
+             t))
+
+         (defun set-up-hippie-expand-for-elisp ()
+           "Locally set `hippie-expand' completion functions for use with Emacs Lisp."
+           (make-local-variable 'hippie-expand-try-functions-list)
+
+           (add-to-list 'hippie-expand-try-functions-list
+                        'try-complete-lisp-symbol
+                        t)
+
+           (add-to-list 'hippie-expand-try-functions-list
+                        'try-complete-lisp-symbol-partially
+                        t)
+
+           (add-to-list 'hippie-expand-try-functions-list
+                        'jcf/try-complete-lisp-symbol-without-namespace
+                        t)))
+
+       :bind
+       ("C-h K" . find-function-on-key))
+
+     (use-package ipretty :init
+       (ipretty-mode 1))
    #+end_src
 
-   #+begin_src emacs-lisp
-     (require 'elisp-slime-nav)
-     (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-       (add-hook hook 'elisp-slime-nav-mode))
-
-     (require 'lively)
-
-     (setq-default initial-scratch-message
-                   (concat ";; Happy hacking " (or user-login-name "") "!\n\n"))
-
-   #+end_src
-
-   Make C-x C-e run ~'eval-region~ if the region is active.
+   Auto-compile on save and load.
 
    #+begin_src emacs-lisp
-     (defun jcf/eval-last-sexp-or-region (beg end prefix)
-       "Eval region from BEG to END if active, otherwise the last sexp."
-       (interactive "r\nP")
-       (if (use-region-p)
-           (eval-region beg end)
-         (pp-eval-last-sexp prefix)))
-
-     (global-set-key (kbd "M-:") 'pp-eval-expression)
-
-     (after-load 'lisp-mode
-       (define-key emacs-lisp-mode-map (kbd "C-x C-e") 'jcf/eval-last-sexp-or-region))
-
-     (require 'ipretty)
-     (ipretty-mode 1)
-   #+end_src
-
-   Hippie-expand.
-
-   #+begin_src emacs-lisp
-     (defun my/emacs-lisp-module-name ()
-       "Search the buffer for `provide' declaration."
-       (save-excursion
-         (goto-char (point-min))
-         (when (search-forward-regexp "^(provide '" nil t)
-           (symbol-name (symbol-at-point)))))
-
-     ;; Credit to Chris Done for this one.
-     (defun my/try-complete-lisp-symbol-without-namespace (old)
-       "Hippie expand \"try\" function which expands \"-foo\" to \"modname-foo\" in elisp."
-       (unless old
-         (he-init-string (he-lisp-symbol-beg) (point))
-         (when (string-prefix-p "-" he-search-string)
-           (let ((mod-name (my/emacs-lisp-module-name)))
-             (when mod-name
-               (setq he-expand-list (list (concat mod-name he-search-string)))))))
-       (when he-expand-list
-         (he-substitute-string (car he-expand-list))
-         (setq he-expand-list nil)
-         t))
-
-     (defun set-up-hippie-expand-for-elisp ()
-       "Locally set `hippie-expand' completion functions for use with Emacs Lisp."
-       (make-local-variable 'hippie-expand-try-functions-list)
-       (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol t)
-       (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol-partially t)
-       (add-to-list 'hippie-expand-try-functions-list 'my/try-complete-lisp-symbol-without-namespace t))
-   #+end_src
-
-   Automatic byte compilation.
-
-   #+begin_src emacs-lisp
-     (require 'auto-compile)
-     (auto-compile-on-save-mode 1)
-     (auto-compile-on-load-mode 1)
+     (use-package auto-compile :init
+       (progn
+         (auto-compile-on-save-mode 1)
+         (auto-compile-on-load-mode 1)))
    #+end_src
 
    Highlight current sexp.
 
    #+begin_src emacs-lisp
-     (require 'hl-sexp)
-
-     ;; Prevent flickery behaviour due to hl-sexp-mode unhighlighting before each command
-     (after-load 'hl-sexp
+     (use-package hl-sexp
+       :commands hl-sexp-mode
+       :config
+       ;; Prevent flickery behaviour due to hl-sexp-mode unhighlighting
+       ;; before each command
        (defadvice hl-sexp-mode (after unflicker (&optional turn-on) activate)
          (when turn-on
            (remove-hook 'pre-command-hook #'hl-sexp-unhighlight))))
@@ -478,12 +488,6 @@
    Enable desired features for all lisp modes.
 
    #+begin_src emacs-lisp
-     (require 'rainbow-delimiters)
-     (require 'paredit) ; Redshank requires paredit
-     (require 'redshank)
-     (after-load 'redshank
-       (diminish 'redshank-mode))
-
      (defun jcf/lisp-setup ()
        "Enable features useful in any Lisp mode."
        (turn-on-eldoc-mode)
@@ -507,6 +511,13 @@
                '(lisp-mode inferior-lisp-mode lisp-interaction-mode))
        "All lispy major modes.")
 
+     (use-package rainbow-delimiters)
+
+     (use-package redshank
+       :diminish redshank-mode
+       :init
+       (use-package paredit))
+
      (require 'derived)
 
      (dolist (hook (mapcar #'derived-mode-hook-name jcf/lispy-modes))
@@ -522,14 +533,11 @@
 
      (add-hook 'after-save-hook #'jcf/maybe-check-parens)
 
-     (require 'eldoc-eval)
-     (require 'eldoc-eval)
+     (use-package eldoc-eval)
 
-     (add-to-list 'auto-mode-alist '("\\.emacs-project\\'" . emacs-lisp-mode))
-     (add-to-list 'auto-mode-alist '("archive-contents\\'" . emacs-lisp-mode))
-
-     (require 'cl-lib-highlight)
-     (after-load 'lisp-mode
+     (use-package 'cl-lib-highlight
+       :commands lisp-mode
+       :config
        (cl-lib-highlight-initialize))
    #+end_src
 
@@ -570,17 +578,9 @@
    Macrostep.
 
    #+begin_src emacs-lisp
-     (require 'macrostep)
-
-     (after-load 'lisp-mode
-       (define-key emacs-lisp-mode-map (kbd "C-c e") 'macrostep-expand))
-   #+end_src
-
-   A quick way to jump to the definition of a function given its key
-   binding.
-
-   #+begin_src emacs-lisp
-     (global-set-key (kbd "C-h K") 'find-function-on-key)
+     (use-package 'macrostep
+       :commands lisp-mode
+       :config (define-key emacs-lisp-mode-map (kbd "C-c e") 'macrostep-expand))
    #+end_src
 
 ** Lua
