@@ -1,7 +1,7 @@
 #+TITLE: emacs.d - Org
 #+AUTHOR: James Conroy-Finn
 #+EMAIL: james@logi.cl
-#+STARTUP: showall
+#+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 
 * Org

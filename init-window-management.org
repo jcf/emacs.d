@@ -1,7 +1,7 @@
 #+TITLE: emacs.d - Window Management
 #+AUTHOR: James Conroy-Finn
 #+EMAIL: james@logi.cl
-#+STARTUP: showall
+#+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 
 * Window management

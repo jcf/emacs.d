@@ -1,7 +1,7 @@
 #+TITLE: emacs.d - Defuns
 #+AUTHOR: James Conroy-Finn
 #+EMAIL: james@logi.cl
-#+STARTUP: showall
+#+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 #+LINK: prelude https://github.com/bbatsov/prelude/blob/6f05616b6022e1029594b8bf107dd5bcbff93db7/core/prelude-core.el#L237
 

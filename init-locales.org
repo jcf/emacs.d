@@ -1,7 +1,7 @@
 #+TITLE: emacs.d - Locales
 #+AUTHOR: James Conroy-Finn
 #+EMAIL: james@logi.cl
-#+STARTUP: showall
+#+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 
 * TODO Locales - verify this needs to be done last

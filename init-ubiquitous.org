@@ -1,7 +1,7 @@
 #+TITLE: emacs.d - Ubiquitous
 #+AUTHOR: James Conroy-Finn
 #+EMAIL: james@logi.cl
-#+STARTUP: showall
+#+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 #+LINK: f https://github.com/rejeep/f.el
 #+LINK: s https://github.com/magnars/s.el

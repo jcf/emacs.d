@@ -1,7 +1,7 @@
 #+TITLE: emacs.d
 #+AUTHOR: James Conroy-Finn
 #+EMAIL: james@logi.cl
-#+STARTUP: showall
+#+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 #+LINK: cask https://github.com/cask/cask
 #+LINK: pallet https://github.com/rdallasgray/pallet

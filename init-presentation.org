@@ -1,7 +1,7 @@
 #+TITLE: emacs.d - Presentation
 #+AUTHOR: James Conroy-Finn
 #+EMAIL: james@logi.cl
-#+STARTUP: showall
+#+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 #+LINK: fullframe https://github.com/tomterl/fullframe
 #+LINK: zenburn https://github.com/bbatsov/zenburn-emacs
