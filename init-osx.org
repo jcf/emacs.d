@@ -72,6 +72,29 @@
   #+begin_src emacs-lisp
     (setq-default locate-command "mdfind")
   #+end_src
+** Dash
+
+   Support for the http://kapeli.com/dash documentation browser. Only
+   available on OS X.
+
+   #+begin_src emacs-lisp
+     (defun jcf/dash-installed-p ()
+       "Return t if Dash is installed on this machine, or nil otherwise."
+       (let ((lsregister "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"))
+         (and (file-executable-p lsregister)
+              (not (string-equal
+                    ""
+                    (shell-command-to-string
+                     (concat lsregister " -dump|grep com.kapeli.dash")))))))
+
+     (defvar jcf/dash-installed?
+       (jcf/dash-installed-p))
+
+     (use-package dash-at-point
+       :if jcf/dash-installed?
+       :bind
+       ("C-c D" . dash-at-point))
+   #+end_src
 
 ** Proxy
 

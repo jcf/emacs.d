@@ -19,51 +19,23 @@
 ** Company
 
    #+begin_src emacs-lisp
-     (require 'company)
-     (add-hook 'after-init-hook 'global-company-mode)
+     (use-package company
+       :diminish company-mode
+       :init
+       (global-company-mode 1)
 
-     (defvar jcf/completion-backends
-       '(company-ghc
-         company-go
-         company-inf-ruby
-         company-tern))
+       :config
+       (progn
+         (dolist ((package '(company-ghc
+                             company-go
+                             company-inf-ruby
+                             company-tern)))
+           (use-package `package :init
+             (add-to-list 'company-backends package)))
 
-     (dolist (package jcf/completion-backends)
-       (require package))
-
-     (after-load 'company
-       (diminish 'company-mode)
-
-       ;; Use Helm to complete suggestions
-       (define-key company-mode-map (kbd "C-:") 'helm-company)
-       (define-key company-active-map (kbd "C-:") 'helm-company)
-
-       ;; Add completion backends
-       (dolist (backend jcf/completion-backends)
-         (add-to-list 'company-backends backend)))
-   #+end_src
-
-** Dash
-
-   #+begin_src emacs-lisp
-     ;; Support for the http://kapeli.com/dash documentation browser
-
-     (defun jcf/dash-installed-p ()
-       "Return t if Dash is installed on this machine, or nil otherwise."
-       (let ((lsregister "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"))
-         (and (file-executable-p lsregister)
-              (not (string-equal
-                    ""
-                    (shell-command-to-string
-                     (concat lsregister " -dump|grep com.kapeli.dash")))))))
-
-     (when (and *is-a-mac* (not (package-installed-p 'dash-at-point)))
-       (message "Checking whether Dash is installed")
-       (when (jcf/dash-installed-p)
-         (require 'dash-at-point)))
-
-     (when (package-installed-p 'dash-at-point)
-       (global-set-key (kbd "C-c D") 'dash-at-point))
+         ;; Use Helm to complete suggestions
+         (define-key company-mode-map (kbd "C-:") 'helm-company)
+         (define-key company-active-map (kbd "C-:") 'helm-company)))
    #+end_src
 
 ** Dired
