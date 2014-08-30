@@ -737,38 +737,6 @@
                        (run-hooks 'prog-mode-hook))))))
    #+end_src
 
-*** TODO Inline SQL - fix or remove
-
-    Adds support for syntax highlighting SQL in Ruby heredocs, for example:
-
-    #+BEGIN_SRC ruby
-      sql = <<-SQL
-        SELECT * FROM users
-        WHERE users.email = 'james@logi.cl'
-        LIMIT 1
-      SQL
-    #+end_src
-
-    Needs to run after rinari to avoid clobbering font-lock-keywords?
-    Disabled for now.
-
-    #+begin_src emacs-lisp
-      ;; (require 'mmm-mode)
-      ;; (eval-after-load 'mmm-mode
-      ;;   '(progn
-      ;;      (mmm-add-classes
-      ;;       '((ruby-heredoc-sql
-      ;;          :submode sql-mode
-      ;;          :front "<<-?[\'\"]?\\(SQL\\)[\'\"]?"
-      ;;          :save-matches 1
-      ;;          :front-offset (end-of-line 1)
-      ;;          :back "^[ \t]*~1$"
-      ;;          :delimiter-mode nil)))
-      ;;      (mmm-add-mode-ext-class 'ruby-mode "\\.rb\\'" 'ruby-heredoc-sql)))
-      ;;
-      ;; (add-to-list 'mmm-set-file-name-for-modes 'ruby-mode)
-   #+end_src
-
 ** YAML
 
     #+begin_src emacs-lisp
