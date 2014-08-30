@@ -514,8 +514,8 @@
 ** Whitespace cleanup
 
    #+begin_src emacs-lisp
-    (require 'whitespace-cleanup-mode)
-    (global-whitespace-cleanup-mode t)
+     (use-package whitespace-cleanup-mode :init
+       (global-whitespace-cleanup-mode t))
    #+end_src
 
 ** Yasnippet
