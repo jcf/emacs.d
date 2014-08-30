@@ -30,7 +30,7 @@
                              company-go
                              company-inf-ruby
                              company-tern)))
-           (use-package `package :init
+           (use-package package :init
              (add-to-list 'company-backends package)))
 
          ;; Use Helm to complete suggestions
