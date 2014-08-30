@@ -499,7 +499,7 @@
 ** Unfill
 
   #+begin_src emacs-lisp
-    (require 'unfill)
+    (use-package unfill)
    #+end_src
 
 ** wgrep
