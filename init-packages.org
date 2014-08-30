@@ -170,12 +170,12 @@
 ** Highlight symbols
 
    #+begin_src emacs-lisp
-    (require 'highlight-symbol)
-    (dolist (hook '(prog-mode-hook html-mode-hook))
-      (add-hook hook 'highlight-symbol-mode)
-      (add-hook hook 'highlight-symbol-nav-mode))
-    (eval-after-load 'highlight-symbol
-      '(diminish 'highlight-symbol-mode))
+     (use-package highlight-symbol
+       :diminish highlight-symbol-mode
+       :config
+       (dolist (hook '(prog-mode-hook html-mode-hook))
+         (add-hook hook 'highlight-symbol-mode)
+         (add-hook hook 'highlight-symbol-nav-mode)))
    #+end_src
 
 ** Hippie
