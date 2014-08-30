@@ -302,12 +302,14 @@
    http://www.emacswiki.org/emacs/KeyChord
 
    #+begin_src emacs-lisp
-     (require 'key-chord)
+     (use-package key-chord
+       :init
+       (progn
+         (setq key-chord-two-keys-delay 0.05)
+         (key-chord-mode 1))
 
-     (setq key-chord-two-keys-delay 0.05)
-
-     (key-chord-mode 1)
-     (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+       :config
+       (key-chord-define evil-insert-state-map "jj" 'evil-normal-state))
    #+end_src
 
 ** Multiple major modes
