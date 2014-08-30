@@ -194,12 +194,10 @@
 ** CSV
 
    #+begin_src emacs-lisp
-     (require 'csv-mode)
-     (require 'csv-nav)
-
-     (add-auto-mode 'csv-mode "\\.[Cc][Ss][Vv]\\'")
-
-     (setq csv-separators '("," ";" "|" " "))
+     (use-package csv-mode
+       :mode "\\.[Cc][Ss][Vv]\\'"
+       :init (setq csv-separators '("," ";" "|" " "))
+       :config (use-package csv-nav))
    #+end_src
 
 ** Cucumber
