@@ -80,8 +80,9 @@
 
     #+begin_src emacs-lisp :tangle init-evil.el :comments link
       (evil-leader/set-key-for-mode 'org-mode
-        "ot" 'org-todo
-        "os" 'org-sort-list)
+        "ol" 'org-babel-load-file
+        "os" 'org-sort-list
+        "ot" 'org-babel-tangle)
     #+end_src
 
     Clojure-specific leader bindings.
