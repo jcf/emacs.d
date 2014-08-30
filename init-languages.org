@@ -896,7 +896,8 @@
    development]].
 
    #+begin_src emacs-lisp
-     (add-auto-mode 'tcl-mode "Portfile\\'")
+     (use-package tcl :mode
+       ("Portfile\\'" . tcl-mode))
    #+end_src
 
 ** Textile
