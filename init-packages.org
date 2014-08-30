@@ -372,8 +372,7 @@
 
     #+begin_src emacs-lisp
       (use-package projectile
-        :commands (helm-projectile
-                   projectile-global-mode
+        :commands (projectile-global-mode
                    projectile-mode)
         :init
         (projectile-global-mode))
