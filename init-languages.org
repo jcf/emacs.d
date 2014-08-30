@@ -580,7 +580,8 @@
 
      (add-hook 'after-save-hook #'jcf/maybe-check-parens)
 
-     (use-package eldoc-eval)
+     (use-package eldoc-eval
+       :commands eldoc-eval)
 
      (use-package cl-lib-highlight
        :commands lisp-mode
