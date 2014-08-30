@@ -28,7 +28,7 @@
    #+begin_src emacs-lisp
      (use-package company
        :diminish company-mode
-       :init
+       :idle
        (global-company-mode 1)
 
        :config
