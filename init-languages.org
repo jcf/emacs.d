@@ -627,7 +627,8 @@
 ** Lua
 
    #+begin_src emacs-lisp
-     (use-package lua-mode)
+     (use-package lua-mode
+       :commands lua-mode)
    #+end_src
 
 ** Markdown
