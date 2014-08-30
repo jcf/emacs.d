@@ -263,6 +263,7 @@
 
    #+begin_src emacs-lisp
      (use-package go-mode
+       :commands go-mode
        :config
        (progn
          (add-hook 'before-save-hook #'gofmt-before-save)
