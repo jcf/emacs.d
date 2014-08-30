@@ -181,14 +181,16 @@
 ** Hippie
 
    #+begin_src emacs-lisp
-     (global-set-key (kbd "M-/") 'hippie-expand)
-
-     (setq hippie-expand-try-functions-list
-           '(try-complete-file-name-partially
-             try-complete-file-name
-             try-expand-dabbrev
-             try-expand-dabbrev-all-buffers
-             try-expand-dabbrev-from-kill))
+     (use-package hippie-expand
+       :init
+       (setq hippie-expand-try-functions-list
+             '(try-complete-file-name-partially
+               try-complete-file-name
+               try-expand-dabbrev
+               try-expand-dabbrev-all-buffers
+               try-expand-dabbrev-from-kill))
+       :bind
+       ("M-/" . hippie-expand))
    #+end_src
 
 ** htmlize
