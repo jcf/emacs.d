@@ -472,6 +472,12 @@
 
 ** Lisp
 
+   Treat Cask file like elisp.
+
+   #+begin_src emacs-lisp
+     (add-auto-mode 'emacs-lisp-mode "Cask\\'")
+   #+end_src
+
    #+begin_src emacs-lisp
      (require 'elisp-slime-nav)
      (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
