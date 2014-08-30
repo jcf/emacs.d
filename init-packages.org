@@ -164,7 +164,7 @@
 ** google-this
 
    #+begin_src emacs-lisp
-     (require 'google-this)
+     (use-package google-this)
    #+end_src
 
 ** Highlight symbols
