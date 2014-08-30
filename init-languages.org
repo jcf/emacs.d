@@ -233,7 +233,7 @@
            (expand-file-name "src/github.com/dougm/goflymake" (getenv "GOPATH")))
 
          (defvar jcf/go-flymake-exists?
-           (file-exists-p go-flymake-path))
+           (file-exists-p jcf/go-flymake-path))
 
          (use-package go-flymake
            :if jcf/go-flymake-exists?
