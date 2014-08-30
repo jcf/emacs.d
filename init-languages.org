@@ -16,6 +16,7 @@
 
    #+begin_src emacs-lisp
      (use-package clojure-mode
+       :commands (clojure-mode scratch)
        :config
        (progn
          (use-package clj-refactor)
@@ -38,29 +39,29 @@
        (after-load 'slime-repl
          (add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup))
 
-       (after-load 'clojure-mode
-         (add-hook 'clojure-mode-hook 'jcf/lisp-setup)
-         ;; Undo activation of Paredit by clojure-mode
-         (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
-         (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
-         (add-hook 'clojure-mode-hook 'typed-clojure-mode)
-         (add-hook 'clojure-mode-hook 'subword-mode))
+       (add-hook 'clojure-mode-hook 'jcf/lisp-setup)
+       ;; Undo activation of Paredit by clojure-mode
+       (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
+       (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+       (add-hook 'clojure-mode-hook 'typed-clojure-mode)
+       (add-hook 'clojure-mode-hook 'subword-mode))
 
-       (use-package cider
-         :init
-         (setq nrepl-popup-stacktraces nil)
+     (use-package cider
+       :commands (cider cider-jack-in)
+       :init
+       (setq nrepl-popup-stacktraces nil)
 
-         :config
-         (after-load 'cider
-           (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-           (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-           (add-hook 'cider-repl-mode-hook 'subword-mode)
+       :config
+       (progn
+         (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+         (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+         (add-hook 'cider-repl-mode-hook 'subword-mode)
 
-           ;; nrepl isn't based on comint
-           (add-hook 'cider-repl-mode-hook
-                     (lambda () (setq show-trailing-whitespace nil)))))
+         ;; nrepl isn't based on comint
+         (add-hook 'cider-repl-mode-hook
+                   (lambda () (setq show-trailing-whitespace nil)))
 
-       (use-package slamhound))
+         (use-package slamhound)))
    #+end_src
 
 ** Clojurescript
