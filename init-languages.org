@@ -359,10 +359,12 @@
 ** LESS
 
    #+begin_src emacs-lisp
-    ;;; LESS
-    (require 'less-css-mode)
-    (when (featurep 'js2-mode)
-      (require 'skewer-less))
+     (use-package less-css-mode
+       :commands less-css-mode
+       :config
+       (progn
+         (use-package js2-mode)
+         (use-package skewer-less)))
    #+end_src
 
 ** Lisp
