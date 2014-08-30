@@ -147,8 +147,8 @@
 ** Crontab
 
    #+begin_src emacs-lisp
-     (require 'crontab-mode)
-     (add-auto-mode 'crontab-mode "\\.?cron\\(tab\\)?\\'")
+     (use-package crontab-mode
+       :mode "\\.?cron\\(tab\\)?\\'")
    #+end_src
 
 ** CSS
