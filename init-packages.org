@@ -534,13 +534,14 @@
 
    #+begin_src emacs-lisp
      (use-package yasnippet
-       :init
+       :idle
+       (yas-global-mode 1)
+
+       :config
        (progn
-         (require 'string-utils)
+         (use-package string-utils)
 
          (let ((snippets-dir (expand-file-name "snippets" user-emacs-directory)))
            (if (f-directory? snippets-dir)
-               (setq yas-snippet-dirs snippets-dir)))
-
-         (yas-global-mode 1)))
+               (setq yas-snippet-dirs snippets-dir)))))
    #+end_src
