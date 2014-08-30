@@ -419,11 +419,12 @@
 
    #+begin_src emacs-lisp
      (use-package lisp-mode
+       :commands lisp-mode
        :mode (("Cask\\'" . emacs-lisp-mode)
               ("\\.emacs-project\\'" . emacs-lisp-mode)
               ("archive-contents\\'" . emacs-lisp-mode))
 
-       :init
+       :config
        (progn
          (require 'elisp-slime-nav)
          (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
