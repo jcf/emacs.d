@@ -12,7 +12,7 @@
   Here we setup configuration and packages that are going to be so
   widely used we pretend they're built into Emacs.
 
-** Packages
+** s
 
    [[s][s]] provides useful string utility functions.
 
@@ -20,11 +20,14 @@
      (require 's)
    #+end_src
 
+** f
    [[f][f]] is a modern API for working with files and directories.
 
    #+begin_src emacs-lisp
      (require 'f)
    #+end_src
+
+** diminish
 
    [[diminish]] helps declutter our modeline by either by removing or
    abbreviating minor mode indicators.
@@ -32,6 +35,8 @@
    #+begin_src emacs-lisp
      (require 'diminish)
    #+end_src
+
+** exec-path-from-shell
 
    [[https://github.com/purcell/exec-path-from-shell][~exec-path-from-shell~]] to pull ~PATH~ configuration from the user's
    shell.
