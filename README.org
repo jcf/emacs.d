@@ -296,7 +296,7 @@
    never on Windows it makes sense to ensure Emacs will run in these
    environments.
 
-   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
+   #+begin_src emacs-lisp :tangle init.el :comments link
      (defconst *is-a-mac* (eq system-type 'darwin))
    #+end_src
 
