@@ -19,7 +19,7 @@
    1. Emacs can start faster by only running the code necessary to get started.
    2. We can avoid executing code that has a dependency yet to be loaded.
 
-   #+begin_src emacs-lisp :tangle init-defuns.el :comments link
+   #+begin_src emacs-lisp
      (defmacro after-load (feature &rest body)
        "After FEATURE is loaded, evaluate BODY."
        (declare (indent defun))
@@ -32,7 +32,7 @@
    This function adds a more convenient way of defining a list of file
    patterns that should be attributed to a given mode.
 
-   #+begin_src emacs-lisp :tangle init-defuns.el :comments link
+   #+begin_src emacs-lisp
      (defun add-auto-mode (mode &rest patterns)
        "Add entries to `auto-mode-alist' to use `MODE' for all given file
      `PATTERNS'."
@@ -45,7 +45,7 @@
    This function will provide you with the directory containing the
    named library.
 
-   #+begin_src emacs-lisp :tangle init-defuns.el :comments link
+   #+begin_src emacs-lisp
      (autoload 'find-library-name "find-func")
      (defun jcf/directory-of-library (library-name)
        "Return the directory in which the `LIBRARY-NAME' load file is found."
@@ -57,7 +57,7 @@
 
    This function deletes a file, removing the buffer in the process.
 
-   #+begin_src emacs-lisp :tangle init-defuns.el :comments link
+   #+begin_src emacs-lisp
      (defun delete-this-file ()
        "Delete the current file, and kill the buffer."
        (interactive)
@@ -76,7 +76,7 @@
    This is a modified version of the [[prelude][~prelude-rename-buffer-and-file~]]
    function in Emacs Prelude.
 
-   #+begin_src emacs-lisp :tangle init-defuns.el :comments link
+   #+begin_src emacs-lisp
      (defun rename-buffer-and-file ()
        "Rename current buffer and if the buffer is visiting a file, rename it too."
        (interactive)
@@ -96,7 +96,7 @@
    This function opens the current file using ~browse-url~. I
    typically use ~gf~ via Evil making this somewhat redundent.
 
-   #+begin_src emacs-lisp :tangle init-defuns.el :comments link
+   #+begin_src emacs-lisp
      (defun browse-current-file ()
        "Open the current file as a URL using `browse-url'."
        (interactive)

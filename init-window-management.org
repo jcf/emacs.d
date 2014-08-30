@@ -8,7 +8,7 @@
 
 ** Winner
 
-   #+begin_src emacs-lisp :tangle init-window-management.el :comments link
+   #+begin_src emacs-lisp
      (winner-mode 1)
    #+end_src
 
@@ -17,7 +17,7 @@
    Make ~C-x o~ prompt for a target window when there are more than
    two.
 
-   #+begin_src emacs-lisp :tangle init-window-management.el :comments link
+   #+begin_src emacs-lisp
      (require 'switch-window)
      (setq switch-window-shortcut-style 'alphabet)
      (global-set-key (kbd "C-x o") 'switch-window)
@@ -27,7 +27,7 @@
 
    When splitting window, show (other-buffer) in the new window.
 
-   #+begin_src emacs-lisp :tangle init-window-management.el :comments link
+   #+begin_src emacs-lisp
      (defun split-window-func-with-other-buffer (split-function)
        (lexical-let ((s-f split-function))
          (lambda ()
@@ -41,7 +41,7 @@
 
 ** Rearrange split windows
 
-   #+begin_src emacs-lisp :tangle init-window-management.el :comments link
+   #+begin_src emacs-lisp
      (defun split-window-horizontally-instead ()
        (interactive)
        (save-excursion

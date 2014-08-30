@@ -8,7 +8,7 @@
 
 ** Setup
 
-   #+begin_src emacs-lisp :tangle init-evil.el :comments link
+   #+begin_src emacs-lisp
      (require 'evil)
    #+end_src
 
@@ -22,7 +22,7 @@
     An [[https://github.com/Dewdrops/evil-exchange][Emacs port]] of [[https://github.com/tommcdo/vim-exchange][vim-exchange]], designed to make it easier to
     exchange two regions.
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (require 'evil-exchange)
     #+end_src
 
@@ -30,7 +30,7 @@
 
     [[https://github.com/cofi/evil-indent-textobject][evil-indent-text-object]] defines textobjects based on indentation.
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (require 'evil-indent-textobject)
     #+end_src
 
@@ -39,7 +39,7 @@
     [[https://github.com/cofi/evil-leader][evil-leader]] adds support for Vim's venerable ~<leader>~ key, which
     any Vim user will be very accustomed to.
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (require 'evil-leader)
       (setq evil-leader/leader ",")
 
@@ -78,7 +78,7 @@
 
     Org-specific leader bindings.
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (evil-leader/set-key-for-mode 'org-mode
         "ol" 'org-babel-load-file
         "os" 'org-sort-list
@@ -87,7 +87,7 @@
 
     Clojure-specific leader bindings.
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (evil-leader/set-key-for-mode 'clojure-mode
         "v" 'clojure-test-run-test
         "V" 'clojure-test-run-tests
@@ -105,7 +105,7 @@
 
     Ruby-specific leader bindings.
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (evil-leader/set-key-for-mode 'ruby-mode
         "v" 'rspec-verify
         "V" 'rspec-verify-all)
@@ -113,7 +113,7 @@
 
     Cucumber-specific bindings.
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (evil-leader/set-key-for-mode 'feature-mode
         "v" 'feature-verify-scenario-at-pos
         "V" 'feature-verify-all-scenarios-in-buffer)
@@ -124,7 +124,7 @@
     [[https://github.com/redguardtoo/evil-matchit][evil-matchit]] is a port of [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] by Benji Fisher. Matchit
     enhances ~%~ to match HTML tags, ~do~/~end~ blocks and more.
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (require 'evil-matchit)
     #+end_src
 
@@ -133,7 +133,7 @@
     I tend to use Emacs' built-in ~comment-dwim~ more than
     [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]], but it's here in case I decide to regress.
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (require 'evil-nerd-commenter)
     #+end_src
 
@@ -143,7 +143,7 @@
     [[https://github.com/cofi/evil-numbers][evil-numbers]] enhances ~C-a~ and ~C-x~ in a similar way to Tim
     Pope's [[https://github.com/tpope/vim-speeddating][speeddating.vim]].
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (require 'evil-numbers)
 
       (define-key evil-normal-state-map (kbd "C-A")
@@ -154,25 +154,25 @@
 
 *** Visual star
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (require 'evil-visualstar)
     #+end_src
 
 *** ~goto-chg~
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (require 'goto-chg)
     #+end_src
 
 *** Surround
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (require 'evil-surround)
     #+end_src
 
 *** Jumper
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (require 'evil-jumper)
     #+end_src
 
@@ -181,7 +181,7 @@
    Activates all of the evil extensions installed above, making sure
    to [[http://j.mp/1i0vLSP][load evil-leader]] before evil itself.
 
-   #+begin_src emacs-lisp :tangle init-evil.el :comments link
+   #+begin_src emacs-lisp
      (global-evil-leader-mode 1)
      (evil-mode 1)
      (global-evil-surround-mode 1)
@@ -194,13 +194,13 @@
 
 *** Default cursor
 
-   #+begin_src emacs-lisp :tangle init-evil.el :comments link
+   #+begin_src emacs-lisp
      (setq evil-default-cursor t)
    #+end_src
 
 *** Modeline
 
-   #+begin_src emacs-lisp :tangle init-evil.el :comments link
+   #+begin_src emacs-lisp
      (setq evil-insert-state-message nil)
      (setq evil-visual-state-message nil)
      (setq evil-mode-line-format 'before)
@@ -208,13 +208,13 @@
 
 *** Use evil-search
 
-   #+begin_src emacs-lisp :tangle init-evil.el :comments link
+   #+begin_src emacs-lisp
      (setq evil-search-module 'evil-search)
    #+end_src
 
 *** Colourise cursor based on state
 
-   #+begin_src emacs-lisp :tangle init-evil.el :comments link
+   #+begin_src emacs-lisp
      (setq evil-emacs-state-cursor  '("red" box))
      (setq evil-normal-state-cursor '("gray" box))
      (setq evil-visual-state-cursor '("gray" box))
@@ -224,7 +224,7 @@
 
 *** Yank to end of line
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (define-key evil-normal-state-map "Y" (kbd "y$"))
     #+end_src
 
@@ -232,7 +232,7 @@
 
     Used in some ~<leader>~ bindings below.
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (defun jcf/delete-window ()
         "Delete the current window, and rebalance remaining windows."
         (interactive)
@@ -254,13 +254,13 @@
 
 *** Use global tags
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (define-key evil-motion-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
     #+end_src
 
 *** Space to repeat ~find-char~
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (define-key evil-normal-state-map (kbd "SPC") 'evil-repeat-find-char)
       (define-key
         evil-normal-state-map (kbd "S-SPC") 'evil-repeat-find-char-reverse)
@@ -268,7 +268,7 @@
 
 *** Use ~escape~ to quit everywhere
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       ;; Use escape to quit, and not as a meta-key.
       (define-key evil-normal-state-map [escape] 'keyboard-quit)
       (define-key evil-visual-state-map [escape] 'keyboard-quit)
@@ -281,7 +281,7 @@
 
 *** ~C-hjkl~ to move around windows
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
       (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
       (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
@@ -290,14 +290,14 @@
 
 *** Lazy ex with ~;~
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (define-key evil-normal-state-map ";" 'evil-ex)
       (define-key evil-visual-state-map ";" 'evil-ex)
     #+end_src
 
 *** Initial evil state per mode
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (loop for (mode . state)
             in '((ielm-mode . insert)
                  (nrepl-mode . insert)
@@ -317,7 +317,7 @@
 
 *** Magit from avsej
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
       (evil-add-hjkl-bindings magit-commit-mode-map 'emacs)
       (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs
@@ -331,7 +331,7 @@
 
 *** Scroll when searching
 
-    #+begin_src emacs-lisp :tangle init-evil.el :comments link
+    #+begin_src emacs-lisp
       (defadvice evil-search-next
           (after advice-for-evil-search-next activate)
         (evil-scroll-line-to-center (line-number-at-pos)))

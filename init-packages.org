@@ -10,7 +10,7 @@
 
 ** Ace Jump
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
     (require 'ace-jump-mode)
     (global-set-key (kbd "C-;") 'ace-jump-mode)
     (global-set-key (kbd "C-:") 'ace-jump-word-mode)
@@ -18,7 +18,7 @@
 
 ** Company
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'company)
      (add-hook 'after-init-hook 'global-company-mode)
 
@@ -38,7 +38,7 @@
 
 ** Dash
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      ;; Support for the http://kapeli.com/dash documentation browser
 
      (defun jcf/dash-installed-p ()
@@ -61,7 +61,7 @@
 
 ** Dired
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'dired+)
 
      (setq diredp-hide-details-initially-flag nil)
@@ -78,20 +78,20 @@
 
 ** dsvn
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'dsvn)
    #+end_src
 
 ** Electric pair mode
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
     (when (fboundp 'electric-pair-mode)
       (setq-default electric-pair-mode 1))
    #+end_src
 
 ** erc
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (after-load 'erc
        (setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
@@ -110,13 +110,13 @@
 
    Always insert text at the prompt.
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (setq eshell-scroll-to-bottom-on-input 'all)
    #+end_src
 
    Allow symbol names to be used for redirection targets.
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (setq eshell-buffer-shorthand t)
    #+end_src
 
@@ -128,27 +128,27 @@
 
    Ignore case when completing filenames.
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (setq eshell-cmpl-ignore-case t)
    #+end_src
 
    Error when a glob matches nothing. This mirrors the default
    behaviour of zsh.
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (setq eshell-error-if-no-glob t)
    #+end_src
 
    Make globs case-insensitive.
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (setq eshell-glob-case-insensitive t)
    #+end_src
 
    Tell Node.js, and hence ~npm~ to avoid use of escape codes because
    they don't print well.
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (add-hook
       'eshell-mode-hook
       '(lambda ()
@@ -157,14 +157,14 @@
 
 ** Expand region
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
     (require 'expand-region)
     (global-set-key (kbd "C-=") 'er/expand-region)
    #+end_src
 
 ** Fill column indicator
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (when (eval-when-compile (> emacs-major-version 23))
        (require 'fill-column-indicator)
        (defun jcf/prog-mode-fci-settings ()
@@ -204,26 +204,26 @@
 
    Powered by [[http://www.gnu.org/software/global/][GNU Global]].
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'ggtags)
      (ggtags-mode 1)
    #+end_src
 
 ** gnuplot
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'gnuplot)
    #+end_src
 
 ** google-this
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'google-this)
    #+end_src
 
 ** Highlight symbols
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
     (require 'highlight-symbol)
     (dolist (hook '(prog-mode-hook html-mode-hook))
       (add-hook hook 'highlight-symbol-mode)
@@ -234,7 +234,7 @@
 
 ** Hippie
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (global-set-key (kbd "M-/") 'hippie-expand)
 
      (setq hippie-expand-try-functions-list
@@ -247,7 +247,7 @@
 
 ** htmlize
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'htmlize)
    #+end_src
 
@@ -258,7 +258,7 @@
     Explicitly require ~ibuffer-vc~ to get its column definitions,
     as they can't be autoloaded.
 
-    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    #+begin_src emacs-lisp
       (require 'ibuffer-vc)
       (after-load 'ibuffer
         (require 'ibuffer-vc))
@@ -266,7 +266,7 @@
 
 *** Filters
 
-    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    #+begin_src emacs-lisp
       (defun ibuffer-set-up-preferred-filters ()
         (ibuffer-vc-set-filter-groups-by-vc-root)
         (unless (eq ibuffer-sorting-mode 'filename/process)
@@ -277,7 +277,7 @@
 
 *** Human readable file sizes
 
-    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    #+begin_src emacs-lisp
       (after-load 'ibuffer
         (define-ibuffer-column size-h
           (:name "Size" :inline t)
@@ -291,7 +291,7 @@
 
     Toggle with ~`~.
 
-    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    #+begin_src emacs-lisp
       (setq ibuffer-formats
             '((mark modified read-only vc-status-mini " "
                     (name 18 18 :left :elide)
@@ -317,13 +317,13 @@
 
 *** Global keybinding
 
-    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    #+begin_src emacs-lisp
       (global-set-key (kbd "C-x C-b") 'ibuffer)
     #+end_src
 
 ** ido
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'ido-vertical-mode)
 
      (require 'ido)
@@ -365,7 +365,7 @@
 
    http://www.emacswiki.org/emacs/KeyChord
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'key-chord)
 
      (setq key-chord-two-keys-delay 0.05)
@@ -376,7 +376,7 @@
 
 ** Multiple major modes
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'mmm-mode)
      (require 'mmm-auto)
      (setq mmm-global-mode 'buffers-with-submode-classes)
@@ -389,13 +389,13 @@
    keystrokes into a designated buffer, along with the command bound to
    them.
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'mwe-log-commands)
    #+end_src
 
 ** Page break lines
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'page-break-lines)
      (global-page-break-lines-mode)
      (diminish 'page-break-lines-mode)
@@ -411,20 +411,20 @@
 
     Consider replacing with the built-in [[http://www.emacswiki.org/emacs/DirectoryVariables][~directory-variables~]].
 
-    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    #+begin_src emacs-lisp
       (require 'project-local-variables)
     #+end_src
 
 ** Projectile
 
-    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    #+begin_src emacs-lisp
       (require 'projectile)
       (projectile-global-mode)
     #+end_src
 
 ** regex-tool
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'regex-tool)
    #+end_src
 ** Scratch
@@ -435,7 +435,7 @@
    also enable Lisp Interaction mode by typing ~M-x
    lisp-interaction-mode~.
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'scratch)
    #+end_src
 
@@ -443,7 +443,7 @@
 
    Disabled for now.
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      ;; (require 'smart-mode-line)
 
      ;; (setq sml/theme nil)
@@ -452,7 +452,7 @@
 
 ** SmartParens
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'smartparens)
 
      ;; I don't need paredit, but some package developers do!
@@ -497,7 +497,7 @@
 
    Can be [[https://github.com/ggreer/the_silver_searcher#installation][installed]] via Homebrew on OS X.
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (when (executable-find "ag")
        (require 'ag)
        (require 'wgrep-ag)
@@ -507,14 +507,14 @@
 
 ** Highlight escape sequences
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'highlight-escape-sequences)
      (hes-mode)
    #+end_src
 
 ** Guide key
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'guide-key)
      (setq guide-key/guide-key-sequence
            '("C-x r"
@@ -530,14 +530,14 @@
 
 ** Editorconfig
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'editorconfig)
      (add-to-list 'auto-mode-alist '("\\.editorconfig\\'" . conf-unix-mode))
    #+end_src
 
 ** recentf
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (recentf-mode 1)
      (setq recentf-max-saved-items 1000
            recentf-exclude '("/tmp/" "/ssh:"))
@@ -545,7 +545,7 @@
 
 ** Undo tree
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
     (require 'undo-tree)
     (global-undo-tree-mode)
     (diminish 'undo-tree-mode)
@@ -553,7 +553,7 @@
 
 ** Unfill
 
-  #+begin_src emacs-lisp :tangle init-packages.el :comments link
+  #+begin_src emacs-lisp
     (require 'unfill)
    #+end_src
 
@@ -562,20 +562,20 @@
     [[https://github.com/mhayashi1120/Emacs-wgrep][~wgrep~]] makes the ~grep~, and ~ag~ buffers writable so you can make
     changes to your search results.
 
-    #+begin_src emacs-lisp :tangle init-packages.el :comments link
+    #+begin_src emacs-lisp
       (require 'wgrep)
     #+end_src
 
 ** Whitespace cleanup
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
     (require 'whitespace-cleanup-mode)
     (global-whitespace-cleanup-mode t)
    #+end_src
 
 ** Yasnippet
 
-   #+begin_src emacs-lisp :tangle init-packages.el :comments link
+   #+begin_src emacs-lisp
      (require 'yasnippet)
      (require 'string-utils)
 

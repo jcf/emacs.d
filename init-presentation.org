@@ -15,7 +15,7 @@
   number of the packages we use on a daily basis. [[zenburn][Zenburn]] is its
   name.
 
-  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+  #+begin_src emacs-lisp
     (require 'zenburn-theme)
     (load-theme 'zenburn t)
   #+end_src
@@ -25,7 +25,7 @@
    These hooks make it easy to update interface customisations when
    Emacs redraws.
 
-   #+BEGIN_SRC emacs-lisp :tangle init-presentation.el :comments link
+   #+BEGIN_SRC emacs-lisp
      (defvar after-make-console-frame-hooks '()
        "Hooks to run after creating a new TTY frame")
      (defvar after-make-window-system-frame-hooks '()
@@ -49,7 +49,7 @@
   the GUI features because they don't support the keyboard-driven
   approach with Vim-style bindings that we are aiming for.
 
-  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+  #+begin_src emacs-lisp
     (setq use-file-dialog nil)
     (setq use-dialog-box nil)
     (setq inhibit-startup-screen t)
@@ -59,14 +59,14 @@
   When ~tool-bar-mode~ is available we disable it because it takes up
   valueable space and never use it.
 
-  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+  #+begin_src emacs-lisp
     (when (fboundp 'tool-bar-mode)
       (tool-bar-mode -1))
   #+end_src
 
   We do the same with the scrollbar for the same reasons.
 
-  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+  #+begin_src emacs-lisp
      (when (fboundp 'set-scroll-bar-mode)
        (set-scroll-bar-mode nil))
   #+end_src
@@ -75,7 +75,7 @@
   little (the fringe is the gutter to the left and right of every
   pane in Emacs).
 
-  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+  #+begin_src emacs-lisp
     (when (fboundp 'fringe-mode)
       (fringe-mode 4))
    #+end_src
@@ -88,7 +88,7 @@
   otherwise. See [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Menu-Bars.html#Menu-Bars][Menu Bars]] for more information.
   #+end_quote
 
-  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+  #+begin_src emacs-lisp
     (add-hook 'after-make-frame-functions
               (lambda (frame)
                 (with-selected-frame frame
@@ -101,7 +101,7 @@
   To highlight empty lines in the current buffer we highlight them in
   the left fringe.
 
-  #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+  #+begin_src emacs-lisp
     (setq indicate-empty-lines t)
   #+end_src
 
@@ -112,7 +112,7 @@
 
    To make Emacs more transparent press Command-Control-8.
 
-   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+   #+begin_src emacs-lisp
      (defun jcf/adjust-opacity (frame incr)
        (let* ((oldalpha (or (frame-parameter frame 'alpha) 100))
               (newalpha (+ incr oldalpha)))
@@ -129,7 +129,7 @@
    Set the title of the current frame to an abbreviated version of the
    buffer name.
 
-   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+   #+begin_src emacs-lisp
      (setq frame-title-format
            '((:eval (if (buffer-file-name)
                         (abbreviate-file-name (buffer-file-name))
@@ -141,7 +141,7 @@
    Non-zero values for ~line-spacing~ can mess up ansi-term and
    similar modes, so we zero it explicitly in those cases.
 
-   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+   #+begin_src emacs-lisp
      (add-hook 'term-mode-hook
                (lambda ()
                  (set (make-local-variable 'line-spacing)
@@ -152,7 +152,7 @@
 
    Improved naming of buffers for files with identical names.
 
-   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+   #+begin_src emacs-lisp
      (require 'uniquify)
 
      (setq
@@ -166,7 +166,7 @@
 
    Use the abbreviated form of yes/no confirmation.
 
-   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+   #+begin_src emacs-lisp
      (fset 'yes-or-no-p 'y-or-n-p)
    #+end_src
 
@@ -178,7 +178,7 @@
    To force use of default font set
    ~jcf/force-default-font-for-symbols~ to ~t~.
 
-   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+   #+begin_src emacs-lisp
      (defcustom jcf/force-default-font-for-symbols nil
        "When non-nil, force Emacs to use your default font for symbols."
        :type 'boolean)
@@ -204,7 +204,7 @@
    These functions are bound to Command-Control-= and
    Command-Control-- respectively.
 
-   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+   #+begin_src emacs-lisp
      (require 'cl)
 
      (defun jcf/font-name-replace-size (font-name new-size)
@@ -247,7 +247,7 @@
    [[fullframe]] makes it easy to take over the whole frame when you run a
    command, like ~magit-status~ for example.
 
-   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+   #+begin_src emacs-lisp
      (require 'fullframe)
    #+end_src
 
@@ -257,14 +257,14 @@
 
 *** ibuffer.
 
-    #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+    #+begin_src emacs-lisp
       (after-load 'ibuffer
        (fullframe ibuffer ibuffer-quit))
     #+end_src
 
 *** Magit
 
-    #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+    #+begin_src emacs-lisp
       (after-load 'magit
         (fullframe magit-status magit-mode-quit-window))
     #+end_src

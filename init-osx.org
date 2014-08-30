@@ -13,7 +13,7 @@
 
 ** Setup PATH
 
-   #+BEGIN_SRC emacs-lisp :tangle init-osx.el :comments link
+   #+BEGIN_SRC emacs-lisp
      (when (memq window-system '(mac ns))
        (exec-path-from-shell-initialize))
    #+END_SRC
@@ -22,7 +22,7 @@
 
    Toggle native OS X fullscreen with Command-Option-f.
 
-   #+begin_src emacs-lisp :tangle init-osx.el :comments link
+   #+begin_src emacs-lisp
      (when (fboundp 'toggle-frame-fullscreen)
        (global-set-key (kbd "M-ƒ") 'toggle-frame-fullscreen))
    #+end_src
@@ -34,7 +34,7 @@
    It is installed automatically by my [[dotfiles]] and can be downloaded
    for free from [[source-code-pro][Adobe]].
 
-   #+begin_src emacs-lisp :tangle init-osx.el :comments link
+   #+begin_src emacs-lisp
      (set-frame-font "-*-Source Code Pro-normal-normal-normal-*-12-*-*-*-m-0-iso10646-1")
    #+end_src
 
@@ -50,7 +50,7 @@
    6. Hide others with ~M-H~
    7. Copy and paste with ~M-c~ and ~M-v~ respectively
 
-   #+begin_src emacs-lisp :tangle init-osx.el :comments link
+   #+begin_src emacs-lisp
      (when *is-a-mac*
        (setq mac-command-modifier 'meta)
        (setq mac-option-modifier 'none)
@@ -69,7 +69,7 @@
 
 ** Hook locate upto Spotlight
 
-  #+begin_src emacs-lisp :tangle init-osx.el :comments link
+  #+begin_src emacs-lisp
     (setq-default locate-command "mdfind")
   #+end_src
 
@@ -78,7 +78,7 @@
    Pick up ~http_proxy~ & ~https_proxy~ from Mac system config using
    [[http://www.cs.usyd.edu.au/~massad/project-proxy-config.html][proxy-config]].
 
-   #+begin_src emacs-lisp :tangle init-osx.el :comments link
+   #+begin_src emacs-lisp
      (when (and *is-a-mac* (executable-find "proxy-config"))
        (defun mac-configured-proxy (proto)
          (jcf/string-rtrim
@@ -115,6 +115,6 @@
 
 ** Location
 
-   #+begin_src emacs-lisp :tangle init-osx.el :comments link
+   #+begin_src emacs-lisp
      (require 'osx-location)
    #+end_src

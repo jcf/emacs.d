@@ -16,7 +16,7 @@
 
 *** Packages
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'clojure-mode)
       (require 'clj-refactor)
       (require 'cljsbuild-mode)
@@ -26,7 +26,7 @@
 
 *** Slime
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (defun slime-clojure-repl-setup ()
         "Some REPL setup additional to that in durendal."
         (when (string-equal (slime-lisp-implementation-name) "clojure")
@@ -45,7 +45,7 @@
 
 *** Hooks
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (after-load 'clojure-mode
         (add-hook 'clojure-mode-hook 'jcf/lisp-setup)
         ;; Undo activation of Paredit by clojure-mode
@@ -60,13 +60,13 @@
     Use clojure-mode for clojurescript, since clojurescript-mode pulls
     in Slime.
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (add-auto-mode 'clojure-mode "\\.cljs\\'")
     #+end_src
 
 *** Cider
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'emacs '(24))
 
       (require 'cider)
@@ -75,7 +75,7 @@
 
 *** NREPL
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
       (setq nrepl-popup-stacktraces nil)
 
       (after-load 'cider
@@ -90,7 +90,7 @@
 
 ** Common-Lisp
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      ;; See http://bc.tech.coop/blog/070927.html
      (add-auto-mode 'lisp-mode "\\.cl\\'")
      (add-hook 'lisp-mode-hook (lambda ()
@@ -138,13 +138,13 @@
 
    Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (add-auto-mode 'conf-mode "Procfile")
    #+end_src
 
 ** Crontab
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'crontab-mode)
      (add-auto-mode 'crontab-mode "\\.?cron\\(tab\\)?\\'")
    #+end_src
@@ -153,7 +153,7 @@
 
 *** Indentation
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (setq css-indent-offset 2)
    #+end_src
 
@@ -162,7 +162,7 @@
     Note that ~rainbow-mode~ needs ~color.el~, bundled with Emacs
     >= 24.
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (when (eval-when-compile (>= emacs-major-version 24))
         (require 'rainbow-mode)
         (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
@@ -171,7 +171,7 @@
 
 *** Embedded CSS support
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
      (require 'mmm-mode)
 
      (after-load 'mmm-vars
@@ -202,7 +202,7 @@
 
 *** Use Eldoc for syntax hints
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'css-eldoc)
       (autoload 'turn-on-css-eldoc "css-eldoc")
       (add-hook 'css-mode-hook 'turn-on-css-eldoc)
@@ -210,7 +210,7 @@
 
 ** CSV
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'csv-mode)
      (require 'csv-nav)
 
@@ -221,13 +221,13 @@
 
 ** Cucumber
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'feature-mode)
    #+end_src
 
 ** Erlang
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (ignore-errors
        (require 'erlang))
 
@@ -247,7 +247,7 @@
      (expand-file-name "bin" (getenv "GOPATH"))))
    #+end_src
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'go-mode)
    #+end_src
 
@@ -258,7 +258,7 @@
       go get -u github.com/dougm/goflymake
    #+end_src
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (defvar go-flymake-path
        (expand-file-name "src/github.com/dougm/goflymake" (getenv "GOPATH")))
 
@@ -272,13 +272,13 @@
 
    Format our code automatically when saving.
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (add-hook 'before-save-hook #'gofmt-before-save)
    #+end_src
 
 ** Haml
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'haml-mode)
 
      (after-load 'haml-mode
@@ -289,7 +289,7 @@
 
 ** Haskell
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'haskell-mode)
 
      (when (> emacs-major-version 23)
@@ -336,7 +336,7 @@
 
    See [[Ruby]] configuration for ERB setup.
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'tidy)
      (add-hook 'html-mode-hook (lambda () (tidy-build-menu html-mode-map)))
 
@@ -352,7 +352,7 @@
 
 *** Basics
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'json-mode)
      (when (>= emacs-major-version 24)
        (require 'js2-mode)
@@ -372,7 +372,7 @@
    Need to first remove from list if present, since elpa adds entries
    too, which may be in an arbitrary order.
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
      (eval-when-compile (require 'cl))
      (setq auto-mode-alist (cons `("\\.js\\(\\.erb\\)?\\'" . ,preferred-javascript-mode)
                                  (loop for entry in auto-mode-alist
@@ -382,7 +382,7 @@
 
 *** ~js2-mode~
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
      (after-load 'js2-mode
        (add-hook 'js2-mode-hook '(lambda () (setq mode-name "JS2"))))
 
@@ -396,7 +396,7 @@
 
 *** ~js-mode~
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
      (setq-default js-indent-level preferred-javascript-indent-level)
 
 
@@ -463,7 +463,7 @@
 
 ** LESS
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
     ;;; LESS
     (require 'less-css-mode)
     (when (featurep 'js2-mode)
@@ -472,7 +472,7 @@
 
 ** Lisp
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'elisp-slime-nav)
      (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
        (add-hook hook 'elisp-slime-nav-mode))
@@ -680,13 +680,13 @@
 
 ** Lua
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'lua-mode)
    #+end_src
 
 ** Markdown
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'markdown-mode)
 
      (setq auto-mode-alist
@@ -702,7 +702,7 @@
 
 ** NXML
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (add-auto-mode
       'nxml-mode
       (concat "\\."
@@ -721,7 +721,7 @@
 
     http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-mode/
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (defun jcf/pp-xml-region (begin end)
         "Pretty format XML markup in region. The function inserts linebreaks
       to separate tags that have nothing but whitespace between them.  It
@@ -737,21 +737,21 @@
 
 *** tidy integration
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'tidy)
       (add-hook 'nxml-mode-hook (lambda () (tidy-build-menu nxml-mode-map)))
    #+end_src
 
 ** PHP
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'php-mode)
      (require 'smarty-mode)
    #+end_src
 
 ** Python
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (setq auto-mode-alist
            (append '(("SConstruct\\'" . python-mode)
                      ("SConscript\\'" . python-mode))
@@ -760,7 +760,7 @@
 
 ** Rails
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'rinari)
      (after-load 'rinari
        (diminish 'rinari-minor-mode "Rin"))
@@ -776,7 +776,7 @@
 
 *** Basics
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'ruby-mode)
       (require 'ruby-hash-syntax)
 
@@ -813,13 +813,13 @@
 
 *** Inferior Ruby
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'inf-ruby)
     #+end_src
 
 *** Compilation
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       ;;; Ruby compilation
       (require 'ruby-compilation)
 
@@ -832,7 +832,7 @@
 
 *** Robe
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'robe)
       (after-load 'ruby-mode
         (add-hook 'ruby-mode-hook 'robe-mode))
@@ -840,20 +840,20 @@
 
 *** Ri
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'yari)
       (defalias 'ri 'yari)
     #+end_src
 
 *** YAML
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'yaml-mode)
     #+end_src
 
 *** ERB
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'mmm-mode)
       (defun jcf/ensure-mmm-erb-loaded ()
         (require 'mmm-erb))
@@ -885,7 +885,7 @@
 
 *** RSpec
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'rspec-mode)
 
       (after-load 'ruby-mode
@@ -894,7 +894,7 @@
 
 *** Bundler
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (require 'bundler)
     #+end_src
 
@@ -913,7 +913,7 @@
     Needs to run after rinari to avoid clobbering font-lock-keywords?
     Disabled for now.
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       ;; (require 'mmm-mode)
       ;; (eval-after-load 'mmm-mode
       ;;   '(progn
@@ -932,7 +932,7 @@
 
 ** SASS
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
     (require 'sass-mode)
     (require 'scss-mode)
     (setq-default scss-compile-at-save nil)
@@ -942,7 +942,7 @@
 
 *** Add ~.zsh~ files to ~sh-mode~
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (add-auto-mode 'sh-mode "\\.zsh\\'")
     #+end_src
 
@@ -950,7 +950,7 @@
 
     Recognise Prezto runcoms.
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (defvar jcf-pretzo-files '("zlogin"
                                  "zlogout"
                                  "zpretzorc"
@@ -965,7 +965,7 @@
 
     Use Z-Shell when we're editing a Prezto runcom.
 
-    #+begin_src emacs-lisp :tangle init-languages.el :comments link
+    #+begin_src emacs-lisp
       (add-hook
        'sh-mode-hook
        (lambda ()
@@ -976,7 +976,7 @@
 
 ** Slim
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'slim-mode)
    #+end_src
 
@@ -984,7 +984,7 @@
 
    Require slime to get the party started.
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'slime)
    #+end_src
 
@@ -992,7 +992,7 @@
    causes problems, so we remove the .elc files there. See
    http://lists.common-lisp.net/pipermail/slime-devel/2012-February/018470.html
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (mapc #'delete-file
            (file-expand-wildcards (concat user-emacs-directory
                                           ".cask/*/elpa/slime-2*/contrib/*.elc")))
@@ -1000,13 +1000,13 @@
 
    Require some useful packages that extend Slime.
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'hippie-expand-slime)
    #+end_src
 
    Lisp buffer setup.
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (defun jcf/slime-setup ()
        "Mode setup function for slime lisp buffers."
        (set-up-slime-hippie-expand))
@@ -1022,7 +1022,7 @@
 
    REPL setup.
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (defun jcf/slime-repl-setup ()
        "Mode setup function for slime REPL."
        (jcf/lisp-setup)
@@ -1039,7 +1039,7 @@
 
 ** SQL
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'sql-indent)
      (after-load 'sql
        (require 'sql-indent))
@@ -1080,13 +1080,13 @@
    Minimal TCL support for creating Portfiles, used in [[https://guide.macports.org/chunked/development.html][MacPorts
    development]].
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (add-auto-mode 'tcl-mode "Portfile\\'")
    #+end_src
 
 ** Textile
 
-   #+begin_src emacs-lisp :tangle init-languages.el :comments link
+   #+begin_src emacs-lisp
      (require 'textile-mode)
 
      (autoload 'textile-mode "textile-mode" "Mode for editing Textile documents" t)

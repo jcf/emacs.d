@@ -14,7 +14,7 @@
 
 ** Setup Desktop
 
-  #+begin_src emacs-lisp :tangle init-sessions.el :comments link
+  #+begin_src emacs-lisp
     (setq desktop-path (list user-emacs-directory)
           desktop-auto-save-timeout 600)
     (desktop-save-mode 1)
@@ -44,7 +44,7 @@
 
 ** Restore histories and registers after saving
 
-  #+begin_src emacs-lisp :tangle init-sessions.el :comments link
+  #+begin_src emacs-lisp
     (setq-default history-length 1000)
     (savehist-mode t)
 
@@ -56,7 +56,7 @@
 
 ** Variables to save
 
-   #+begin_src emacs-lisp :tangle init-sessions.el :comments link
+   #+begin_src emacs-lisp
      (setq desktop-globals-to-save
            (append '((comint-input-ring        . 50)
                      (compile-history          . 30)
@@ -89,7 +89,7 @@
 
 ** Restore frame for Emacs 24 up to 24.3.50
 
-   #+begin_src emacs-lisp :tangle init-sessions.el :comments link
+   #+begin_src emacs-lisp
      (when (eval-when-compile (and (>= emacs-major-version 24)
                                    (string< emacs-version "24.3.50")))
        (unless (boundp 'desktop-restore-frames)

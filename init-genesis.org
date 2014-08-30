@@ -16,7 +16,7 @@
    way we want. Each variable has corresponding documentation
    accessible via ~describe-variable~.
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (setq-default
       buffers-menu-max-size 30
       case-fold-search t
@@ -41,7 +41,7 @@
 
 ** grep
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (setq-default
       grep-highlight-matches t
       grep-scroll-output t)
@@ -49,7 +49,7 @@
 
 ** ediff
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (setq-default
       ediff-split-window-function 'split-window-horizontally
       ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -57,7 +57,7 @@
 
 ** Blink cursor
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (setq-default
       blink-cursor-delay 0
       blink-cursor-interval 0.4)
@@ -65,14 +65,14 @@
 
 ** Bookmark file
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (setq-default
       bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory))
    #+END_SRC
 
 ** Auto revert
 
-  #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+  #+begin_src emacs-lisp
     (global-auto-revert-mode)
     (setq global-auto-revert-non-file-buffers t
           auto-revert-verbose nil)
@@ -80,13 +80,13 @@
 
 ** Transient mark
 
-  #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+  #+begin_src emacs-lisp
     (transient-mark-mode t)
   #+END_SRC
 
 ** Highlight trailing whitespace
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (defun jcf/no-trailing-whitespace ()
       "Turn off display of trailing whitespace in this buffer."
       (setq show-trailing-whitespace nil))
@@ -105,7 +105,7 @@
 
 ** Newline behaviour
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (global-set-key (kbd "RET") 'newline-and-indent)
      (defun jcf/newline-at-end-of-line ()
        "Move to end of line, enter a newline, and reindent."
@@ -121,7 +121,7 @@
    See https://github.com/purcell/emacs.d/issues/138 for more
    information.
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (when (eval-when-compile (string< "24.3.1" emacs-version))
        (after-load 'subword
          (diminish 'subword-mode)))
@@ -129,21 +129,21 @@
 
 ** Prettify symbols
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (when (fboundp 'global-prettify-symbols-mode)
        (global-prettify-symbols-mode))
    #+END_SRC
 
 ** Zap up to char
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
     (global-set-key (kbd "M-Z") 'zap-up-to-char)
    #+END_SRC
 
 ** Don't disable narrowing commands
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (put 'narrow-to-region 'disabled nil)
     (put 'narrow-to-page 'disabled nil)
     (put 'narrow-to-defun 'disabled nil)
@@ -151,20 +151,20 @@
 
 ** Show matching parens
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (show-paren-mode 1)
    #+END_SRC
 
 ** Don't disable case-change functions
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (put 'upcase-region 'disabled nil)
     (put 'downcase-region 'disabled nil)
    #+END_SRC
 
 ** CUA selection mode for rectangles
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (cua-selection-mode t)
    #+END_SRC
 
@@ -172,13 +172,13 @@
 
 *** M-x without meta.
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (global-set-key (kbd "C-x C-m") 'execute-extended-command)
    #+END_SRC
 
 *** Vim-like alternatives to M-^ and C-u M-^.
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (global-set-key (kbd "C-c j") 'join-line)
     (global-set-key (kbd "C-c J") (lambda () (interactive) (join-line 1)))
 
@@ -190,13 +190,13 @@
 
 *** Installation
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (require 'multiple-cursors)
    #+END_SRC
 
 *** Mark bindings
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
     (global-set-key (kbd "C->") 'mc/mark-next-like-this)
     (global-set-key (kbd "C-+") 'mc/mark-next-like-this)
@@ -205,7 +205,7 @@
 
 *** From active region to multiple cursors
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (global-set-key (kbd "C-c c r") 'set-rectangular-region-anchor)
     (global-set-key (kbd "C-c c c") 'mc/edit-lines)
     (global-set-key (kbd "C-c c e") 'mc/edit-ends-of-lines)
@@ -214,14 +214,14 @@
 
 ** Disable left and right arrow key bindings
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
     (global-unset-key [M-left])
     (global-unset-key [M-right])
    #+END_SRC
 
 ** Delete to beginning of line
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (defun kill-back-to-indentation ()
        "Kill from point back to the first non-whitespace character on
        the line."
@@ -240,7 +240,7 @@
    prefer to use M-S-up and M-S-down, which will work even in lisp
    modes.
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (require 'move-dup)
      (global-set-key [M-up] 'md/move-lines-up)
      (global-set-key [M-down] 'md/move-lines-down)
@@ -252,7 +252,7 @@
 
 ** Fix backward-up-list to understand quotes, see http://bit.ly/h7mdIL
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (defun backward-up-sexp (arg)
        "Jump up to the start of the ARG'th enclosing sexp."
        (interactive "p")
@@ -267,7 +267,7 @@
 
 ** Cut/copy current line if no region active
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (require 'whole-line-or-region)
 
      (whole-line-or-region-mode t)
@@ -295,7 +295,7 @@
 
 ** Indentation-aware open line
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (defun jcf/open-line-with-reindent (n)
        "A version of `open-line' which reindents the start and end
      positions.
@@ -330,7 +330,7 @@
 
 ** Randomise lines
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (defun sort-lines-random (beg end)
        "Sort lines in region randomly."
        (interactive "r")
@@ -353,7 +353,7 @@
 
 *** Show number of matches
 
-    #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    #+begin_src emacs-lisp
       (when (>= emacs-major-version 24)
         (require 'anzu)
         (global-anzu-mode t)
@@ -364,13 +364,13 @@
 
 *** Use ~occur~ inside ~isearch~
 
-    #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    #+begin_src emacs-lisp
       (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
     #+END_SRC
 
 *** Search back/forth for symbol at point
 
-    #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    #+begin_src emacs-lisp
       (defun isearch-yank-symbol ()
         "*Put symbol at current point into search string."
         (interactive)
@@ -391,7 +391,7 @@
 
     http://www.emacswiki.org/emacs/ZapToISearch
 
-    #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    #+begin_src emacs-lisp
       (defun zap-to-isearch (rbeg rend)
         "Kill the region between the mark and the closest portion of the
       isearch match string. The behaviour is meant to be analogous to
@@ -435,14 +435,14 @@
 
 ** flycheck
 
-    #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+    #+begin_src emacs-lisp
       (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
             flycheck-idle-change-delay 0.8)
     #+END_SRC
 
 ** Spelling
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (require 'ispell)
 
      (when (executable-find ispell-program-name)
@@ -475,7 +475,7 @@
 
    Convert URLs in comments into clickable links.
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (setq goto-address-mail-face 'link)
 
      (dolist (hook (if (fboundp 'prog-mode)
@@ -486,13 +486,13 @@
 
 ** Make scripts executable
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
    #+END_SRC
 
 ** Perl-style regular expressions
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (setq-default regex-tool-backend 'perl)
    #+END_SRC
 
@@ -507,7 +507,7 @@
    - https://github.com/jcf/dotfiles/blob/master/roles/emacs/files/emacsserver
    - https://github.com/jcf/prezto/blob/14354ea203fa3f7035208cb0d76ca8e600258d39/runcoms/zprofile#L25
 
-   #+begin_src emacs-lisp :tangle init-genesis.el :comments link
+   #+begin_src emacs-lisp
      (defun jcf/start-server ()
        (require 'server)
        (unless (server-running-p)

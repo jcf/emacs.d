@@ -16,20 +16,20 @@
 
    [[s][s]] provides useful string utility functions.
 
-   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
+   #+begin_src emacs-lisp
      (require 's)
    #+end_src
 
    [[f][f]] is a modern API for working with files and directories.
 
-   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
+   #+begin_src emacs-lisp
      (require 'f)
    #+end_src
 
    [[diminish]] helps declutter our modeline by either by removing or
    abbreviating minor mode indicators.
 
-   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
+   #+begin_src emacs-lisp
      (require 'diminish)
    #+end_src
 

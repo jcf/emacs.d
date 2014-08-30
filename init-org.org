@@ -10,13 +10,13 @@
 
    Always install Org from package to ensure we get a recent version.
 
-   #+begin_src emacs-lisp :tangle init-org.el :comments link
+   #+begin_src emacs-lisp
      (require 'org)
    #+end_src
 
 ** Basics
 
-  #+begin_src emacs-lisp :tangle init-org.el :comments link
+  #+begin_src emacs-lisp
      (require 'org-fstree)
      (when *is-a-mac*
        (require 'org-mac-link)
@@ -69,7 +69,7 @@
 
 ** Org clock
 
-   #+begin_src emacs-lisp :tangle init-org.el :comments link
+   #+begin_src emacs-lisp
      ;; Save the running clock and all clock history when exiting Emacs, load it on startup
      (setq org-clock-persistence-insinuate t)
      (setq org-clock-persist t)
@@ -104,7 +104,7 @@
 
 ** Pomodoro
 
-   #+begin_src emacs-lisp :tangle init-org.el :comments link
+   #+begin_src emacs-lisp
      (require 'org-pomodoro)
      (after-load 'org-agenda
        (define-key org-agenda-mode-map (kbd "P") 'org-pomodoro))
@@ -114,7 +114,7 @@
 
    Disabled for now.
 
-   #+begin_src emacs-lisp :tangle init-org.el :comments link
+   #+begin_src emacs-lisp
      ;; (when (and *is-a-mac* (require 'org-mac-iCal nil t))
      ;;   (setq org-agenda-include-diary t
      ;;         org-agenda-custom-commands
@@ -137,14 +137,14 @@
 
 ** Clojure support
 
-   #+begin_src emacs-lisp :tangle init-org.el :comments link
+   #+begin_src emacs-lisp
      (require 'ob-clojure)
      (setq org-babel-clojure-backend 'cider)
    #+end_src
 
 ** Bindings
 
-   #+begin_src emacs-lisp :tangle init-org.el :comments link
+   #+begin_src emacs-lisp
      (after-load 'org
        (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
        (when *is-a-mac*
