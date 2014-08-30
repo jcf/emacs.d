@@ -219,7 +219,7 @@
    is not the case you can set the relevant environment variables using
    something like:
 
-   #+BEGIN_SRC go
+   #+BEGIN_SRC emacs-lisp :tangle no
      (setenv "GOPATH" (expand-file-name "Go" (getenv "HOME")))
      (setenv "PATH" (concat (getenv "PATH") ":"
      (expand-file-name "bin" (getenv "GOPATH"))))
@@ -229,17 +229,15 @@
      (use-package go-mode
        :config
        (progn
-         (defvar jcf/go-flymake-path
-           (expand-file-name "src/github.com/dougm/goflymake" (getenv "GOPATH")))
+         (add-hook 'before-save-hook #'gofmt-before-save)
 
-         (defvar jcf/go-flymake-exists?
-           (file-exists-p jcf/go-flymake-path))
-
-         (use-package go-flymake
-           :if jcf/go-flymake-exists?
-           :config (add-to-list 'load-path jcf/go-flymake-path))
-
-         (add-hook 'before-save-hook #'gofmt-before-save)))
+         ;; Flymake for Go requires a Go dependency. If it's in our
+         ;; `GOPATH` we can load it up.
+         (let ((flymake-path (expand-file-name "src/github.com/dougm/goflymake"
+                                               (getenv "GOPATH"))))
+           (when (file-exists-p flymake-path)
+             (add-to-list 'load-path flymake-path)
+             (use-package go-flymake)))))
    #+end_src
 
 ** Haml
