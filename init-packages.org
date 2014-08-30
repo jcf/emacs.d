@@ -315,10 +315,14 @@
 ** Multiple major modes
 
    #+begin_src emacs-lisp
-     (require 'mmm-mode)
-     (require 'mmm-auto)
-     (setq mmm-global-mode 'buffers-with-submode-classes)
-     (setq mmm-submode-decoration-level 0)
+     (use-package mmm-mode
+       :init
+       (progn
+         (setq
+          mmm-global-mode 'buffers-with-submode-classes
+          mmm-submode-decoration-level 0)
+
+         (use-package mmm-auto)))
    #+end_src
 
 ** mwe-log-commands
