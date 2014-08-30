@@ -488,10 +488,11 @@
      (setq-default initial-scratch-message
                    (concat ";; Happy hacking " (or user-login-name "") "!\n\n"))
 
+   #+end_src
 
-     
-     ;; Make C-x C-e run 'eval-region if the region is active
+   Make C-x C-e run ~'eval-region~ if the region is active.
 
+   #+begin_src emacs-lisp
      (defun jcf/eval-last-sexp-or-region (beg end prefix)
        "Eval region from BEG to END if active, otherwise the last sexp."
        (interactive "r\nP")
@@ -506,12 +507,11 @@
 
      (require 'ipretty)
      (ipretty-mode 1)
+   #+end_src
 
+   Hippie-expand.
 
-     ;; ----------------------------------------------------------------------------
-     ;; Hippie-expand
-     ;; ----------------------------------------------------------------------------
-
+   #+begin_src emacs-lisp
      (defun my/emacs-lisp-module-name ()
        "Search the buffer for `provide' declaration."
        (save-excursion
@@ -539,20 +539,19 @@
        (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol t)
        (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol-partially t)
        (add-to-list 'hippie-expand-try-functions-list 'my/try-complete-lisp-symbol-without-namespace t))
+   #+end_src
 
+   Automatic byte compilation.
 
-     ;; ----------------------------------------------------------------------------
-     ;; Automatic byte compilation
-     ;; ----------------------------------------------------------------------------
-
+   #+begin_src emacs-lisp
      (require 'auto-compile)
      (auto-compile-on-save-mode 1)
      (auto-compile-on-load-mode 1)
+   #+end_src
 
-     ;; ----------------------------------------------------------------------------
-     ;; Highlight current sexp
-     ;; ----------------------------------------------------------------------------
+   Highlight current sexp.
 
+   #+begin_src emacs-lisp
      (require 'hl-sexp)
 
      ;; Prevent flickery behaviour due to hl-sexp-mode unhighlighting before each command
@@ -560,12 +559,12 @@
        (defadvice hl-sexp-mode (after unflicker (&optional turn-on) activate)
          (when turn-on
            (remove-hook 'pre-command-hook #'hl-sexp-unhighlight))))
+   #+end_src
 
+   Support byte-compilation in a sub-process, as required by
+   highlight-cl.
 
-     
-     ;;; Support byte-compilation in a sub-process, as
-     ;;; required by highlight-cl
-
+   #+begin_src emacs-lisp
      (defun jcf/byte-compile-file-batch (filename)
        "Byte-compile FILENAME in batch mode, ie. a clean sub-process."
        (interactive "fFile to byte-compile in batch mode: ")
@@ -577,17 +576,16 @@
             'shell-quote-argument
             (list "-Q" "-batch" "-f" "batch-byte-compile" filename)
             " ")))))
+   #+end_src
 
+   Enable desired features for all lisp modes.
 
-     ;; ----------------------------------------------------------------------------
-     ;; Enable desired features for all lisp modes
-     ;; ----------------------------------------------------------------------------
+   #+begin_src emacs-lisp
      (require 'rainbow-delimiters)
      (require 'paredit) ; Redshank requires paredit
      (require 'redshank)
      (after-load 'redshank
        (diminish 'redshank-mode))
-
 
      (defun jcf/lisp-setup ()
        "Enable features useful in any Lisp mode."
@@ -636,20 +634,20 @@
      (require 'cl-lib-highlight)
      (after-load 'lisp-mode
        (cl-lib-highlight-initialize))
+   #+end_src
 
-     ;; ----------------------------------------------------------------------------
-     ;; Delete .elc files when reverting the .el from VC or magit
-     ;; ----------------------------------------------------------------------------
+   Delete .elc files when reverting the .el from VC or magit.
 
-     ;; When .el files are open, we can intercept when they are modified
-     ;; by VC or magit in order to remove .elc files that are likely to
-     ;; be out of sync.
+   When .el files are open, we can intercept when they are modified by
+   VC or magit in order to remove .elc files that are likely to be out
+   of sync.
 
-     ;; This is handy while actively working on elisp files, though
-     ;; obviously it doesn't ensure that unopened files will also have
-     ;; their .elc counterparts removed - VC hooks would be necessary for
-     ;; that.
+   This is handy while actively working on elisp files, though
+   obviously it doesn't ensure that unopened files will also have
+   their .elc counterparts removed - VC hooks would be necessary for
+   that.
 
+   #+begin_src emacs-lisp
      (defvar jcf/vc-reverting nil
        "Whether or not VC or Magit is currently reverting buffers.")
 
@@ -670,17 +668,21 @@
      (defadvice vc-revert-buffer-internal (around jcf/reverting activate)
        (let ((jcf/vc-reverting t))
          ad-do-it))
+   #+end_src
 
+   Macrostep.
 
-     
+   #+begin_src emacs-lisp
      (require 'macrostep)
 
      (after-load 'lisp-mode
        (define-key emacs-lisp-mode-map (kbd "C-c e") 'macrostep-expand))
+   #+end_src
 
-     
+   A quick way to jump to the definition of a function given its key
+   binding.
 
-     ;; A quick way to jump to the definition of a function given its key binding
+   #+begin_src emacs-lisp
      (global-set-key (kbd "C-h K") 'find-function-on-key)
    #+end_src
 
