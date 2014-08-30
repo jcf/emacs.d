@@ -205,7 +205,8 @@
 ** Cucumber
 
    #+begin_src emacs-lisp
-     (use-package feature-mode)
+     (use-package feature-mode
+       :commands feature-mode)
    #+end_src
 
 ** ERB
