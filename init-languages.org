@@ -799,7 +799,8 @@
 ** Slim
 
    #+begin_src emacs-lisp
-     (use-package slim-mode)
+     (use-package slim-mode
+       :commands slim-mode)
    #+end_src
 
 ** Slime
