@@ -45,9 +45,9 @@
 ** Magit takeover
 
    #+begin_src emacs-lisp :tangle init-version-control.el :comments link
-    (require 'fullframe)
-    (after-load 'magit
-      (fullframe magit-status magit-mode-quit-window))
+     (require 'fullframe)
+     (after-load 'magit
+       (fullframe magit-status magit-mode-quit-window))
    #+end_src
 
 ** Disable ~command-h~ on OS X
