@@ -51,6 +51,7 @@
    (jcf/load-org "evil")
    (when *is-a-mac*
      (jcf/load-org "osx"))
+   (jcf/load-org "org")
    (jcf/load-org "packages")
    (jcf/load-org "sessions")
    (jcf/load-org "window-management")
