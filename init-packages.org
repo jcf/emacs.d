@@ -470,8 +470,8 @@
 ** Editorconfig
 
    #+begin_src emacs-lisp
-     (require 'editorconfig)
-     (add-to-list 'auto-mode-alist '("\\.editorconfig\\'" . conf-unix-mode))
+     (use-package editorconfig :mode
+       ("\\.editorconfig\\'" . conf-unix-mode))
    #+end_src
 
 ** recentf
