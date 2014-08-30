@@ -785,8 +785,12 @@
 ** SASS
 
    #+begin_src emacs-lisp
-     (use-package sass-mode)
-     (use-package scss-mode :init
+     (use-package sass-mode
+       :commands sass-mode)
+
+     (use-package scss-mode
+       :commands scss-mode
+       :init
        (setq-default scss-compile-at-save nil))
    #+end_src
 
