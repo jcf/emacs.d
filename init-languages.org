@@ -90,7 +90,7 @@
    #+begin_src emacs-lisp
      ;; See http://bc.tech.coop/blog/070927.html
      (use-package lisp-mode
-       :mode ("\\.cl\\'" . lisp-mode)
+       :mode (("\\.cl\\'" . lisp-mode))
        :config
        (progn
          (unless (featurep 'slime)
@@ -256,6 +256,7 @@
 
    #+begin_src emacs-lisp
      (use-package haskell-mode
+       :commands haskell-mode
        :mode "\\.ghci\\'"
        :config
        (progn
@@ -323,6 +324,7 @@
 
    #+begin_src emacs-lisp
      (use-package coffee-mode
+       :commands coffee-mode
        :mode "\\.coffee\\.erb\\'"
        :init
        (setq
@@ -330,8 +332,8 @@
         coffee-tab-width 2))
 
      (use-package js2-mode
-       :diminish (js2-mode . "JS2")
-       :bind "\\.js\\(\\.erb\\)?\\'"
+       :diminish ((js2-mode . "JS2"))
+       :mode "\\.js\\(\\.erb\\)?\\'"
        :commands js2-mode
        :init
        (progn
@@ -349,10 +351,12 @@
        :mode (("\\.bowerrc\\'" . json-mode)
               ("\\.csslintrc\\'" . json-mode)
               ("\\.jshintrc\\'" . json-mode))
+       :commands json-mode
        :init
        (add-hook 'json-mode-hook 'rainbow-delimiters-mode))
 
      (use-package jsx-mode
+       :commands jsx-mode
        :mode "\\.jsx\\'")
    #+end_src
 
@@ -535,7 +539,7 @@
 
      (use-package eldoc-eval)
 
-     (use-package 'cl-lib-highlight
+     (use-package cl-lib-highlight
        :commands lisp-mode
        :config
        (cl-lib-highlight-initialize))
@@ -578,7 +582,7 @@
    Macrostep.
 
    #+begin_src emacs-lisp
-     (use-package 'macrostep
+     (use-package macrostep
        :commands lisp-mode
        :config (define-key emacs-lisp-mode-map (kbd "C-c e") 'macrostep-expand))
    #+end_src
@@ -608,11 +612,17 @@
 
    #+begin_src emacs-lisp
      (use-package nxml-mode
-       :mode (concat "\\."
-                     (regexp-opt
-                      '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss"
-                        "gpx" "tcx" "plist"))
-                     "\\'")
+       :mode (("\\.gpx\\'" . nxml-mode)
+              ("\\.plist\\'" . nxml-mode)
+              ("\\.rng\\'" . nxml-mode)
+              ("\\.rss\\'" . nxml-mode)
+              ("\\.sch\\'" . nxml-mode)
+              ("\\.svg\\'" . nxml-mode)
+              ("\\.tcx\\'" . nxml-mode)
+              ("\\.xml\\'" . nxml-mode)
+              ("\\.xsd\\'" . nxml-mode)
+              ("\\.xslt\\'" . nxml-mode))
+
        :init
        (progn
          (setq
@@ -647,8 +657,9 @@
 *** tidy integration
 
     #+begin_src emacs-lisp
-      (require 'tidy)
-      (add-hook 'nxml-mode-hook (lambda () (tidy-build-menu nxml-mode-map)))
+      (use-package tidy
+        :init
+        (add-hook 'nxml-mode-hook (lambda () (tidy-build-menu nxml-mode-map))))
    #+end_src
 
 ** PHP
@@ -671,7 +682,7 @@
 
    #+begin_src emacs-lisp
      (use-package rinari
-       :diminish (rinari . "Rin")
+       :diminish ((rinari . "Rin"))
        :init
        (global-rinari-mode))
    #+end_src
@@ -718,7 +729,7 @@
              (define-key m [f7] 'ruby-compilation-this-test)
              (define-key m [f6] 'recompile)))
 
-         (use-package 'yari
+         (use-package yari
            :init (defalias 'ri 'yari))
 
          (use-package rspec-mode
@@ -756,6 +767,10 @@
           (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
           (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
 
+          (defun jcf/set-up-mode-for-erb (mode)
+            (add-hook (derived-mode-hook-name mode) 'jcf/ensure-mmm-erb-loaded)
+            (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
+
           (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
             (dolist (mode html-erb-modes)
               (jcf/set-up-mode-for-erb mode)
@@ -764,16 +779,13 @@
 
           (require 'derived)
 
-          (defun jcf/set-up-mode-for-erb (mode)
-            (add-hook (derived-mode-hook-name mode) 'jcf/ensure-mmm-erb-loaded)
-            (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
-
           (mapc 'jcf/set-up-mode-for-erb
                 '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
 
           (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
             (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))))
     #+end_src
+
 ** SASS
 
    #+begin_src emacs-lisp
@@ -855,7 +867,7 @@
      (use-package sql
        :config
        (progn
-         (use-package 'sql-indent)
+         (use-package sql-indent)
 
          (defun jcf/pop-to-sqli-buffer ()
            "Switch to the corresponding sqli buffer."
