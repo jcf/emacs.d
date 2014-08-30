@@ -196,7 +196,7 @@
 ** htmlize
 
    #+begin_src emacs-lisp
-     (require 'htmlize)
+     (use-package htmlize)
    #+end_src
 
 ** ibuffer
