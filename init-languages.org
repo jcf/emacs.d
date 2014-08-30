@@ -607,18 +607,23 @@
 ** NXML
 
    #+begin_src emacs-lisp
-     (add-auto-mode
-      'nxml-mode
-      (concat "\\."
-              (regexp-opt
-               '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss"
-                 "gpx" "tcx" "plist"))
-              "\\'"))
-     (setq magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist))
-     (fset 'xml-mode 'nxml-mode)
-     (add-hook 'nxml-mode-hook (lambda ()
-                                 (set (make-local-variable 'ido-use-filename-at-point) nil)))
-     (setq nxml-slash-auto-complete-flag t)
+     (use-package nxml-mode
+       :mode (concat "\\."
+                     (regexp-opt
+                      '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss"
+                        "gpx" "tcx" "plist"))
+                     "\\'")
+       :init
+       (progn
+         (setq
+          magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist)
+          nxml-slash-auto-complete-flag t)
+
+         (add-hook
+          'nxml-mode-hook
+          (lambda () (set (make-local-variable 'ido-use-filename-at-point) nil)))
+
+         (fset 'xml-mode 'nxml-mode)))
    #+end_src
 
 *** Pretty printing
