@@ -332,7 +332,7 @@
    them.
 
    #+begin_src emacs-lisp
-     (require 'mwe-log-commands)
+     (use-package mwe-log-commands)
    #+end_src
 
 ** Page break lines
