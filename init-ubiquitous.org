@@ -21,10 +21,20 @@
    #+end_src
 
 ** f
+
    [[f][f]] is a modern API for working with files and directories.
 
    #+begin_src emacs-lisp
      (require 'f)
+   #+end_src
+
+** use-package
+
+   [[https://github.com/jwiegley/use-package][use-package]] provides a convenient way of grouping common
+   configuration setups per package.
+
+   #+begin_src emacs-lisp
+     (require 'use-package)
    #+end_src
 
 ** diminish
