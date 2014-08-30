@@ -11,9 +11,9 @@
 ** Ace Jump
 
    #+begin_src emacs-lisp
-    (require 'ace-jump-mode)
-    (global-set-key (kbd "C-;") 'ace-jump-mode)
-    (global-set-key (kbd "C-:") 'ace-jump-word-mode)
+     (use-package ace-jump-mode :bind
+       (("C-;" . ace-jump-mode)
+        ("C-:" . ace-jump-word-mode)))
    #+end_src
 
 ** Company
