@@ -42,13 +42,6 @@
       (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-goto-parent-section))
   #+end_src
 
-** Magit takeover
-
-   #+begin_src emacs-lisp :tangle init-version-control.el :comments link
-     (after-load 'magit
-       (fullframe magit-status magit-mode-quit-window))
-   #+end_src
-
 ** Disable ~command-h~ on OS X
 
    #+begin_src emacs-lisp :tangle init-version-control.el :comments link

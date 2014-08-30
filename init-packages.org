@@ -253,13 +253,6 @@
 
 ** ibuffer
 
-*** Go fullframe
-
-    #+begin_src emacs-lisp :tangle init-packages.el :comments link
-      (after-load 'ibuffer
-       (fullframe ibuffer ibuffer-quit))
-    #+end_src
-
 *** Version-control support
 
     Explicitly require ~ibuffer-vc~ to get its column definitions,

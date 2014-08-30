@@ -3,6 +3,7 @@
 #+EMAIL: james@logi.cl
 #+STARTUP: showall
 #+OPTIONS: toc:2 num:nil ^:nil
+#+LINK: fullframe https://github.com/tomterl/fullframe
 #+LINK: zenburn https://github.com/bbatsov/zenburn-emacs
 
 * Presentation
@@ -240,3 +241,30 @@
      (global-set-key (kbd "C-M-=") 'jcf/increase-default-font-height)
      (global-set-key (kbd "C-M--") 'jcf/decrease-default-font-height)
    #+END_SRC
+
+** Fullframe
+
+   [[fullframe]] makes it easy to take over the whole frame when you run a
+   command, like ~magit-status~ for example.
+
+   #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+     (require 'fullframe)
+   #+end_src
+
+   It's important to setup our fullframe functions before they are
+   used to ensure we're calling the modified version that actual goes
+   fullframe.
+
+*** ibuffer.
+
+    #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+      (after-load 'ibuffer
+       (fullframe ibuffer ibuffer-quit))
+    #+end_src
+
+*** Magit
+
+    #+begin_src emacs-lisp :tangle init-presentation.el :comments link
+      (after-load 'magit
+        (fullframe magit-status magit-mode-quit-window))
+    #+end_src
