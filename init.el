@@ -32,6 +32,12 @@
 
 ;; init\.el:1 ends here
 
+;; [[file:~/.emacs.d/README.org::*OS%20X][OS\ X:1]]
+
+(defconst *is-a-mac* (eq system-type 'darwin))
+
+;; OS\ X:1 ends here
+
 ;; [[file:~/.emacs.d/README.org::*Load%20Org%20files][Load\ Org\ files:1]]
 
 (defvar jcf/config-dir
