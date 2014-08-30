@@ -477,9 +477,14 @@
 ** recentf
 
    #+begin_src emacs-lisp
-     (recentf-mode 1)
-     (setq recentf-max-saved-items 1000
-           recentf-exclude '("/tmp/" "/ssh:"))
+     (use-package recentf
+       :init
+       (recentf-mode 1)
+
+       :config
+       (setq
+        recentf-max-saved-items 1000
+        recentf-exclude '("/tmp/" "/ssh:")))
     #+end_src
 
 ** Undo tree
