@@ -256,7 +256,6 @@
 *** Go fullframe
 
     #+begin_src emacs-lisp :tangle init-packages.el :comments link
-      (require 'fullframe)
       (after-load 'ibuffer
        (fullframe ibuffer ibuffer-quit))
     #+end_src

@@ -5,6 +5,7 @@
 #+OPTIONS: toc:2 num:nil ^:nil
 #+LINK: f https://github.com/rejeep/f.el
 #+LINK: s https://github.com/magnars/s.el
+#+LINK: fullframe https://github.com/tomterl/fullframe
 #+LINK: diminish http://www.eskimo.com/~seldon/diminish.el
 
 * Ubiquitous
@@ -24,6 +25,13 @@
 
    #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
      (require 'f)
+   #+end_src
+
+   [[fullframe]] makes it easy to take over the whole frame when you run a
+   command, like ~magit-status~ for example.
+
+   #+begin_src emacs-lisp :tangle init-ubiquitous.el :comments link
+     (require 'fullframe)
    #+end_src
 
    [[diminish]] helps declutter our modeline by either by removing or
