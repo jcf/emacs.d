@@ -64,6 +64,7 @@
    (jcf/load-org "ubiquitous")
    (jcf/load-org "presentation")
    (jcf/load-org "evil")
+   (jcf/load-org "helm")
    (when *is-a-mac*
      (jcf/load-org "osx"))
    (jcf/load-org "org")

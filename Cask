@@ -1,6 +1,3 @@
-
-;; [[file:~/.emacs.d/README.org::*Dependencies][Dependencies:1]]
-
 (source gnu)
 (source melpa)
 (source org)
@@ -77,6 +74,18 @@
 (depends-on "guide-key")
 (depends-on "haml-mode")
 (depends-on "haskell-mode")
+(depends-on "helm")
+(depends-on "helm-ag")
+(depends-on "helm-company")
+(depends-on "helm-dash")
+(depends-on "helm-descbinds")
+(depends-on "helm-flycheck")
+(depends-on "helm-flymake")
+(depends-on "helm-gtags")
+(depends-on "helm-helm-commands")
+(depends-on "helm-ls-git")
+(depends-on "helm-package")
+(depends-on "helm-projectile")
 (depends-on "hi2")
 (depends-on "highlight-escape-sequences")
 (depends-on "highlight-symbol")
@@ -108,7 +117,6 @@
 (depends-on "move-dup")
 (depends-on "multiple-cursors")
 (depends-on "mwe-log-commands")
-(depends-on "org" :git "git://orgmode.org/org-mode.git")
 (depends-on "org")
 (depends-on "org-fstree")
 (depends-on "org-mac-iCal")
@@ -116,10 +124,11 @@
 (depends-on "org-plus-contrib")
 (depends-on "org-pomodoro")
 (depends-on "osx-location")
+(depends-on "packed")
 (depends-on "page-break-lines")
 (depends-on "pallet")
 (depends-on "pandoc-mode")
-(depends-on "paredit") ; Redshank requires paredit
+(depends-on "paredit")
 (depends-on "php-mode")
 (depends-on "popwin")
 (depends-on "prodigy")
@@ -144,7 +153,7 @@
 (depends-on "skewer-mode")
 (depends-on "slamhound")
 (depends-on "slim-mode")
-(depends-on "slime" :git "git://github.com/slime/slime.git")
+(depends-on "slime")
 (depends-on "smartparens")
 (depends-on "smarty-mode")
 (depends-on "smex")
@@ -169,5 +178,3 @@
 (depends-on "yari")
 (depends-on "yasnippet")
 (depends-on "zenburn-theme")
-
-;; Dependencies:1 ends here

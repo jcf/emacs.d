@@ -53,10 +53,13 @@
         "ee" 'eval-expression
         "es" 'eval-last-sexp
         "er" 'eval-region
-        "fb" 'ido-switch-buffer
-        "fd" 'ido-dired
-        "ff" 'ido-find-file
+        "fa" 'helm-ag
+        "fb" 'helm-buffers-list
+        "ff" 'helm-find-files
+        "fi" 'helm-semantic-or-imenu
         "fj" 'dired-jump
+        "fl" 'helm-occur
+        "fp" 'helm-projectile
         "gb" 'magit-blame-mode
         "gc" 'magit-commit
         "gl" 'magit-log
@@ -73,7 +76,7 @@
         "ss" 'jcf/split-window-horizontally
         "sv" 'jcf/split-window-vertically
         "w"  'save-buffer
-        "x"  'smex)
+        "x"  'execute-extended-command)
     #+end_src
 
     Org-specific leader bindings.

@@ -31,6 +31,10 @@
      (after-load 'company
        (diminish 'company-mode)
 
+       ;; Use Helm to complete suggestions
+       (define-key company-mode-map (kbd "C-:") 'helm-company)
+       (define-key company-active-map (kbd "C-:") 'helm-company)
+
        ;; Add completion backends
        (dolist (backend jcf/completion-backends)
          (add-to-list 'company-backends backend)))
@@ -334,16 +338,14 @@
      (setq ido-auto-merge-work-directories-length 0)
      (setq ido-use-virtual-buffers t)
 
-     (when (eval-when-compile (>= emacs-major-version 24))
-      (require 'ido-ubiquitous)
-      (ido-ubiquitous-mode t))
+     (require 'ido-ubiquitous)
+     (ido-ubiquitous-mode t)
 
      ;; Use smex to handle M-x
-     (when (eval-when-compile (>= emacs-major-version 24))
-       (require 'smex)
-       ;; Change path for ~/.smex-items
-       (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
-       (global-set-key [remap execute-extended-command] 'smex))
+     (require 'smex)
+     ;; Change path for ~/.smex-items
+     (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+     ;; (global-set-key [remap execute-extended-command] 'smex)
 
      (require 'idomenu)
 
@@ -522,6 +524,7 @@
              "C-c ;"
              "C-c ; f"
              "C-c ' f"
+             "C-c h"
              "C-x n"))
      (guide-key-mode 1)
      (diminish 'guide-key-mode)

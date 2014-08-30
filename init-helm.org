@@ -1,0 +1,64 @@
+#+TITLE: emacs.d - Helm
+#+AUTHOR: James Conroy-Finn
+#+EMAIL: james@logi.cl
+#+STARTUP: content
+#+OPTIONS: toc:2 num:nil ^:nil
+
+* Helm
+
+  #+begin_src emacs-lisp
+    (require 'helm)
+  #+end_src
+
+  Use "C-c h" instead of the default "C-x c", because it can too
+  easily become "C-x C-c". Must be set before requiring
+  ~helm-config~.
+
+  #+begin_src emacs-lisp
+    (setq helm-command-prefix-key "C-c h")
+  #+end_src
+
+  #+begin_src emacs-lisp
+    (require 'helm-config)
+    (require 'helm-eshell)
+    (require 'helm-files)
+    (require 'helm-grep)
+  #+end_src
+
+  #+begin_src emacs-lisp
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+    (define-key helm-map (kbd "C-z")  'helm-select-action)
+  #+end_src
+
+  #+begin_src emacs-lisp
+    (define-key helm-grep-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
+    (define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
+    (define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
+  #+end_src
+
+  #+begin_src emacs-lisp
+    (setq
+     helm-google-suggest-use-curl-p t
+     helm-scroll-amount 4
+     helm-quick-update t
+     helm-idle-delay 0.01
+     helm-input-idle-delay 0.01
+     helm-ff-search-library-in-sexp t
+     helm-split-window-default-side 'other
+     helm-split-window-in-side-p t
+     helm-buffers-favorite-modes (append helm-buffers-favorite-modes
+                                         '(picture-mode artist-mode))
+     helm-candidate-number-limit 200
+     helm-M-x-requires-pattern 0
+     helm-ff-file-name-history-use-recentf t
+     helm-move-to-line-cycle-in-source t
+     ido-use-virtual-buffers t
+     helm-buffers-fuzzy-matching t)
+  #+end_src
+
+** Use Helm to power M-x
+
+   #+begin_src emacs-lisp
+     (global-set-key [remap execute-extended-command] 'helm-M-x)
+   #+end_src
