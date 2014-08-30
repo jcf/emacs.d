@@ -47,6 +47,7 @@
         "a"  'projectile-toggle-between-implementation-and-test
         "b"  'ibuffer
         "db" 'kill-buffer
+        "df" 'delete-this-file
         "dw" 'jcf/delete-window
         "eb" 'eval-buffer
         "ed" 'eval-defun
