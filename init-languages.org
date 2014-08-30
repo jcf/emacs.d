@@ -696,8 +696,11 @@
 ** PHP
 
    #+begin_src emacs-lisp
-     (use-package php-mode)
-     (use-package smarty-mode)
+     (use-package php-mode
+       :commands php-mode)
+
+     (use-package smarty-mode
+       :commands smarty-mode)
    #+end_src
 
 ** Python
