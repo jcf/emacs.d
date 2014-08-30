@@ -203,7 +203,7 @@
 ** Cucumber
 
    #+begin_src emacs-lisp
-     (require 'feature-mode)
+     (use-package feature-mode)
    #+end_src
 
 ** Erlang
