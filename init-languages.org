@@ -245,7 +245,9 @@
 ** Erlang
 
    #+begin_src emacs-lisp
-     (use-package erlang :config
+     (use-package erlang
+       :commands erlang-mode
+       :config
        (use-package erlang-start))
    #+end_src
 
