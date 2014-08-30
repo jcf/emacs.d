@@ -28,6 +28,7 @@
      magit-save-some-buffers nil
      magit-process-popup-time 10
      magit-diff-refine-hunk t
+     magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
      magit-completing-read-function 'magit-ido-completing-read)
 
     (after-load 'magit
