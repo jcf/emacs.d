@@ -560,6 +560,7 @@
      (use-package rainbow-delimiters)
 
      (use-package redshank
+       :commands redshank-mode
        :diminish redshank-mode
        :init
        (use-package paredit))
