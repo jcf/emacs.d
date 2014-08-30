@@ -674,19 +674,11 @@
               ("SConscript\\'" . python-mode)))
    #+end_src
 
-** Rails
-
-   #+begin_src emacs-lisp
-     (use-package rinari
-       :diminish ((rinari . "Rin"))
-       :init
-       (global-rinari-mode))
-   #+end_src
-
 ** Ruby
 
    #+begin_src emacs-lisp
      (use-package ruby-mode
+       :commands ruby-mode
        :mode (("Gemfile\\'" . ruby-mode)
               ("Kirkfile\\'" . ruby-mode)
               ("Rakefile\\'" . ruby-mode)
@@ -714,11 +706,9 @@
          (add-hook 'ruby-mode-hook 'subword-mode)
 
          (use-package robe
-           :commands ruby-mode
            :config (add-hook 'ruby-mode-hook 'robe-mode))
 
          (use-package ruby-compilation
-           :commands ruby-mode
            :config
            (let ((m ruby-mode-map))
              (define-key m [S-f7] 'ruby-compilation-this-buffer)
@@ -728,8 +718,12 @@
          (use-package yari
            :init (defalias 'ri 'yari))
 
+         (use-package rinari
+           :diminish ((rinari . "Rin"))
+           :init
+           (global-rinari-mode))
+
          (use-package rspec-mode
-           :commands ruby-mode
            :config (rspec-mode 1))
 
          (use-package bundler)
