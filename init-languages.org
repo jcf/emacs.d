@@ -348,7 +348,9 @@
            :commands skewer-mode)))
 
      (use-package json-mode
-       :mode '("\\.bowerrc\\'" "\\.csslintrc\\'" "\\.jshintrc\\'")
+       :mode (("\\.bowerrc\\'" . json-mode)
+              ("\\.csslintrc\\'" . json-mode)
+              ("\\.jshintrc\\'" . json-mode))
        :init
        (add-hook 'json-mode-hook 'rainbow-delimiters-mode))
 
