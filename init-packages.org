@@ -23,7 +23,10 @@
      (add-hook 'after-init-hook 'global-company-mode)
 
      (defvar jcf/completion-backends
-       '(company-go company-inf-ruby company-tern))
+       '(company-ghc
+         company-go
+         company-inf-ruby
+         company-tern))
 
      (dolist (package jcf/completion-backends)
        (require package))
