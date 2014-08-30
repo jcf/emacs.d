@@ -325,7 +325,8 @@
 
    #+begin_src emacs-lisp
      (use-package mmm-mode
-       :init
+       :commands mmm-mode
+       :config
        (progn
          (setq
           mmm-global-mode 'buffers-with-submode-classes
@@ -370,7 +371,11 @@
 ** Projectile
 
     #+begin_src emacs-lisp
-      (use-package projectile :init
+      (use-package projectile
+        :commands (helm-projectile
+                   projectile-global-mode
+                   projectile-mode)
+        :init
         (projectile-global-mode))
     #+end_src
 
