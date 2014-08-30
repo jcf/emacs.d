@@ -64,13 +64,6 @@
      (use-package dsvn)
    #+end_src
 
-** Electric pair mode
-
-   #+begin_src emacs-lisp
-    (when (fboundp 'electric-pair-mode)
-      (setq-default electric-pair-mode 1))
-   #+end_src
-
 ** erc
 
    #+begin_src emacs-lisp
