@@ -20,7 +20,6 @@
 
   #+begin_src emacs-lisp
     (require 'helm-config)
-    (require 'helm-eshell)
     (require 'helm-files)
     (require 'helm-grep)
   #+end_src
