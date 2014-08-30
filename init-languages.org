@@ -212,9 +212,11 @@
 ** ERB
 
     #+begin_src emacs-lisp
-      (use-package mmm-mode)
+      (use-package mmm-mode
+        :commands mmm-mode)
 
       (use-package mmm-erb
+        :commands mmm-erb
         :mode (("\\.rhtml\\'" . html-erb-mode)
                ("\\.html\\.erb\\'" . html-erb-mode)
                ("\\.jst\\.ejs\\'" . html-erb-mode))
