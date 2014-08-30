@@ -156,6 +156,7 @@
 
   #+begin_src emacs-lisp
     (use-package css-mode
+      :commands css-mode
       :init
       (setq css-indent-offset 2)
       :config
