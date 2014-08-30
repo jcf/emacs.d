@@ -257,33 +257,38 @@
 ** ido
 
    #+begin_src emacs-lisp
-     (require 'ido-vertical-mode)
+     (use-package ido-vertical-mode)
 
-     (require 'ido)
-     (ido-mode t)
-     (ido-everywhere t)
-     (ido-vertical-mode 1)
-     (setq ido-enable-flex-matching t)
-     (setq ido-use-filename-at-point nil)
-     (setq ido-auto-merge-work-directories-length 0)
-     (setq ido-use-virtual-buffers t)
+     (use-package ido
+       :init
+       (progn
+         (ido-mode t)
+         (ido-everywhere t)
+         (ido-vertical-mode 1)
 
-     (require 'ido-ubiquitous)
-     (ido-ubiquitous-mode t)
+         (setq
+          ido-auto-merge-work-directories-length 0
+          ido-default-buffer-method 'selected-window
+          ido-enable-flex-matching t
+          ido-use-filename-at-point nil
+          ido-use-virtual-buffers t)
 
-     ;; Use smex to handle M-x
-     (require 'smex)
-     ;; Change path for ~/.smex-items
-     (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
-     ;; (global-set-key [remap execute-extended-command] 'smex)
+         ;; Allow the same buffer to be open in different frames.
+         ;;
+         ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
+         (add-hook
+          'ido-setup-hook
+          (lambda ()
+            (define-key ido-completion-map [up] 'previous-history-element)))
 
-     (require 'idomenu)
+         (use-package ido-ubiquitous :init
+           (ido-ubiquitous-mode t))
 
-     ;; Allow the same buffer to be open in different frames
-     (setq ido-default-buffer-method 'selected-window)
+         (use-package idomenu)))
 
-     ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
-     (add-hook 'ido-setup-hook (lambda () (define-key ido-completion-map [up] 'previous-history-element)))
+     (use-package smex :init
+       (setq smex-save-file
+             (expand-file-name ".smex-items" user-emacs-directory)))
    #+end_src
 
 ** Key Chord
