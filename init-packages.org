@@ -361,8 +361,8 @@
 ** Projectile
 
     #+begin_src emacs-lisp
-      (require 'projectile)
-      (projectile-global-mode)
+      (use-package projectile :init
+        (projectile-global-mode))
     #+end_src
 
 ** regex-tool
