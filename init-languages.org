@@ -786,39 +786,17 @@
 
 ** Shell
 
-*** Add ~.zsh~ files to ~sh-mode~
-
-    #+begin_src emacs-lisp
-      (add-auto-mode 'sh-mode "\\.zsh\\'")
-    #+end_src
-
-*** Prezto support
-
-    Recognise Prezto runcoms.
-
-    #+begin_src emacs-lisp
-      (defvar jcf-pretzo-files '("zlogin"
-                                 "zlogout"
-                                 "zpretzorc"
-                                 "zprofile"
-                                 "zshenv"
-                                 "zshrc"))
-
-      (mapc (lambda (file)
-              (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
-            jcf-pretzo-files)
-    #+end_src
-
-    Use Z-Shell when we're editing a Prezto runcom.
-
-    #+begin_src emacs-lisp
-      (add-hook
-       'sh-mode-hook
-       (lambda ()
-         (if (and buffer-file-name
-                  (member (file-name-nondirectory buffer-file-name) jcf-pretzo-files))
-             (sh-set-shell "zsh"))))
-    #+end_src
+   #+begin_src emacs-lisp
+     (use-package sh-mode
+       :mode (("\\.zsh\\'" . sh-mode)
+              ("\\zlogin\\'" . sh-mode)
+              ("\\zlogout\\'" . sh-mode)
+              ("\\zpretzorc\\'" . sh-mode)
+              ("\\zprofile\\'" . sh-mode)
+              ("\\zshenv\\'" . sh-mode)
+              ("\\zshrc\\'" . sh-mode))
+       )
+   #+end_src
 
 ** Slim
 
