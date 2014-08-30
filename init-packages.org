@@ -158,7 +158,7 @@
 ** gnuplot
 
    #+begin_src emacs-lisp
-     (require 'gnuplot)
+     (use-package gnuplot)
    #+end_src
 
 ** google-this
