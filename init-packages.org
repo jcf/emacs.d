@@ -463,8 +463,8 @@
 ** Highlight escape sequences
 
    #+begin_src emacs-lisp
-     (require 'highlight-escape-sequences)
-     (hes-mode)
+     (use-package highlight-escape-sequences :init
+       (hes-mode))
    #+end_src
 
 ** Editorconfig
