@@ -12,6 +12,12 @@
 
 ** The basics
 
+   Identify yourself.
+
+   #+begin_src emacs-lisp
+     (setq user-mail-address "james@logi.cl")
+   #+end_src
+
    These settings are the first steps towards making Emacs behave the
    way we want. Each variable has corresponding documentation
    accessible via ~describe-variable~.
