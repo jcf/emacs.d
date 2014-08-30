@@ -14,92 +14,76 @@
 
 ** Clojure
 
-*** Packages
+   #+begin_src emacs-lisp
+     (use-package clojure-mode
+       :config
+       (progn
+         (use-package clj-refactor)
+         (use-package cljsbuild-mode)
+         (use-package elein)
+         (use-package typed-clojure-mode))
 
-    #+begin_src emacs-lisp
-      (require 'clojure-mode)
-      (require 'clj-refactor)
-      (require 'cljsbuild-mode)
-      (require 'elein)
-      (require 'typed-clojure-mode)
-    #+end_src
+       (defun slime-clojure-repl-setup ()
+         "Some REPL setup additional to that in durendal."
+         (when (string-equal (slime-lisp-implementation-name) "clojure")
+           (when (slime-inferior-process)
+             (message "Setting up repl for clojure")
+             (slime-redirect-inferior-output))
 
-*** Slime
+           (set-syntax-table clojure-mode-syntax-table)
+           (setq lisp-indent-function 'clojure-indent-function)
+           (let (font-lock-mode)
+             (clojure-mode-font-lock-setup))))
 
-    #+begin_src emacs-lisp
-      (defun slime-clojure-repl-setup ()
-        "Some REPL setup additional to that in durendal."
-        (when (string-equal (slime-lisp-implementation-name) "clojure")
-          (when (slime-inferior-process)
-            (message "Setting up repl for clojure")
-            (slime-redirect-inferior-output))
+       (after-load 'slime-repl
+         (add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup))
 
-          (set-syntax-table clojure-mode-syntax-table)
-          (setq lisp-indent-function 'clojure-indent-function)
-          (let (font-lock-mode)
-            (clojure-mode-font-lock-setup))))
+       (after-load 'clojure-mode
+         (add-hook 'clojure-mode-hook 'jcf/lisp-setup)
+         ;; Undo activation of Paredit by clojure-mode
+         (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
+         (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+         (add-hook 'clojure-mode-hook 'typed-clojure-mode)
+         (add-hook 'clojure-mode-hook 'subword-mode))
 
-      (after-load 'slime-repl
-        (add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup))
-    #+end_src
+       (use-package cider
+         :init
+         (setq nrepl-popup-stacktraces nil)
 
-*** Hooks
+         :config
+         (after-load 'cider
+           (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+           (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+           (add-hook 'cider-repl-mode-hook 'subword-mode)
 
-    #+begin_src emacs-lisp
-      (after-load 'clojure-mode
-        (add-hook 'clojure-mode-hook 'jcf/lisp-setup)
-        ;; Undo activation of Paredit by clojure-mode
-        (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
-        (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
-        (add-hook 'clojure-mode-hook 'typed-clojure-mode)
-        (add-hook 'clojure-mode-hook 'subword-mode))
-    #+end_src
+           ;; nrepl isn't based on comint
+           (add-hook 'cider-repl-mode-hook
+                     (lambda () (setq show-trailing-whitespace nil)))))
 
-*** Clojurescript
-
-    Define our own ~clojurescript-mode~ that is derived from
-    ~clojure-mode~.
-
-    We disable Company mode because you can't complete Clojurescript
-    via a normal Clojure REPL, and if you try Emacs hangs until
-    Company times out.
-
-    #+begin_src emacs-lisp
-      (define-derived-mode clojurescript-mode clojure-mode
-        "Clojurescript"
-        "Extends clojure-mode with Clojurescript-specific settings."
-        (company-mode -1))
-    #+end_src
-
-    Use ~clojurescript-mode~ for files with a ~cljs~ extension.
-
-    #+begin_src emacs-lisp
-      (add-auto-mode 'clojurescript-mode "\\.cljs\\'")
-    #+end_src
-
-*** Cider
-
-    #+begin_src emacs-lisp
-      (require 'emacs '(24))
-
-      (require 'cider)
-      (require 'slamhound)
+       (use-package slamhound))
    #+end_src
 
-*** NREPL
+** Clojurescript
+
+   Define our own ~clojurescript-mode~ that is derived from
+   ~clojure-mode~.
+
+   We disable Company mode because you can't complete Clojurescript
+   via a normal Clojure REPL, and if you try Emacs hangs until
+   Company times out.
 
    #+begin_src emacs-lisp
-      (setq nrepl-popup-stacktraces nil)
+     (define-derived-mode clojurescript-mode clojure-mode
+       "Clojurescript"
+       "Extends clojure-mode with Clojurescript-specific settings."
+       (company-mode -1))
+   #+end_src
 
-      (after-load 'cider
-        (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-        (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-        (add-hook 'cider-repl-mode-hook 'subword-mode)
+   Use ~clojurescript-mode~ for files with a ~cljs~ extension.
 
-        ;; nrepl isn't based on comint
-        (add-hook 'cider-repl-mode-hook
-                  (lambda () (setq show-trailing-whitespace nil))))
-    #+end_src
+   #+begin_src emacs-lisp
+     (add-auto-mode 'clojurescript-mode "\\.cljs\\'")
+   #+end_src
 
 ** Common-Lisp
 
