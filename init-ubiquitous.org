@@ -75,3 +75,22 @@
      (when (memq window-system '(mac ns))
        (exec-path-from-shell-initialize))
    #+END_SRC
+** guide-key
+
+   [[https://github.com/kai2nenobu/guide-key][guide-key]] displays the available key bindings automatically and
+   dynamically.
+
+   #+begin_src emacs-lisp
+     (require 'guide-key)
+     (setq guide-key/guide-key-sequence
+           '("C-x r"
+             "C-x 4"
+             "C-x 5"
+             "C-c ;"
+             "C-c ; f"
+             "C-c ' f"
+             "C-c h"
+             "C-x n"))
+     (guide-key-mode 1)
+     (diminish 'guide-key-mode)
+   #+end_src
