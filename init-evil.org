@@ -12,173 +12,169 @@
      (require 'evil)
    #+end_src
 
-** Extensions
+** Exchange
 
-   We load extensions first because they need to be installed before
-   we can configure them.
+   An [[https://github.com/Dewdrops/evil-exchange][Emacs port]] of [[https://github.com/tommcdo/vim-exchange][vim-exchange]], designed to make it easier to
+   exchange two regions.
 
-*** Exchange
+   #+begin_src emacs-lisp
+     (require 'evil-exchange)
+   #+end_src
 
-    An [[https://github.com/Dewdrops/evil-exchange][Emacs port]] of [[https://github.com/tommcdo/vim-exchange][vim-exchange]], designed to make it easier to
-    exchange two regions.
+** Indent Textobject
 
-    #+begin_src emacs-lisp
-      (require 'evil-exchange)
-    #+end_src
+   [[https://github.com/cofi/evil-indent-textobject][evil-indent-text-object]] defines textobjects based on indentation.
 
-*** Indent Textobject
+   #+begin_src emacs-lisp
+     (require 'evil-indent-textobject)
+   #+end_src
 
-    [[https://github.com/cofi/evil-indent-textobject][evil-indent-text-object]] defines textobjects based on indentation.
+** Leader
 
-    #+begin_src emacs-lisp
-      (require 'evil-indent-textobject)
-    #+end_src
+   [[https://github.com/cofi/evil-leader][evil-leader]] adds support for Vim's venerable ~<leader>~ key, which
+   any Vim user will be very accustomed to.
 
-*** Leader
+   #+begin_src emacs-lisp
+     (require 'evil-leader)
+     (setq evil-leader/leader ",")
 
-    [[https://github.com/cofi/evil-leader][evil-leader]] adds support for Vim's venerable ~<leader>~ key, which
-    any Vim user will be very accustomed to.
+     (evil-leader/set-key
+       "a"  'projectile-toggle-between-implementation-and-test
+       "b"  'ibuffer
+       "db" 'kill-buffer
+       "df" 'delete-this-file
+       "dw" 'jcf/delete-window
+       "eb" 'eval-buffer
+       "ed" 'eval-defun
+       "ee" 'eval-expression
+       "es" 'eval-last-sexp
+       "er" 'eval-region
+       "fa" 'helm-ag
+       "fb" 'helm-buffers-list
+       "ff" 'helm-find-files
+       "fi" 'helm-semantic-or-imenu
+       "fj" 'dired-jump
+       "fl" 'helm-occur
+       "fp" 'helm-projectile
+       "gb" 'magit-blame-mode
+       "gc" 'magit-commit
+       "gl" 'magit-log
+       "gs" 'magit-status
+       "hf" 'describe-function
+       "hm" 'describe-mode
+       "hp" 'describe-package
+       "hv" 'describe-variable
+       "pb" 'projectile-switch-to-buffer
+       "pd" 'projectile-switch-project
+       "pf" 'projectile-find-file
+       "sd" 'jcf/delete-window
+       "sf" 'delete-other-windows
+       "ss" 'jcf/split-window-horizontally
+       "sv" 'jcf/split-window-vertically
+       "w"  'save-buffer
+       "x"  'execute-extended-command)
+   #+end_src
 
-    #+begin_src emacs-lisp
-      (require 'evil-leader)
-      (setq evil-leader/leader ",")
+   Org-specific leader bindings.
 
-      (evil-leader/set-key
-        "a"  'projectile-toggle-between-implementation-and-test
-        "b"  'ibuffer
-        "db" 'kill-buffer
-        "df" 'delete-this-file
-        "dw" 'jcf/delete-window
-        "eb" 'eval-buffer
-        "ed" 'eval-defun
-        "ee" 'eval-expression
-        "es" 'eval-last-sexp
-        "er" 'eval-region
-        "fa" 'helm-ag
-        "fb" 'helm-buffers-list
-        "ff" 'helm-find-files
-        "fi" 'helm-semantic-or-imenu
-        "fj" 'dired-jump
-        "fl" 'helm-occur
-        "fp" 'helm-projectile
-        "gb" 'magit-blame-mode
-        "gc" 'magit-commit
-        "gl" 'magit-log
-        "gs" 'magit-status
-        "hf" 'describe-function
-        "hm" 'describe-mode
-        "hp" 'describe-package
-        "hv" 'describe-variable
-        "pb" 'projectile-switch-to-buffer
-        "pd" 'projectile-switch-project
-        "pf" 'projectile-find-file
-        "sd" 'jcf/delete-window
-        "sf" 'delete-other-windows
-        "ss" 'jcf/split-window-horizontally
-        "sv" 'jcf/split-window-vertically
-        "w"  'save-buffer
-        "x"  'execute-extended-command)
-    #+end_src
+   #+begin_src emacs-lisp
+     (evil-leader/set-key-for-mode 'org-mode
+       "ol" 'org-babel-load-file
+       "os" 'org-sort-list
+       "ot" 'org-babel-tangle)
+   #+end_src
 
-    Org-specific leader bindings.
+   Clojure-specific leader bindings.
 
-    #+begin_src emacs-lisp
-      (evil-leader/set-key-for-mode 'org-mode
-        "ol" 'org-babel-load-file
-        "os" 'org-sort-list
-        "ot" 'org-babel-tangle)
-    #+end_src
+   #+begin_src emacs-lisp
+     (evil-leader/set-key-for-mode 'clojure-mode
+       "v" 'clojure-test-run-test
+       "V" 'clojure-test-run-tests
+       "cc" 'cider-connect
+       "cj" 'cider-jack-in
+       "cq" 'cider-quit
+       "eb" 'cider-eval-buffer
+       "ed" 'cider-eval-defun-at-point
+       "es" 'cider-eval-last-sexp
+       "er" 'cider-eval-region
+       "rs" 'cljr-sort-ns
+       "rr" 'cljr-add-require-to-ns
+       "ru" 'cljr-add-use-to-ns)
+   #+end_src
 
-    Clojure-specific leader bindings.
+   Ruby-specific leader bindings.
 
-    #+begin_src emacs-lisp
-      (evil-leader/set-key-for-mode 'clojure-mode
-        "v" 'clojure-test-run-test
-        "V" 'clojure-test-run-tests
-        "cc" 'cider-connect
-        "cj" 'cider-jack-in
-        "cq" 'cider-quit
-        "eb" 'cider-eval-buffer
-        "ed" 'cider-eval-defun-at-point
-        "es" 'cider-eval-last-sexp
-        "er" 'cider-eval-region
-        "rs" 'cljr-sort-ns
-        "rr" 'cljr-add-require-to-ns
-        "ru" 'cljr-add-use-to-ns)
-    #+end_src
+   #+begin_src emacs-lisp
+     (evil-leader/set-key-for-mode 'ruby-mode
+       "v" 'rspec-verify
+       "V" 'rspec-verify-all)
+   #+end_src
 
-    Ruby-specific leader bindings.
+   Cucumber-specific bindings.
 
-    #+begin_src emacs-lisp
-      (evil-leader/set-key-for-mode 'ruby-mode
-        "v" 'rspec-verify
-        "V" 'rspec-verify-all)
-    #+end_src
+   #+begin_src emacs-lisp
+     (evil-leader/set-key-for-mode 'feature-mode
+       "v" 'feature-verify-scenario-at-pos
+       "V" 'feature-verify-all-scenarios-in-buffer)
+   #+end_src
 
-    Cucumber-specific bindings.
+** Extended ~%~ matches
 
-    #+begin_src emacs-lisp
-      (evil-leader/set-key-for-mode 'feature-mode
-        "v" 'feature-verify-scenario-at-pos
-        "V" 'feature-verify-all-scenarios-in-buffer)
-    #+end_src
+   [[https://github.com/redguardtoo/evil-matchit][evil-matchit]] is a port of [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] by Benji Fisher. Matchit
+   enhances ~%~ to match HTML tags, ~do~/~end~ blocks and more.
 
-*** Extended ~%~ matches
+   #+begin_src emacs-lisp
+     (require 'evil-matchit)
+   #+end_src
 
-    [[https://github.com/redguardtoo/evil-matchit][evil-matchit]] is a port of [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] by Benji Fisher. Matchit
-    enhances ~%~ to match HTML tags, ~do~/~end~ blocks and more.
+** NERD commenter
 
-    #+begin_src emacs-lisp
-      (require 'evil-matchit)
-    #+end_src
+   I tend to use Emacs' built-in ~comment-dwim~ more than
+   [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]], but it's here in case I decide to regress.
 
-*** NERD commenter
+   #+begin_src emacs-lisp
+     (require 'evil-nerd-commenter)
+   #+end_src
 
-    I tend to use Emacs' built-in ~comment-dwim~ more than
-    [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]], but it's here in case I decide to regress.
+** Numbers
 
-    #+begin_src emacs-lisp
-      (require 'evil-nerd-commenter)
-    #+end_src
+   Another one from [[https://github.com/cofi][Michael Markert]] (perhaps better known as cofi),
+   [[https://github.com/cofi/evil-numbers][evil-numbers]] enhances ~C-a~ and ~C-x~ in a similar way to Tim
+   Pope's [[https://github.com/tpope/vim-speeddating][speeddating.vim]].
 
-*** Numbers
+   #+begin_src emacs-lisp
+     (require 'evil-numbers)
 
-    Another one from [[https://github.com/cofi][Michael Markert]] (perhaps better known as cofi),
-    [[https://github.com/cofi/evil-numbers][evil-numbers]] enhances ~C-a~ and ~C-x~ in a similar way to Tim
-    Pope's [[https://github.com/tpope/vim-speeddating][speeddating.vim]].
+     (define-key evil-normal-state-map (kbd "C-A")
+       'evil-numbers/inc-at-pt)
+     (define-key evil-normal-state-map (kbd "C-S-A")
+       'evil-numbers/dec-at-pt)
+   #+end_src
 
-    #+begin_src emacs-lisp
-      (require 'evil-numbers)
+** Visual star
 
-      (define-key evil-normal-state-map (kbd "C-A")
-        'evil-numbers/inc-at-pt)
-      (define-key evil-normal-state-map (kbd "C-S-A")
-        'evil-numbers/dec-at-pt)
-    #+end_src
+   #+begin_src emacs-lisp
+     (require 'evil-visualstar)
+     (setq-default evil-symbol-word-search t)
+   #+end_src
 
-*** Visual star
+** ~goto-chg~
 
-    #+begin_src emacs-lisp
-      (require 'evil-visualstar)
-    #+end_src
+   #+begin_src emacs-lisp
+     (require 'goto-chg)
+   #+end_src
 
-*** ~goto-chg~
+** Surround
 
-    #+begin_src emacs-lisp
-      (require 'goto-chg)
-    #+end_src
+   #+begin_src emacs-lisp
+     (require 'evil-surround)
+   #+end_src
 
-*** Surround
+** Jumper
 
-    #+begin_src emacs-lisp
-      (require 'evil-surround)
-    #+end_src
-
-*** Jumper
-
-    #+begin_src emacs-lisp
-      (require 'evil-jumper)
-    #+end_src
+   #+begin_src emacs-lisp
+     (require 'evil-jumper)
+   #+end_src
 
 ** Fire up the modes
 
@@ -196,151 +192,151 @@
 
 ** Configuration
 
-*** Default cursor
+** Default cursor
+
+  #+begin_src emacs-lisp
+    (setq evil-default-cursor t)
+  #+end_src
+
+** Modeline
+
+  #+begin_src emacs-lisp
+    (setq evil-insert-state-message nil)
+    (setq evil-visual-state-message nil)
+    (setq evil-mode-line-format 'before)
+  #+end_src
+
+** Use evil-search
+
+  #+begin_src emacs-lisp
+    (setq evil-search-module 'evil-search)
+  #+end_src
+
+** Colourise cursor based on state
+
+  #+begin_src emacs-lisp
+    (setq evil-emacs-state-cursor  '("red" box))
+    (setq evil-normal-state-cursor '("gray" box))
+    (setq evil-visual-state-cursor '("gray" box))
+    (setq evil-insert-state-cursor '("gray" bar))
+    (setq evil-motion-state-cursor '("gray" box))
+  #+end_src
+
+** Yank to end of line
 
    #+begin_src emacs-lisp
-     (setq evil-default-cursor t)
+     (define-key evil-normal-state-map "Y" (kbd "y$"))
    #+end_src
 
-*** Modeline
+** Delete and balance windows
+
+   Used in some ~<leader>~ bindings below.
 
    #+begin_src emacs-lisp
-     (setq evil-insert-state-message nil)
-     (setq evil-visual-state-message nil)
-     (setq evil-mode-line-format 'before)
+     (defun jcf/delete-window ()
+       "Delete the current window, and rebalance remaining windows."
+       (interactive)
+       (delete-window)
+       (balance-windows))
+
+     (defun jcf/split-window-horizontally ()
+       "Create a new horizontal split and rebalance windows."
+       (interactive)
+       (split-window-horizontally)
+       (balance-windows))
+
+     (defun jcf/split-window-vertically ()
+       "Create a new vertical split and rebalance windows."
+       (interactive)
+       (split-window-vertically)
+       (balance-windows))
    #+end_src
 
-*** Use evil-search
+** Use global tags
 
    #+begin_src emacs-lisp
-     (setq evil-search-module 'evil-search)
+     (define-key evil-motion-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
    #+end_src
 
-*** Colourise cursor based on state
+** Space to repeat ~find-char~
 
    #+begin_src emacs-lisp
-     (setq evil-emacs-state-cursor  '("red" box))
-     (setq evil-normal-state-cursor '("gray" box))
-     (setq evil-visual-state-cursor '("gray" box))
-     (setq evil-insert-state-cursor '("gray" bar))
-     (setq evil-motion-state-cursor '("gray" box))
+     (define-key evil-normal-state-map (kbd "SPC") 'evil-repeat-find-char)
+     (define-key
+       evil-normal-state-map (kbd "S-SPC") 'evil-repeat-find-char-reverse)
    #+end_src
 
-*** Yank to end of line
+** Use ~escape~ to quit everywhere
 
-    #+begin_src emacs-lisp
-      (define-key evil-normal-state-map "Y" (kbd "y$"))
-    #+end_src
+   #+begin_src emacs-lisp
+     ;; Use escape to quit, and not as a meta-key.
+     (define-key evil-normal-state-map [escape] 'keyboard-quit)
+     (define-key evil-visual-state-map [escape] 'keyboard-quit)
+     (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+     (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+     (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+     (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+     (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+   #+end_src
 
-*** Delete and balance windows
+** ~C-hjkl~ to move around windows
 
-    Used in some ~<leader>~ bindings below.
+   #+begin_src emacs-lisp
+     (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+     (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+     (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+     (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+   #+end_src
 
-    #+begin_src emacs-lisp
-      (defun jcf/delete-window ()
-        "Delete the current window, and rebalance remaining windows."
-        (interactive)
-        (delete-window)
-        (balance-windows))
+** Lazy ex with ~;~
 
-      (defun jcf/split-window-horizontally ()
-        "Create a new horizontal split and rebalance windows."
-        (interactive)
-        (split-window-horizontally)
-        (balance-windows))
+   #+begin_src emacs-lisp
+     (define-key evil-normal-state-map ";" 'evil-ex)
+     (define-key evil-visual-state-map ";" 'evil-ex)
+   #+end_src
 
-      (defun jcf/split-window-vertically ()
-        "Create a new vertical split and rebalance windows."
-        (interactive)
-        (split-window-vertically)
-        (balance-windows))
-    #+end_src
+** Initial evil state per mode
 
-*** Use global tags
+   #+begin_src emacs-lisp
+     (loop for (mode . state)
+           in '((ielm-mode . insert)
+                (nrepl-mode . insert)
+                (shell-mode . insert)
+                (git-rebase-mode . emacs)
+                (term-mode . emacs)
+                (help-mode . emacs)
+                (helm-grep-mode . emacs)
+                (grep-mode . emacs)
+                (bc-menu-mode . emacs)
+                (magit-branch-manager-mode . emacs)
+                (rdictcc-buffer-mode . emacs)
+                (dired-mode . normal)
+                (wdired-mode . normal))
+           do (evil-set-initial-state mode state))
+   #+end_src
 
-    #+begin_src emacs-lisp
-      (define-key evil-motion-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
-    #+end_src
+** Magit from avsej
 
-*** Space to repeat ~find-char~
+   #+begin_src emacs-lisp
+     (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
+     (evil-add-hjkl-bindings magit-commit-mode-map 'emacs)
+     (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs
+       "K" 'magit-discard-item
+       "L" 'magit-key-mode-popup-logging)
+     (evil-add-hjkl-bindings magit-status-mode-map 'emacs
+       "K" 'magit-discard-item
+       "l" 'magit-key-mode-popup-logging
+       "h" 'magit-toggle-diff-refine-hunk)
+   #+end_src
 
-    #+begin_src emacs-lisp
-      (define-key evil-normal-state-map (kbd "SPC") 'evil-repeat-find-char)
-      (define-key
-        evil-normal-state-map (kbd "S-SPC") 'evil-repeat-find-char-reverse)
-    #+end_src
+** Scroll when searching
 
-*** Use ~escape~ to quit everywhere
+   #+begin_src emacs-lisp
+     (defadvice evil-search-next
+         (after advice-for-evil-search-next activate)
+       (evil-scroll-line-to-center (line-number-at-pos)))
 
-    #+begin_src emacs-lisp
-      ;; Use escape to quit, and not as a meta-key.
-      (define-key evil-normal-state-map [escape] 'keyboard-quit)
-      (define-key evil-visual-state-map [escape] 'keyboard-quit)
-      (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-      (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-      (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-      (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-      (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-    #+end_src
-
-*** ~C-hjkl~ to move around windows
-
-    #+begin_src emacs-lisp
-      (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-      (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-      (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-      (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-    #+end_src
-
-*** Lazy ex with ~;~
-
-    #+begin_src emacs-lisp
-      (define-key evil-normal-state-map ";" 'evil-ex)
-      (define-key evil-visual-state-map ";" 'evil-ex)
-    #+end_src
-
-*** Initial evil state per mode
-
-    #+begin_src emacs-lisp
-      (loop for (mode . state)
-            in '((ielm-mode . insert)
-                 (nrepl-mode . insert)
-                 (shell-mode . insert)
-                 (git-rebase-mode . emacs)
-                 (term-mode . emacs)
-                 (help-mode . emacs)
-                 (helm-grep-mode . emacs)
-                 (grep-mode . emacs)
-                 (bc-menu-mode . emacs)
-                 (magit-branch-manager-mode . emacs)
-                 (rdictcc-buffer-mode . emacs)
-                 (dired-mode . normal)
-                 (wdired-mode . normal))
-            do (evil-set-initial-state mode state))
-    #+end_src
-
-*** Magit from avsej
-
-    #+begin_src emacs-lisp
-      (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
-      (evil-add-hjkl-bindings magit-commit-mode-map 'emacs)
-      (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs
-        "K" 'magit-discard-item
-        "L" 'magit-key-mode-popup-logging)
-      (evil-add-hjkl-bindings magit-status-mode-map 'emacs
-        "K" 'magit-discard-item
-        "l" 'magit-key-mode-popup-logging
-        "h" 'magit-toggle-diff-refine-hunk)
-    #+end_src
-
-*** Scroll when searching
-
-    #+begin_src emacs-lisp
-      (defadvice evil-search-next
-          (after advice-for-evil-search-next activate)
-        (evil-scroll-line-to-center (line-number-at-pos)))
-
-      (defadvice evil-search-previous
-          (after advice-for-evil-search-previous activate)
-        (evil-scroll-line-to-center (line-number-at-pos)))
-    #+end_src
+     (defadvice evil-search-previous
+         (after advice-for-evil-search-previous activate)
+       (evil-scroll-line-to-center (line-number-at-pos)))
+   #+end_src
