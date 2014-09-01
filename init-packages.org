@@ -294,7 +294,11 @@
            (ido-ubiquitous-mode t))
 
          (use-package idomenu)))
+   #+end_src
 
+** smex
+
+   #+begin_src emacs-lisp
      (use-package smex :init
        (setq smex-save-file
              (expand-file-name ".smex-items" user-emacs-directory)))
