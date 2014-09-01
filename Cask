@@ -139,6 +139,7 @@
 (depends-on "rainbow-mode")
 (depends-on "redshank")
 (depends-on "regex-tool")
+(depends-on "restclient")
 (depends-on "rinari")
 (depends-on "robe")
 (depends-on "rspec-mode")
