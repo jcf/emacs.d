@@ -59,6 +59,7 @@
        "fj" 'dired-jump
        "fl" 'helm-occur
        "fp" 'helm-projectile
+       "fy" 'helm-show-kill-ring
        "gb" 'magit-blame-mode
        "gc" 'magit-commit
        "gl" 'magit-log
