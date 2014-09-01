@@ -40,7 +40,11 @@
    #+begin_src emacs-lisp
      (require 'evil-leader)
      (setq evil-leader/leader ",")
+   #+end_src
 
+*** Global
+
+   #+begin_src emacs-lisp
      (evil-leader/set-key
        "a"  'projectile-toggle-between-implementation-and-test
        "b"  'ibuffer
@@ -79,7 +83,7 @@
        "x"  'execute-extended-command)
    #+end_src
 
-   Org-specific leader bindings.
+*** Org
 
    #+begin_src emacs-lisp
      (evil-leader/set-key-for-mode 'org-mode
@@ -88,7 +92,7 @@
        "ot" 'org-babel-tangle)
    #+end_src
 
-   Clojure-specific leader bindings.
+*** Clojure
 
    #+begin_src emacs-lisp
      (evil-leader/set-key-for-mode 'clojure-mode
@@ -106,7 +110,7 @@
        "ru" 'cljr-add-use-to-ns)
    #+end_src
 
-   Ruby-specific leader bindings.
+*** Ruby
 
    #+begin_src emacs-lisp
      (evil-leader/set-key-for-mode 'ruby-mode
@@ -114,7 +118,7 @@
        "V" 'rspec-verify-all)
    #+end_src
 
-   Cucumber-specific bindings.
+*** Cucumber
 
    #+begin_src emacs-lisp
      (evil-leader/set-key-for-mode 'feature-mode
