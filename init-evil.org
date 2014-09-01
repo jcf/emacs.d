@@ -6,6 +6,9 @@
 
 * Evil
 
+  Emacs is a fantastic environment to work in. With Vim-style
+  keybindings editing text is only made easier.
+
 ** Setup
 
    #+begin_src emacs-lisp
@@ -190,7 +193,16 @@
      (require 'evil-jumper)
    #+end_src
 
-** Configuration
+** Motions around wrapped lines
+
+   Make up and down step through wrapped lines.
+
+   #+begin_src emacs-lisp
+     (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+     (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+     (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+   #+end_src
 
 ** Default cursor
 
