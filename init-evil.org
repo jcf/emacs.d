@@ -274,8 +274,10 @@
 
    #+begin_src emacs-lisp
      (define-key evil-normal-state-map (kbd "SPC") 'evil-repeat-find-char)
-     (define-key
-       evil-normal-state-map (kbd "S-SPC") 'evil-repeat-find-char-reverse)
+     (define-key evil-normal-state-map (kbd "S-SPC") 'evil-repeat-find-char-reverse)
+
+     (define-key evil-motion-state-map (kbd "SPC") 'evil-repeat-find-char)
+     (define-key evil-motion-state-map (kbd "S-SPC") 'evil-repeat-find-char-reverse)
    #+end_src
 
 ** Use ~escape~ to quit everywhere
