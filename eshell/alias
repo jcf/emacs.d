@@ -1,5 +1,5 @@
 alias clear recenter 0
-alias d g diff $*
+alias d (progn (magit-status ".") nil)
 alias du du -kh
 alias e find-file $1
 alias ff find-file $1
