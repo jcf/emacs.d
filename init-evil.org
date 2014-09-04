@@ -96,8 +96,8 @@
 
    #+begin_src emacs-lisp
      (evil-leader/set-key-for-mode 'clojure-mode
-       "v" 'clojure-test-run-test
-       "V" 'clojure-test-run-tests
+       "v" 'cider-test-run-test
+       "V" 'cider-test-run-tests
        "cc" 'cider-connect
        "cj" 'cider-jack-in
        "cq" 'cider-quit
