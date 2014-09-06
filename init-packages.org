@@ -70,6 +70,13 @@
        :commands svn-status)
    #+end_src
 
+** Editorconfig
+
+   #+begin_src emacs-lisp
+     (use-package editorconfig :mode
+       ("\\.editorconfig\\'" . conf-unix-mode))
+   #+end_src
+
 ** erc
 
    #+begin_src emacs-lisp
@@ -174,6 +181,13 @@
 
    #+begin_src emacs-lisp
      (use-package google-this)
+   #+end_src
+
+** Highlight escape sequences
+
+   #+begin_src emacs-lisp
+     (use-package highlight-escape-sequences :init
+       (hes-mode))
    #+end_src
 
 ** Highlight symbols
@@ -296,14 +310,6 @@
          (use-package idomenu)))
    #+end_src
 
-** smex
-
-   #+begin_src emacs-lisp
-     (use-package smex :init
-       (setq smex-save-file
-             (expand-file-name ".smex-items" user-emacs-directory)))
-   #+end_src
-
 ** Key Chord
 
    #+BEGIN_QUOTE
@@ -382,6 +388,19 @@
         (projectile-global-mode))
     #+end_src
 
+** recentf
+
+   #+begin_src emacs-lisp
+     (use-package recentf
+       :init
+       (recentf-mode 1)
+
+       :config
+       (setq
+        recentf-max-saved-items 1000
+        recentf-exclude '("/tmp/" "/ssh:")))
+    #+end_src
+
 ** regex-tool
 
    #+begin_src emacs-lisp
@@ -455,6 +474,14 @@
          (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p)))
    #+end_src
 
+** smex
+
+   #+begin_src emacs-lisp
+     (use-package smex :init
+       (setq smex-save-file
+             (expand-file-name ".smex-items" user-emacs-directory)))
+   #+end_src
+
 ** The Silver Surfer (~ag~)
 
    A [[https://github.com/ggreer/the_silver_searcher][code searching tool]] similar to ack, with a focus on speed.
@@ -474,33 +501,6 @@
        :bind
        ("M-?" . ag-project))
    #+end_src
-
-** Highlight escape sequences
-
-   #+begin_src emacs-lisp
-     (use-package highlight-escape-sequences :init
-       (hes-mode))
-   #+end_src
-
-** Editorconfig
-
-   #+begin_src emacs-lisp
-     (use-package editorconfig :mode
-       ("\\.editorconfig\\'" . conf-unix-mode))
-   #+end_src
-
-** recentf
-
-   #+begin_src emacs-lisp
-     (use-package recentf
-       :init
-       (recentf-mode 1)
-
-       :config
-       (setq
-        recentf-max-saved-items 1000
-        recentf-exclude '("/tmp/" "/ssh:")))
-    #+end_src
 
 ** Undo tree
 
