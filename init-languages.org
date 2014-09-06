@@ -19,10 +19,10 @@
        :commands (clojure-mode scratch)
        :config
        (progn
-         (use-package clj-refactor)
+         (use-package clj-refactor :diminish clj-refactor)
          (use-package cljsbuild-mode)
          (use-package elein)
-         (use-package typed-clojure-mode))
+         (use-package typed-clojure-mode :diminish typed-clojure))
 
        (defun slime-clojure-repl-setup ()
          "Some REPL setup additional to that in durendal."
