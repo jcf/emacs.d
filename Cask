@@ -157,6 +157,7 @@
 (depends-on "slamhound")
 (depends-on "slim-mode")
 (depends-on "slime")
+(depends-on "slime-company")
 (depends-on "smartparens")
 (depends-on "smarty-mode")
 (depends-on "smex")
