@@ -69,6 +69,7 @@
    #+begin_src emacs-lisp
      (global-set-key [remap execute-extended-command] 'helm-M-x)
    #+end_src
+
 ** Projectile
 
    #+begin_src emacs-lisp
