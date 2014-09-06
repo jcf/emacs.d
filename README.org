@@ -156,8 +156,8 @@
      'after-init-hook
      (lambda ()
        (jcf/load-org "defuns")
-       (jcf/load-org "genesis")
        (jcf/load-org "ubiquitous")
+       (jcf/load-org "genesis")
        (jcf/load-org "presentation")
        (jcf/load-org "evil")
        (jcf/load-org "helm")
