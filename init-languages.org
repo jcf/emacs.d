@@ -24,6 +24,16 @@
          (use-package elein)
          (use-package typed-clojure-mode :diminish typed-clojure))
 
+       (define-clojure-indent
+         (defroutes 'defun)
+         (GET 2)
+         (POST 2)
+         (PUT 2)
+         (DELETE 2)
+         (HEAD 2)
+         (ANY 2)
+         (context 2))
+
        (defun slime-clojure-repl-setup ()
          "Some REPL setup additional to that in durendal."
          (when (string-equal (slime-lisp-implementation-name) "clojure")
