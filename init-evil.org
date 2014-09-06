@@ -59,6 +59,7 @@
        "fa" 'helm-ag
        "fb" 'helm-buffers-list
        "ff" 'helm-find-files
+       "fg" 'helm-ls-git-ls
        "fi" 'helm-semantic-or-imenu
        "fj" 'dired-jump
        "fl" 'helm-occur
