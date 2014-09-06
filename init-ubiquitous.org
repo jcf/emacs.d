@@ -75,6 +75,7 @@
      (when (memq window-system '(mac ns))
        (exec-path-from-shell-initialize))
    #+END_SRC
+
 ** guide-key
 
    [[https://github.com/kai2nenobu/guide-key][guide-key]] displays the available key bindings automatically and
