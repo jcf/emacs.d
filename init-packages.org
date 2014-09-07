@@ -63,6 +63,22 @@
            :config (global-dired-hide-details-mode -1))))
    #+end_src
 
+** Dizzee
+
+   #+begin_src emacs-lisp
+     (use-package dizzee
+       :commands (jcf-lein-datomic-start jcf-lein-headless-start)
+       :config
+       (progn
+         (dz-defservice jcf-lein-headless
+                        "lein"
+                        :cd "~/"
+                        :args ("repl" ":headless"))
+
+         (dz-defservice jcf-lein-datomic
+                        "lein"
+                        :args ("datomic"))))
+   #+end_src
 ** dsvn
 
    #+begin_src emacs-lisp

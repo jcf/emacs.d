@@ -30,6 +30,7 @@
 (depends-on "diff-hl")
 (depends-on "diminish")
 (depends-on "dired+")
+(depends-on "dizzee")
 (depends-on "drag-stuff")
 (depends-on "dsvn")
 (depends-on "editorconfig")
