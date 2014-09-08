@@ -16,7 +16,7 @@
 
    #+begin_src emacs-lisp
      (use-package clojure-mode
-       :commands (clojure-mode scratch)
+       :commands (clojure-mode scratch cider cider-jack-in)
        :config
        (progn
          (use-package clj-refactor :diminish clj-refactor)
@@ -54,25 +54,32 @@
        (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
        (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
        (add-hook 'clojure-mode-hook 'typed-clojure-mode)
-       (add-hook 'clojure-mode-hook 'subword-mode))
+       (add-hook 'clojure-mode-hook 'subword-mode)
 
-     (use-package cider
-       :commands (cider cider-jack-in)
-       :init
-       (setq nrepl-popup-stacktraces nil)
+       (use-package cider
+         :init
+         (setq cider-auto-select-error-buffer nil
+               cider-repl-pop-to-buffer-on-connect nil
+               cider-repl-use-clojure-font-lock t
+               cider-repl-wrap-history t
+               cider-repl-history-size 1000
+               cider-repl-history-file (f-expand ".cider-history"
+                                                 user-emacs-directory)
+               nrepl-hide-special-buffers t
+               nrepl-popup-stacktraces nil)
 
-       :config
-       (progn
-         (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-         (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-         (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-         (add-hook 'cider-repl-mode-hook 'subword-mode)
+         :config
+         (progn
+           (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+           (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+           (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+           (add-hook 'cider-repl-mode-hook 'subword-mode)
 
-         ;; nrepl isn't based on comint
-         (add-hook 'cider-repl-mode-hook
-                   (lambda () (setq show-trailing-whitespace nil)))
+           ;; nrepl isn't based on comint
+           (add-hook 'cider-repl-mode-hook
+                     (lambda () (setq show-trailing-whitespace nil)))
 
-         (use-package slamhound)))
+           (use-package slamhound))))
    #+end_src
 
 ** Clojurescript
