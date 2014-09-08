@@ -809,15 +809,21 @@
 ** Shell
 
    #+begin_src emacs-lisp
-     (use-package sh-mode
-       :mode (("\\.zsh\\'" . sh-mode)
-              ("\\zlogin\\'" . sh-mode)
-              ("\\zlogout\\'" . sh-mode)
-              ("\\zpretzorc\\'" . sh-mode)
-              ("\\zprofile\\'" . sh-mode)
-              ("\\zshenv\\'" . sh-mode)
-              ("\\zshrc\\'" . sh-mode))
-       )
+     (defun jcf-setup-sh-mode ()
+       (interactive)
+       (setq sh-basic-offset 2
+             sh-indentation 2))
+
+     (add-hook 'sh-mode-hook 'jcf-setup-sh-mode)
+
+     (add-auto-mode 'sh-mode
+                    "\\.zsh\\'"
+                    "\\'zlogin\\'"
+                    "\\'zlogout\\'"
+                    "\\'zpretzorc\\'"
+                    "\\'zprofile\\'"
+                    "\\'zshenv\\'"
+                    "\\'zshrc\\'")
    #+end_src
 
 ** Slim
