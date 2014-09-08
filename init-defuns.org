@@ -105,3 +105,11 @@
              (error "Cannot open tramp file")
            (browse-url (concat "file://" file-name)))))
    #+end_src
+
+** ~jcf/log-startup-time~
+
+   #+begin_src emacs-lisp
+     (defun jcf/log-startup-time ()
+       (message "init completed in %.2fms"
+                (jcf/time-subtract-millis after-init-time before-init-time)))
+   #+end_src

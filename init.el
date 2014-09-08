@@ -72,6 +72,8 @@
    (jcf/load-org "window-management")
    (jcf/load-org "version-control")
    (jcf/load-org "languages")
-   (jcf/load-org "locales")))
+   (jcf/load-org "locales")
+
+   (jcf/log-startup-time)))
 
 ;; Load\ Org\ files:1 ends here
