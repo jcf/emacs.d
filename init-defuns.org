@@ -10,6 +10,19 @@
   Here we define utility functions we'll use in both subsequent
   configuration, and interactively.
 
+** ~add-auto-mode~
+
+   This function adds a more convenient way of defining a list of file
+   patterns that should be attributed to a given mode.
+
+   #+begin_src emacs-lisp
+     (defun add-auto-mode (mode &rest patterns)
+       "Add entries to `auto-mode-alist' to use `MODE' for all given file
+     `PATTERNS'."
+       (dolist (pattern patterns)
+         (add-to-list 'auto-mode-alist (cons pattern mode))))
+   #+end_src
+
 ** ~after-load~
 
    This function evaluates of body of Emacs Lisp after a named feature
@@ -27,30 +40,19 @@
           '(progn ,@body)))
    #+end_src
 
-** ~add-auto-mode~
+** ~browse-current-file~
 
-   This function adds a more convenient way of defining a list of file
-   patterns that should be attributed to a given mode.
-
-   #+begin_src emacs-lisp
-     (defun add-auto-mode (mode &rest patterns)
-       "Add entries to `auto-mode-alist' to use `MODE' for all given file
-     `PATTERNS'."
-       (dolist (pattern patterns)
-         (add-to-list 'auto-mode-alist (cons pattern mode))))
-   #+end_src
-
-** ~jcf/directory-of-library~
-
-   This function will provide you with the directory containing the
-   named library.
+   This function opens the current file using ~browse-url~. I
+   typically use ~gf~ via Evil making this somewhat redundent.
 
    #+begin_src emacs-lisp
-     (autoload 'find-library-name "find-func")
-     (defun jcf/directory-of-library (library-name)
-       "Return the directory in which the `LIBRARY-NAME' load file is found."
-       (file-name-as-directory
-        (file-name-directory (find-library-name library-name))))
+     (defun browse-current-file ()
+       "Open the current file as a URL using `browse-url'."
+       (interactive)
+       (let ((file-name (buffer-file-name)))
+         (if (tramp-tramp-file-p file-name)
+             (error "Cannot open tramp file")
+           (browse-url (concat "file://" file-name)))))
    #+end_src
 
 ** ~delete-this-file~
@@ -68,6 +70,26 @@
          (kill-this-buffer)))
    #+end_src
 
+** ~jcf/directory-of-library~
+
+   This function will provide you with the directory containing the
+   named library.
+
+   #+begin_src emacs-lisp
+     (autoload 'find-library-name "find-func")
+     (defun jcf/directory-of-library (library-name)
+       "Return the directory in which the `LIBRARY-NAME' load file is found."
+       (file-name-as-directory
+        (file-name-directory (find-library-name library-name))))
+   #+end_src
+
+** ~jcf/log-startup-time~
+
+   #+begin_src emacs-lisp
+     (defun jcf/log-startup-time ()
+       (message "init completed in %.2fms"
+                (jcf/time-subtract-millis after-init-time before-init-time)))
+   #+end_src
 ** ~rename-buffer-and-file~
 
    This function renames the current buffer, and the underlying file
@@ -89,27 +111,4 @@
               (t
                (rename-file filename new-name t)
                (set-visited-file-name new-name t t)))))))
-   #+end_src
-
-** ~browse-current-file~
-
-   This function opens the current file using ~browse-url~. I
-   typically use ~gf~ via Evil making this somewhat redundent.
-
-   #+begin_src emacs-lisp
-     (defun browse-current-file ()
-       "Open the current file as a URL using `browse-url'."
-       (interactive)
-       (let ((file-name (buffer-file-name)))
-         (if (tramp-tramp-file-p file-name)
-             (error "Cannot open tramp file")
-           (browse-url (concat "file://" file-name)))))
-   #+end_src
-
-** ~jcf/log-startup-time~
-
-   #+begin_src emacs-lisp
-     (defun jcf/log-startup-time ()
-       (message "init completed in %.2fms"
-                (jcf/time-subtract-millis after-init-time before-init-time)))
    #+end_src
