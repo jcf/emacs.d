@@ -20,6 +20,15 @@
     (setq helm-command-prefix-key "C-c h")
   #+end_src
 
+** Bring back ~helm--make-source~
+
+   Someone needs this, but it's been renamed in a recent version of
+   ~helm-source~.
+
+   #+begin_src emacs-lisp
+     (defalias 'helm--make-source 'helm-make-source)
+   #+end_src
+
 ** Require built-ins
 
   #+begin_src emacs-lisp
