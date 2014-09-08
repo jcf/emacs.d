@@ -63,6 +63,7 @@
        "fi" 'helm-semantic-or-imenu
        "fj" 'dired-jump
        "fl" 'helm-occur
+       "fm" 'helm-mini
        "fp" 'helm-projectile
        "fy" 'helm-show-kill-ring
        "gb" 'magit-blame-mode
