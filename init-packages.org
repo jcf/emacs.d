@@ -128,6 +128,7 @@
 
    #+begin_src emacs-lisp
      (use-package eshell
+       :commands eshell
        :init
        (setq
         eshell-buffer-shorthand t
@@ -136,7 +137,9 @@
         eshell-glob-case-insensitive t
         eshell-scroll-to-bottom-on-input 'all)
        :config
-       (eshell/export "NODE_NO_READLINE=1"))
+       (add-hook 'eshell-mode-hook
+                 (lambda ()
+                   (eshell/export "NODE_NO_READLINE=1"))))
    #+end_src
 
 ** Expand region
@@ -296,15 +299,9 @@
 ** ido
 
    #+begin_src emacs-lisp
-     (use-package ido-vertical-mode)
-
      (use-package ido
-       :init
+       :idle
        (progn
-         (ido-mode t)
-         (ido-everywhere t)
-         (ido-vertical-mode 1)
-
          (setq
           ido-auto-merge-work-directories-length 0
           ido-default-buffer-method 'selected-window
@@ -312,18 +309,21 @@
           ido-use-filename-at-point nil
           ido-use-virtual-buffers t)
 
+         (ido-mode t)
+         (ido-everywhere t)
+         (use-package ido-vertical-mode :init (ido-vertical-mode 1))
+         (use-package ido-ubiquitous :init (ido-ubiquitous-mode t))
+         (use-package idomenu))
+
+       :config
+       (progn
          ;; Allow the same buffer to be open in different frames.
          ;;
          ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
          (add-hook
           'ido-setup-hook
           (lambda ()
-            (define-key ido-completion-map [up] 'previous-history-element)))
-
-         (use-package ido-ubiquitous :init
-           (ido-ubiquitous-mode t))
-
-         (use-package idomenu)))
+            (define-key ido-completion-map [up] 'previous-history-element)))))
    #+end_src
 
 ** Key Chord
