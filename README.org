@@ -165,7 +165,6 @@
          (jcf/load-org "osx"))
        (jcf/load-org "org")
        (jcf/load-org "packages")
-       (jcf/load-org "sessions")
        (jcf/load-org "window-management")
        (jcf/load-org "version-control")
        (jcf/load-org "languages")
