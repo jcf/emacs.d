@@ -205,10 +205,11 @@
    Make up and down step through wrapped lines.
 
    #+begin_src emacs-lisp
-     (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
-     (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
-     (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
-     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+     (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+     (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+
+     (define-key evil-normal-state-map (kbd "gj") 'evil-next-line)
+     (define-key evil-normal-state-map (kbd "gk") 'evil-previous-line)
    #+end_src
 
 ** Default cursor
