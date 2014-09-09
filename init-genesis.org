@@ -53,6 +53,22 @@
        (setq backup-directory-alist `(("." . backups-dir))))
    #+end_src
 
+** Fill column
+
+   From http://programmers.stackexchange.com/a/148678:
+
+   #+begin_quote
+   [T]his common coding standard is a result of the IBM's 1928 80
+   column punched card format, since many coding standards date back
+   to a time when programs were written on punch cards, one card/line
+   at a time, and even the transition to wider screens didn't alter
+   the fact that code gets harder to read the wider it becomes.
+   #+end_quote
+
+   #+begin_src emacs-lisp
+     (setq-default fill-column 80)
+   #+end_src
+
 ** grep
 
    #+begin_src emacs-lisp
