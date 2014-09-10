@@ -65,6 +65,7 @@
                cider-repl-history-size 1000
                cider-repl-history-file (f-expand ".cider-history"
                                                  user-emacs-directory)
+               cider-show-error-buffer nil
                nrepl-hide-special-buffers t
                nrepl-popup-stacktraces nil)
 
