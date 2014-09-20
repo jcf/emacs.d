@@ -61,6 +61,7 @@
 (depends-on "fullframe")
 (depends-on "ggtags")
 (depends-on "gh")
+(depends-on "ghc")
 (depends-on "ghci-completion")
 (depends-on "git-blame")
 (depends-on "git-commit-mode")
