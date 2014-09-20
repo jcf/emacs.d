@@ -127,6 +127,7 @@
 (depends-on "org-plus-contrib")
 (depends-on "org-pomodoro")
 (depends-on "osx-location")
+(depends-on "package-build")
 (depends-on "packed")
 (depends-on "page-break-lines")
 (depends-on "pallet")
