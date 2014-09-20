@@ -155,6 +155,7 @@
 (depends-on "scss-mode")
 (depends-on "session")
 (depends-on "shut-up")
+(depends-on "simple-httpd")
 (depends-on "skewer-less")
 (depends-on "skewer-mode")
 (depends-on "slamhound")
