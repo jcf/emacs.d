@@ -5,6 +5,7 @@
 (depends-on "ace-jump-mode")
 (depends-on "ag")
 (depends-on "anzu")
+(depends-on "async")
 (depends-on "auto-compile")
 (depends-on "bind-key")
 (depends-on "bug-reference-github")
