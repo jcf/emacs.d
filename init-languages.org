@@ -413,7 +413,12 @@
               ("\\.jshintrc\\'" . json-mode))
        :commands json-mode
        :init
-       (add-hook 'json-mode-hook 'rainbow-delimiters-mode))
+       (progn
+         (defun jcf-json-mode-hook ()
+           (setq js-indent-level 2)
+           (rainbow-delimiters-mode))
+
+         (add-hook 'json-mode-hook 'jcf-json-mode-hook)))
 
      (use-package jsx-mode
        :commands jsx-mode
