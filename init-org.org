@@ -84,8 +84,8 @@
 
    #+begin_src emacs-lisp
      (setq org-directory "~/Dropbox/Org"
-           org-agenda-files '("~/Dropbox/Org/")
-           org-default-notes-file "~/Dropbox/Org/refile.org")
+           org-agenda-files '("~/Dropbox/Agenda/")
+           org-default-notes-file "~/Dropbox/Agenda/refile.org")
    #+end_src
 
 ** TODOs
