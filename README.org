@@ -9,6 +9,13 @@
 
 * Getting Started
 
+  #+name: emacs-d-version
+  #+begin_src sh :exports none
+    cd ~/.emacs.d && git rev-parse --short HEAD
+  #+end_src
+
+  *Version call_emacs-d-version().*
+
   First things first, we need to setup load paths and get any packages
   that don't live in ELPA installed. For convenience, this is handled
   by [[pallet][Pallet]] and [[cask][Cask]].

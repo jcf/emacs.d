@@ -164,7 +164,16 @@
      ;;                 (insert (match-string 0))))))
    #+end_src
 
-** Clojure support
+** Babel languages
+
+   #+begin_src emacs-lisp
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((R . t)
+        (sh . t)))
+   #+end_src
+
+   Clojure support via Cider.
 
    #+begin_src emacs-lisp
      (require 'ob-clojure)
