@@ -97,6 +97,40 @@
                    (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)"))))
    #+end_src
 
+** Capture templates
+
+   #+begin_src emacs-lisp
+     (setq org-capture-templates
+           (quote (("t" "todo" entry (file "~/Dropbox/Agenda/refile.org")
+                    "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                   ("r" "respond" entry (file "~/Dropbox/Agenda/refile.org")
+                    "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+                   ("n" "note" entry (file "~/Dropbox/Agenda/refile.org")
+                    "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+                   ("j" "Journal" entry (file+datetree "~/git/org/diary.org")
+                    "* %?\n%U\n" :clock-in t :clock-resume t)
+                   ("w" "org-protocol" entry (file "~/Dropbox/Agenda/refile.org")
+                    "* TODO Review %c\n%U\n" :immediate-finish t)
+                   ("m" "Meeting" entry (file "~/Dropbox/Agenda/refile.org")
+                    "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+                   ("p" "Phone call" entry (file "~/Dropbox/Agenda/refile.org")
+                    "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+                   ("h" "Habit" entry (file "~/Dropbox/Agenda/refile.org")
+                    "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
+   #+end_src
+
+** Remove empty LOGBOOK drawers on clock out
+
+   #+begin_src emacs-lisp
+     (defun jcf/remove-empty-drawer-on-clock-out ()
+       (interactive)
+       (save-excursion
+         (beginning-of-line 0)
+         (org-remove-empty-drawer-at (point))))
+
+     (add-hook 'org-clock-out-hook 'jcf/remove-empty-drawer-on-clock-out 'append)
+   #+end_src
+
 ** Org clock
 
    #+begin_src emacs-lisp
