@@ -74,6 +74,8 @@
        "hm" 'describe-mode
        "hp" 'describe-package
        "hv" 'describe-variable
+       "oa" 'org-agenda
+       "oc" 'org-capture
        "pb" 'projectile-switch-to-buffer
        "pd" 'projectile-switch-project
        "pf" 'projectile-find-file
