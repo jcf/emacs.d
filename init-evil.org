@@ -58,6 +58,7 @@
        "er" 'eval-region
        "fa" 'helm-ag
        "fb" 'helm-buffers-list
+       "fd" 'projectile-dired
        "ff" 'helm-find-files
        "fg" 'helm-ls-git-ls
        "fi" 'helm-semantic-or-imenu
