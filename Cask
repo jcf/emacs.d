@@ -33,6 +33,7 @@
 (depends-on "diminish")
 (depends-on "dired+")
 (depends-on "dizzee")
+(depends-on "dockerfile-mode")
 (depends-on "drag-stuff")
 (depends-on "dsvn")
 (depends-on "editorconfig")
