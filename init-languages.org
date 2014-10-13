@@ -742,7 +742,15 @@
      (use-package python
        :mode (("\\.py\\'" . python-mode)
               ("SConstruct\\'" . python-mode)
-              ("SConscript\\'" . python-mode)))
+              ("SConscript\\'" . python-mode))
+       :init
+       (add-hook 'python-mode-hook 'elpy-initialize-local-variables)
+       :config
+       (use-package elpy
+         :init
+         (progn
+           (elpy-enable)
+           (elpy-use-ipython))))
    #+end_src
 
 ** Ruby
