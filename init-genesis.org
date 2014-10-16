@@ -6,9 +6,8 @@
 
 * Genesis
 
-  In the beginning Org mode configured the basics and the
-  essentials. These were the fundamentals that make Emacs behave the
-  way we want.
+  In the beginning Org mode configured the basics and the essentials. These were
+  the fundamentals that make Emacs behave the way we want.
 
 ** The basics
 
@@ -18,9 +17,9 @@
      (setq user-mail-address "james@logi.cl")
    #+end_src
 
-   These settings are the first steps towards making Emacs behave the
-   way we want. Each variable has corresponding documentation
-   accessible via ~describe-variable~.
+   These settings are the first steps towards making Emacs behave the way we
+   want. Each variable has corresponding documentation accessible via
+   ~describe-variable~.
 
    #+begin_src emacs-lisp
      (setq-default
@@ -58,11 +57,11 @@
    From http://programmers.stackexchange.com/a/148678:
 
    #+begin_quote
-   [T]his common coding standard is a result of the IBM's 1928 80
-   column punched card format, since many coding standards date back
-   to a time when programs were written on punch cards, one card/line
-   at a time, and even the transition to wider screens didn't alter
-   the fact that code gets harder to read the wider it becomes.
+   [T]his common coding standard is a result of the IBM's 1928 80 column punched
+   card format, since many coding standards date back to a time when programs
+   were written on punch cards, one card/line at a time, and even the transition
+   to wider screens didn't alter the fact that code gets harder to read the
+   wider it becomes.
    #+end_quote
 
    #+begin_src emacs-lisp
@@ -148,8 +147,7 @@
 
 ** Workaround for subword not being available
 
-   See https://github.com/purcell/emacs.d/issues/138 for more
-   information.
+   See https://github.com/purcell/emacs.d/issues/138 for more information.
 
    #+begin_src emacs-lisp
      (when (eval-when-compile (string< "24.3.1" emacs-version))
@@ -534,11 +532,10 @@
 
 ** Start a server
 
-   By running an Emacs server we can have new Emacs instances start
-   instantly.
+   By running an Emacs server we can have new Emacs instances start instantly.
 
-   This is made possible by the editor configuration in the [[https://github.com/jcf/prezto][jcf/prezto]]
-   repo, combined with the emacsserver executable in [[https://github.com/jcf/dotfiles][jcf/dotfiles]].
+   This is made possible by the editor configuration in the [[https://github.com/jcf/prezto][jcf/prezto]] repo,
+   combined with the emacsserver executable in [[https://github.com/jcf/dotfiles][jcf/dotfiles]].
 
    - https://github.com/jcf/dotfiles/blob/master/roles/emacs/files/emacsserver
    - https://github.com/jcf/prezto/blob/14354ea203fa3f7035208cb0d76ca8e600258d39/runcoms/zprofile#L25
