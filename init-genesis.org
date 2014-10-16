@@ -548,6 +548,11 @@
        (require 'server)
        (unless (server-running-p)
          (server-start)))
+   #+end_src
 
-     (add-hook 'after-init-hook 'jcf/start-server)
+   We start the server immediately because at this point the ~after-init-hook~
+   will have already fired.
+
+   #+begin_src emacs-lisp
+     (jcf/start-server)
    #+end_src
