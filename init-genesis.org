@@ -530,6 +530,15 @@
      (setq-default regex-tool-backend 'perl)
    #+END_SRC
 
+** Automatically wrap long lines
+
+   I end up wrapping long lines by hand way too much. This tells Emacs to
+   automate the work in all modes that derive from text mode.
+
+   #+begin_src emacs-lisp
+     (add-hook 'text-mode-hook 'turn-on-auto-fill)
+   #+end_src
+
 ** Start a server
 
    By running an Emacs server we can have new Emacs instances start instantly.
