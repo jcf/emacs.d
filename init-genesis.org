@@ -68,6 +68,16 @@
      (setq-default fill-column 80)
    #+end_src
 
+** Initial major mode
+
+   When you start up Emacs you get a nice little scratch buffer to start writing
+   in. By default you'll have ~lisp-mode~, but it's both faster, and easier
+   starting in ~org-mode~.
+
+   #+begin_src emacs-lisp
+     (setq initial-major-mode 'org-mode)
+   #+end_src
+
 ** Sensible window splitting
 
    Some packages use ~split-window-sensibly~ in order to open a split. The
