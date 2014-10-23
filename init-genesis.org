@@ -78,6 +78,14 @@
      (setq initial-major-mode 'org-mode)
    #+end_src
 
+   When we create our default buffer using ~org-mode~ we generate a nice welcome
+   message. I'm quite tempted to remove this…
+
+   #+begin_src emacs-lisp
+     (setq-default initial-scratch-message
+                   (concat "# Happy hacking " (or user-login-name "") "!\n"))
+   #+end_src
+
 ** Sensible window splitting
 
    Some packages use ~split-window-sensibly~ in order to open a split. The
