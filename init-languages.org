@@ -16,7 +16,7 @@
 
    #+begin_src emacs-lisp
      (use-package clojure-mode
-       :commands (clojure-mode scratch cider cider-jack-in)
+       :commands (clojure-mode cider cider-jack-in)
        :config
        (progn
          (use-package clj-refactor :diminish clj-refactor)
@@ -108,7 +108,6 @@
 ** Common-Lisp
 
    #+begin_src emacs-lisp
-     ;; See http://bc.tech.coop/blog/070927.html
      (use-package lisp-mode
        :mode (("\\.cl\\'" . lisp-mode))
        :config
@@ -117,9 +116,9 @@
            (require 'slime)
            (normal-mode))
 
-         ;; From http://bc.tech.coop/blog/070515.html
          (defun lispdoc ()
-           "Searches lispdoc.com for SYMBOL, which is by default the symbol currently under the curser"
+           "Searches lispdoc.com for SYMBOL, which is by default the symbol currently
+     under the cursor."
            (interactive)
            (let* ((word-at-point (word-at-point))
                   (symbol-at-point (symbol-at-point))
@@ -143,18 +142,6 @@
                                        "basic+search")))))))
 
          (define-key lisp-mode-map (kbd "C-c l") 'lispdoc)))
-
-     (use-package slime
-       :commands slime-mode
-       :config
-       (progn
-         (when (executable-find "sbcl")
-           (add-to-list 'slime-lisp-implementations
-                        '(sbcl ("sbcl") :coding-system utf-8-unix)))
-
-         (when (executable-find "lisp")
-           (add-to-list 'slime-lisp-implementations
-                        '(cmucl ("lisp") :coding-system iso-latin-1-unix)))))
    #+end_src
 
 ** Configuration
@@ -455,9 +442,6 @@
 
          (require 'lively)
 
-         (setq-default initial-scratch-message
-                       (concat ";; Happy hacking " (or user-login-name "") "!\n\n"))
-
          (defun jcf-eval-last-sexp-or-region (beg end prefix)
            "Eval region from BEG to END if active, otherwise the last sexp."
            (interactive "r\nP")
@@ -586,7 +570,7 @@
      (use-package redshank
        :commands redshank-mode
        :diminish redshank-mode
-       :init
+       :config
        (use-package paredit))
 
      (require 'derived)
@@ -870,9 +854,18 @@
 
    #+begin_src emacs-lisp
      (use-package slime
+       :commands slime-mode
        :config
        (progn
          (require 'hippie-expand-slime)
+
+         (when (executable-find "sbcl")
+           (add-to-list 'slime-lisp-implementations
+                        '(sbcl ("sbcl") :coding-system utf-8-unix)))
+
+         (when (executable-find "lisp")
+           (add-to-list 'slime-lisp-implementations
+                        '(cmucl ("lisp") :coding-system iso-latin-1-unix)))
 
          (defun jcf-slime-setup ()
            "Mode setup function for slime lisp buffers."
@@ -890,7 +883,6 @@
            "Mode setup function for slime REPL."
            (jcf-lisp-setup)
            (set-up-slime-hippie-expand)
-           (set-up-slime-ac t)
            (setq show-trailing-whitespace nil))
 
          (after-load 'slime-repl
