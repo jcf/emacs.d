@@ -50,7 +50,7 @@
        "b"  'ibuffer
        "db" 'kill-buffer
        "df" 'delete-this-file
-       "dw" 'jcf/delete-window
+       "dw" 'jcf-delete-window
        "eb" 'eval-buffer
        "ed" 'eval-defun
        "ee" 'eval-expression
@@ -80,10 +80,10 @@
        "pb" 'projectile-switch-to-buffer
        "pd" 'projectile-switch-project
        "pf" 'projectile-find-file
-       "sd" 'jcf/delete-window
+       "sd" 'jcf-delete-window
        "sf" 'delete-other-windows
-       "ss" 'jcf/split-window-horizontally
-       "sv" 'jcf/split-window-vertically
+       "ss" 'jcf-split-window-horizontally
+       "sv" 'jcf-split-window-vertically
        "w"  'save-buffer
        "x"  'execute-extended-command)
    #+end_src
@@ -256,19 +256,19 @@
    Used in some ~<leader>~ bindings below.
 
    #+begin_src emacs-lisp
-     (defun jcf/delete-window ()
+     (defun jcf-delete-window ()
        "Delete the current window, and rebalance remaining windows."
        (interactive)
        (delete-window)
        (balance-windows))
 
-     (defun jcf/split-window-horizontally ()
+     (defun jcf-split-window-horizontally ()
        "Create a new horizontal split and rebalance windows."
        (interactive)
        (split-window-horizontally)
        (balance-windows))
 
-     (defun jcf/split-window-vertically ()
+     (defun jcf-split-window-vertically ()
        "Create a new vertical split and rebalance windows."
        (interactive)
        (split-window-vertically)

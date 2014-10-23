@@ -3,7 +3,7 @@
 #+EMAIL: james@logi.cl
 #+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
-#+LINK: dotfiles https://github.com/jcf/dotfiles
+#+LINK: dotfiles https://github.com/jcf-dotfiles
 #+LINK: source-code-pro http://store1.adobe.com/cfusion/store/html/index.cfm?event=displayFontPackage&code=1960
 
 * OS X
@@ -78,7 +78,7 @@
    available on OS X.
 
    #+begin_src emacs-lisp
-     (defun jcf/dash-installed-p ()
+     (defun jcf-dash-installed-p ()
        "Return t if Dash is installed on this machine, or nil otherwise."
        (let ((lsregister "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"))
          (and (file-executable-p lsregister)
@@ -87,11 +87,11 @@
                     (shell-command-to-string
                      (concat lsregister " -dump|grep com.kapeli.dash")))))))
 
-     (defvar jcf/dash-installed?
-       (jcf/dash-installed-p))
+     (defvar jcf-dash-installed?
+       (jcf-dash-installed-p))
 
      (use-package dash-at-point
-       :if jcf/dash-installed?
+       :if jcf-dash-installed?
        :bind
        ("C-c D" . dash-at-point))
    #+end_src
@@ -104,7 +104,7 @@
    #+begin_src emacs-lisp
      (when (and *is-a-mac* (executable-find "proxy-config"))
        (defun mac-configured-proxy (proto)
-         (jcf/string-rtrim
+         (jcf-string-rtrim
           (shell-command-to-string
            (concat "proxy-config " (cdr (assoc-string proto '(("http" . "-h")
                                                               ("https" . "-s"))))))))

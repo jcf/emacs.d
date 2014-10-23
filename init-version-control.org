@@ -62,11 +62,11 @@
      (require 'magit-svn)
      (autoload 'magit-svn-enabled "magit-svn")
 
-     (defun jcf/maybe-enable-magit-svn-mode ()
+     (defun jcf-maybe-enable-magit-svn-mode ()
        (when (magit-svn-enabled)
          (magit-svn-mode)))
 
-     (add-hook 'magit-status-mode-hook #'jcf/maybe-enable-magit-svn-mode)
+     (add-hook 'magit-status-mode-hook #'jcf-maybe-enable-magit-svn-mode)
 
      (after-load 'compile
        (dolist
@@ -82,7 +82,7 @@
        (interactive "DSelect directory: ")
        (unless git-svn--available-commands
          (setq git-svn--available-commands
-               (jcf/string-all-matches
+               (jcf-string-all-matches
                 "^  \\([a-z\\-]+\\) +"
                 (shell-command-to-string "git svn help") 1)))
        (let* ((default-directory (vc-git-root dir))

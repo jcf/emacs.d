@@ -49,7 +49,7 @@
        (after-load 'slime-repl
          (add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup))
 
-       (add-hook 'clojure-mode-hook 'jcf/lisp-setup)
+       (add-hook 'clojure-mode-hook 'jcf-lisp-setup)
        ;; Undo activation of Paredit by clojure-mode
        (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
        (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
@@ -244,19 +244,19 @@
           (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
           (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
 
-          (defun jcf/set-up-mode-for-erb (mode)
-            (add-hook (derived-mode-hook-name mode) 'jcf/ensure-mmm-erb-loaded)
+          (defun jcf-set-up-mode-for-erb (mode)
+            (add-hook (derived-mode-hook-name mode) 'jcf-ensure-mmm-erb-loaded)
             (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
 
           (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
             (dolist (mode html-erb-modes)
-              (jcf/set-up-mode-for-erb mode)
+              (jcf-set-up-mode-for-erb mode)
               (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
               (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
 
           (require 'derived)
 
-          (mapc 'jcf/set-up-mode-for-erb
+          (mapc 'jcf-set-up-mode-for-erb
                 '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
 
           (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
@@ -457,7 +457,7 @@
          (setq-default initial-scratch-message
                        (concat ";; Happy hacking " (or user-login-name "") "!\n\n"))
 
-         (defun jcf/eval-last-sexp-or-region (beg end prefix)
+         (defun jcf-eval-last-sexp-or-region (beg end prefix)
            "Eval region from BEG to END if active, otherwise the last sexp."
            (interactive "r\nP")
            (if (use-region-p)
@@ -468,9 +468,9 @@
 
          (after-load 'lisp-mode
            (define-key emacs-lisp-mode-map (kbd "C-x C-e")
-             'jcf/eval-last-sexp-or-region))
+             'jcf-eval-last-sexp-or-region))
 
-         (defun jcf/emacs-lisp-module-name ()
+         (defun jcf-emacs-lisp-module-name ()
            "Search the buffer for `provide' declaration."
            (save-excursion
              (goto-char (point-min))
@@ -478,13 +478,13 @@
                (symbol-name (symbol-at-point)))))
 
          ;; Credit to Chris Done for this one.
-         (defun jcf/try-complete-lisp-symbol-without-namespace (old)
+         (defun jcf-try-complete-lisp-symbol-without-namespace (old)
            "Hippie expand \"try\" function which expands \"-foo\" to
            \"modname-foo\" in elisp."
            (unless old
              (he-init-string (he-lisp-symbol-beg) (point))
              (when (string-prefix-p "-" he-search-string)
-               (let ((mod-name (jcf/emacs-lisp-module-name)))
+               (let ((mod-name (jcf-emacs-lisp-module-name)))
                  (when mod-name
                    (setq he-expand-list (list (concat mod-name he-search-string)))))))
            (when he-expand-list
@@ -505,7 +505,7 @@
                         t)
 
            (add-to-list 'hippie-expand-try-functions-list
-                        'jcf/try-complete-lisp-symbol-without-namespace
+                        'jcf-try-complete-lisp-symbol-without-namespace
                         t)))
 
        :bind
@@ -541,7 +541,7 @@
    highlight-cl.
 
    #+begin_src emacs-lisp
-     (defun jcf/byte-compile-file-batch (filename)
+     (defun jcf-byte-compile-file-batch (filename)
        "Byte-compile FILENAME in batch mode, ie. a clean sub-process."
        (interactive "fFile to byte-compile in batch mode: ")
        (let ((emacs (car command-line-args)))
@@ -557,7 +557,7 @@
    Enable desired features for all lisp modes.
 
    #+begin_src emacs-lisp
-     (defun jcf/lisp-setup ()
+     (defun jcf-lisp-setup ()
        "Enable features useful in any Lisp mode."
        (turn-on-eldoc-mode)
        (redshank-mode)
@@ -565,18 +565,18 @@
        (rainbow-delimiters-mode +1)
        (disable-paredit-mode))
 
-     (defun jcf/emacs-lisp-setup ()
+     (defun jcf-emacs-lisp-setup ()
        "Enable features useful when working with elisp."
        (elisp-slime-nav-mode t)
        (set-up-hippie-expand-for-elisp)
        (disable-paredit-mode))
 
-     (defconst jcf/elispy-modes
+     (defconst jcf-elispy-modes
        '(emacs-lisp-mode ielm-mode)
        "Major modes relating to elisp.")
 
-     (defconst jcf/lispy-modes
-       (append jcf/elispy-modes
+     (defconst jcf-lispy-modes
+       (append jcf-elispy-modes
                '(lisp-mode inferior-lisp-mode lisp-interaction-mode))
        "All lispy major modes.")
 
@@ -590,18 +590,18 @@
 
      (require 'derived)
 
-     (dolist (hook (mapcar #'derived-mode-hook-name jcf/lispy-modes))
-       (add-hook hook 'jcf/lisp-setup))
+     (dolist (hook (mapcar #'derived-mode-hook-name jcf-lispy-modes))
+       (add-hook hook 'jcf-lisp-setup))
 
-     (dolist (hook (mapcar #'derived-mode-hook-name jcf/elispy-modes))
-       (add-hook hook 'jcf/emacs-lisp-setup))
+     (dolist (hook (mapcar #'derived-mode-hook-name jcf-elispy-modes))
+       (add-hook hook 'jcf-emacs-lisp-setup))
 
-     (defun jcf/maybe-check-parens ()
+     (defun jcf-maybe-check-parens ()
        "Run `check-parens' if this is a lispy mode."
-       (when (memq major-mode jcf/lispy-modes)
+       (when (memq major-mode jcf-lispy-modes)
          (check-parens)))
 
-     (add-hook 'after-save-hook #'jcf/maybe-check-parens)
+     (add-hook 'after-save-hook #'jcf-maybe-check-parens)
 
      (use-package eldoc-eval
        :commands eldoc-eval)
@@ -624,12 +624,12 @@
    that.
 
    #+begin_src emacs-lisp
-     (defvar jcf/vc-reverting nil
+     (defvar jcf-vc-reverting nil
        "Whether or not VC or Magit is currently reverting buffers.")
 
-     (defadvice revert-buffer (after jcf/maybe-remove-elc activate)
+     (defadvice revert-buffer (after jcf-maybe-remove-elc activate)
        "If reverting from VC, delete any .elc file that will now be out of sync."
-       (when jcf/vc-reverting
+       (when jcf-vc-reverting
          (when (and (eq 'emacs-lisp-mode major-mode)
                     buffer-file-name
                     (string= "el" (file-name-extension buffer-file-name)))
@@ -638,11 +638,11 @@
                (message "Removing out-of-sync elc file %s" (file-name-nondirectory elc))
                (delete-file elc))))))
 
-     (defadvice magit-revert-buffers (around jcf/reverting activate)
-       (let ((jcf/vc-reverting t))
+     (defadvice magit-revert-buffers (around jcf-reverting activate)
+       (let ((jcf-vc-reverting t))
          ad-do-it))
-     (defadvice vc-revert-buffer-internal (around jcf/reverting activate)
-       (let ((jcf/vc-reverting t))
+     (defadvice vc-revert-buffer-internal (around jcf-reverting activate)
+       (let ((jcf-vc-reverting t))
          ad-do-it))
    #+end_src
 
@@ -712,7 +712,7 @@
    http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-mode/
 
    #+begin_src emacs-lisp
-     (defun jcf/pp-xml-region (begin end)
+     (defun jcf-pp-xml-region (begin end)
        "Pretty format XML markup in region. The function inserts linebreaks
      to separate tags that have nothing but whitespace between them.  It
      then indents the markup by using nxml's indentation rules."
@@ -873,7 +873,7 @@
        (progn
          (require 'hippie-expand-slime)
 
-         (defun jcf/slime-setup ()
+         (defun jcf-slime-setup ()
            "Mode setup function for slime lisp buffers."
            (set-up-slime-hippie-expand))
 
@@ -883,11 +883,11 @@
            (slime-setup '(slime-fancy slime-repl slime-fuzzy))
            (setq slime-complete-symbol*-fancy t)
            (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-           (add-hook 'slime-mode-hook 'jcf/slime-setup))
+           (add-hook 'slime-mode-hook 'jcf-slime-setup))
 
-         (defun jcf/slime-repl-setup ()
+         (defun jcf-slime-repl-setup ()
            "Mode setup function for slime REPL."
-           (jcf/lisp-setup)
+           (jcf-lisp-setup)
            (set-up-slime-hippie-expand)
            (set-up-slime-ac t)
            (setq show-trailing-whitespace nil))
@@ -897,7 +897,7 @@
            ;; buffers.
            (define-key slime-repl-mode-map (kbd "TAB") 'indent-for-tab-command)
 
-           (add-hook 'slime-repl-mode-hook 'jcf/slime-repl-setup))))
+           (add-hook 'slime-repl-mode-hook 'jcf-slime-repl-setup))))
    #+end_src
 
 ** SQL
@@ -909,7 +909,7 @@
        (progn
          (use-package sql-indent)
 
-         (defun jcf/pop-to-sqli-buffer ()
+         (defun jcf-pop-to-sqli-buffer ()
            "Switch to the corresponding sqli buffer."
            (interactive)
            (if sql-buffer
@@ -918,20 +918,20 @@
                  (goto-char (point-max)))
              (sql-set-sqli-buffer)
              (when sql-buffer
-               (jcf/pop-to-sqli-buffer))))
+               (jcf-pop-to-sqli-buffer))))
 
          (after-load 'sql
-           (define-key sql-mode-map (kbd "C-c C-z") 'jcf/pop-to-sqli-buffer)
-           (add-hook 'sql-interactive-mode-hook 'jcf/never-indent)
+           (define-key sql-mode-map (kbd "C-c C-z") 'jcf-pop-to-sqli-buffer)
+           (add-hook 'sql-interactive-mode-hook 'jcf-never-indent)
            (when (package-installed-p 'dash-at-point)
-             (defun jcf/maybe-set-dash-db-docset ()
+             (defun jcf-maybe-set-dash-db-docset ()
                (when (eq sql-product 'postgres)
                  (setq dash-at-point-docset "psql")))
 
-             (add-hook 'sql-mode-hook 'jcf/maybe-set-dash-db-docset)
-             (add-hook 'sql-interactive-mode-hook 'jcf/maybe-set-dash-db-docset)
+             (add-hook 'sql-mode-hook 'jcf-maybe-set-dash-db-docset)
+             (add-hook 'sql-interactive-mode-hook 'jcf-maybe-set-dash-db-docset)
              (defadvice sql-set-product (after set-dash-docset activate)
-               (jcf/maybe-set-dash-db-docset))))
+               (jcf-maybe-set-dash-db-docset))))
 
          (setq-default sql-input-ring-file-name
                        (expand-file-name ".sqli_history" user-emacs-directory))

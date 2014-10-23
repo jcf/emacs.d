@@ -131,7 +131,7 @@
 ** Highlight trailing whitespace
 
    #+begin_src emacs-lisp
-    (defun jcf/no-trailing-whitespace ()
+    (defun jcf-no-trailing-whitespace ()
       "Turn off display of trailing whitespace in this buffer."
       (setq show-trailing-whitespace nil))
 
@@ -144,20 +144,20 @@
                     compilation-mode-hook
                     twittering-mode-hook
                     minibuffer-setup-hook))
-      (add-hook hook #'jcf/no-trailing-whitespace))
+      (add-hook hook #'jcf-no-trailing-whitespace))
    #+END_SRC
 
 ** Newline behaviour
 
    #+begin_src emacs-lisp
      (global-set-key (kbd "RET") 'newline-and-indent)
-     (defun jcf/newline-at-end-of-line ()
+     (defun jcf-newline-at-end-of-line ()
        "Move to end of line, enter a newline, and reindent."
        (interactive)
        (move-end-of-line 1)
        (newline-and-indent))
 
-     (global-set-key (kbd "S-<return>") 'jcf/newline-at-end-of-line)
+     (global-set-key (kbd "S-<return>") 'jcf-newline-at-end-of-line)
    #+END_SRC
 
 ** Workaround for subword not being available
@@ -345,7 +345,7 @@
 ** Indentation-aware open line
 
    #+begin_src emacs-lisp
-     (defun jcf/open-line-with-reindent (n)
+     (defun jcf-open-line-with-reindent (n)
        "A version of `open-line' which reindents the start and end
      positions.
 
@@ -374,7 +374,7 @@
          (end-of-line)
          (indent-according-to-mode)))
 
-     (global-set-key (kbd "C-o") 'jcf/open-line-with-reindent)
+     (global-set-key (kbd "C-o") 'jcf-open-line-with-reindent)
    #+END_SRC
 
 ** Randomise lines
@@ -558,14 +558,14 @@
 
    By running an Emacs server we can have new Emacs instances start instantly.
 
-   This is made possible by the editor configuration in the [[https://github.com/jcf/prezto][jcf/prezto]] repo,
-   combined with the emacsserver executable in [[https://github.com/jcf/dotfiles][jcf/dotfiles]].
+   This is made possible by the editor configuration in the [[https://github.com/jcf-prezto][jcf-prezto]] repo,
+   combined with the emacsserver executable in [[https://github.com/jcf-dotfiles][jcf-dotfiles]].
 
-   - https://github.com/jcf/dotfiles/blob/master/roles/emacs/files/emacsserver
-   - https://github.com/jcf/prezto/blob/14354ea203fa3f7035208cb0d76ca8e600258d39/runcoms/zprofile#L25
+   - https://github.com/jcf-dotfiles/blob/master/roles/emacs/files/emacsserver
+   - https://github.com/jcf-prezto/blob/14354ea203fa3f7035208cb0d76ca8e600258d39/runcoms/zprofile#L25
 
    #+begin_src emacs-lisp
-     (defun jcf/start-server ()
+     (defun jcf-start-server ()
        (require 'server)
        (unless (server-running-p)
          (server-start)))
@@ -575,5 +575,5 @@
    will have already fired.
 
    #+begin_src emacs-lisp
-     (jcf/start-server)
+     (jcf-start-server)
    #+end_src

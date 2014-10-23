@@ -70,25 +70,25 @@
          (kill-this-buffer)))
    #+end_src
 
-** ~jcf/directory-of-library~
+** ~jcf-directory-of-library~
 
    This function will provide you with the directory containing the
    named library.
 
    #+begin_src emacs-lisp
      (autoload 'find-library-name "find-func")
-     (defun jcf/directory-of-library (library-name)
+     (defun jcf-directory-of-library (library-name)
        "Return the directory in which the `LIBRARY-NAME' load file is found."
        (file-name-as-directory
         (file-name-directory (find-library-name library-name))))
    #+end_src
 
-** ~jcf/log-startup-time~
+** ~jcf-log-startup-time~
 
    #+begin_src emacs-lisp
-     (defun jcf/log-startup-time ()
+     (defun jcf-log-startup-time ()
        (message "init completed in %.2fms"
-                (jcf/time-subtract-millis after-init-time before-init-time)))
+                (jcf-time-subtract-millis after-init-time before-init-time)))
    #+end_src
 ** ~rename-buffer-and-file~
 
