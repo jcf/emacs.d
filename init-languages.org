@@ -145,6 +145,7 @@
          (define-key lisp-mode-map (kbd "C-c l") 'lispdoc)))
 
      (use-package slime
+       :commands slime-mode
        :config
        (progn
          (when (executable-find "sbcl")
