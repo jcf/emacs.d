@@ -204,7 +204,8 @@
    #+begin_src emacs-lisp
      (org-babel-do-load-languages
       'org-babel-load-languages
-      '((R . t)
+      '((ditaa . t)
+        (R . t)
         (sh . t)))
    #+end_src
 
@@ -214,6 +215,22 @@
      (require 'ob-clojure)
      (setq org-babel-clojure-backend 'cider)
    #+end_src
+
+   Ditaa support, installed using Homebrew.
+
+   #+begin_src emacs-lisp
+     (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.9/libexec/ditaa0_9.jar")
+   #+end_src
+
+   Trust benign languages when evaluating code blocks.
+
+   #+begin_src emacs-lisp
+     (defun jcf-org-confirm-babel-evaluate (lang body)
+       (not (string= lang "ditaa")))
+     (setq org-confirm-babel-evaluate 'jcf-org-confirm-babel-evaluate)
+   #+end_src
+
+   See http://orgmode.org/manual/Code-evaluation-security.html for more information.
 
 ** Keybindings
 
