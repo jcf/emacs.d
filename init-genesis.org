@@ -74,13 +74,11 @@
    behaviour of this function is controlled by setting a height and width
    threshold.
 
-   As we always wrap to 80 columns we drop ~split-width-threshold~ from the
-   default of ~160~ to ~85~, and set the height threshold to ~nil~ to persuade
-   Emacs to use vertical splits more often than not.
+   As we always wrap to 80 columns I'd prefer vertical splits in almost all
+   cases.
 
    #+begin_src emacs-lisp
-     (setq-default split-height-threshold nil
-                   split-width-threshold 85)
+     (setq split-height-threshold 200)
    #+end_src
 
 ** grep
