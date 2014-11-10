@@ -5,110 +5,110 @@
 #+OPTIONS: toc:2 num:nil ^:nil
 #+LINK: prelude https://github.com/bbatsov/prelude/blob/6f05616b6022e1029594b8bf107dd5bcbff93db7/core/prelude-core.el#L237
 
-* Defuns
+* Abstract
 
   Here we define utility functions we'll use in both subsequent
   configuration, and interactively.
 
-** ~add-auto-mode~
+* ~add-auto-mode~
 
-   This function adds a more convenient way of defining a list of file
-   patterns that should be attributed to a given mode.
+  This function adds a more convenient way of defining a list of file
+  patterns that should be attributed to a given mode.
 
-   #+begin_src emacs-lisp
-     (defun add-auto-mode (mode &rest patterns)
-       "Add entries to `auto-mode-alist' to use `MODE' for all given file
-     `PATTERNS'."
-       (dolist (pattern patterns)
-         (add-to-list 'auto-mode-alist (cons pattern mode))))
-   #+end_src
+  #+begin_src emacs-lisp
+    (defun add-auto-mode (mode &rest patterns)
+      "Add entries to `auto-mode-alist' to use `MODE' for all given file
+    `PATTERNS'."
+      (dolist (pattern patterns)
+        (add-to-list 'auto-mode-alist (cons pattern mode))))
+  #+end_src
 
-** ~after-load~
+* ~after-load~
 
-   This function evaluates of body of Emacs Lisp after a named feature
-   has been loaded. By deferring execution of some code we benefit in
-   two ways:
+  This function evaluates of body of Emacs Lisp after a named feature
+  has been loaded. By deferring execution of some code we benefit in
+  two ways:
 
-   1. Emacs can start faster by only running the code necessary to get started.
-   2. We can avoid executing code that has a dependency yet to be loaded.
+  1. Emacs can start faster by only running the code necessary to get started.
+  2. We can avoid executing code that has a dependency yet to be loaded.
 
-   #+begin_src emacs-lisp
-     (defmacro after-load (feature &rest body)
-       "After FEATURE is loaded, evaluate BODY."
-       (declare (indent defun))
-       `(eval-after-load ,feature
-          '(progn ,@body)))
-   #+end_src
+  #+begin_src emacs-lisp
+    (defmacro after-load (feature &rest body)
+      "After FEATURE is loaded, evaluate BODY."
+      (declare (indent defun))
+      `(eval-after-load ,feature
+         '(progn ,@body)))
+  #+end_src
 
-** ~browse-current-file~
+* ~browse-current-file~
 
-   This function opens the current file using ~browse-url~. I
-   typically use ~gf~ via Evil making this somewhat redundent.
+  This function opens the current file using ~browse-url~. I
+  typically use ~gf~ via Evil making this somewhat redundent.
 
-   #+begin_src emacs-lisp
-     (defun browse-current-file ()
-       "Open the current file as a URL using `browse-url'."
-       (interactive)
-       (let ((file-name (buffer-file-name)))
-         (if (tramp-tramp-file-p file-name)
-             (error "Cannot open tramp file")
-           (browse-url (concat "file://" file-name)))))
-   #+end_src
+  #+begin_src emacs-lisp
+    (defun browse-current-file ()
+      "Open the current file as a URL using `browse-url'."
+      (interactive)
+      (let ((file-name (buffer-file-name)))
+        (if (tramp-tramp-file-p file-name)
+            (error "Cannot open tramp file")
+          (browse-url (concat "file://" file-name)))))
+  #+end_src
 
-** ~delete-this-file~
+* ~delete-this-file~
 
-   This function deletes a file, removing the buffer in the process.
+  This function deletes a file, removing the buffer in the process.
 
-   #+begin_src emacs-lisp
-     (defun delete-this-file ()
-       "Delete the current file, and kill the buffer."
-       (interactive)
-       (or (buffer-file-name) (error "No file is currently being edited"))
-       (when (yes-or-no-p (format "Really delete '%s'?"
-                                  (file-name-nondirectory buffer-file-name)))
-         (delete-file (buffer-file-name))
-         (kill-this-buffer)))
-   #+end_src
+  #+begin_src emacs-lisp
+    (defun delete-this-file ()
+      "Delete the current file, and kill the buffer."
+      (interactive)
+      (or (buffer-file-name) (error "No file is currently being edited"))
+      (when (yes-or-no-p (format "Really delete '%s'?"
+                                 (file-name-nondirectory buffer-file-name)))
+        (delete-file (buffer-file-name))
+        (kill-this-buffer)))
+  #+end_src
 
-** ~jcf-directory-of-library~
+* ~jcf-directory-of-library~
 
-   This function will provide you with the directory containing the
-   named library.
+  This function will provide you with the directory containing the
+  named library.
 
-   #+begin_src emacs-lisp
-     (autoload 'find-library-name "find-func")
-     (defun jcf-directory-of-library (library-name)
-       "Return the directory in which the `LIBRARY-NAME' load file is found."
-       (file-name-as-directory
-        (file-name-directory (find-library-name library-name))))
-   #+end_src
+  #+begin_src emacs-lisp
+    (autoload 'find-library-name "find-func")
+    (defun jcf-directory-of-library (library-name)
+      "Return the directory in which the `LIBRARY-NAME' load file is found."
+      (file-name-as-directory
+       (file-name-directory (find-library-name library-name))))
+  #+end_src
 
-** ~jcf-log-startup-time~
+* ~jcf-log-startup-time~
 
-   #+begin_src emacs-lisp
-     (defun jcf-log-startup-time ()
-       (message "init completed in %.2fms"
-                (jcf-time-subtract-millis after-init-time before-init-time)))
-   #+end_src
-** ~rename-buffer-and-file~
+  #+begin_src emacs-lisp
+    (defun jcf-log-startup-time ()
+      (message "init completed in %.2fms"
+               (jcf-time-subtract-millis after-init-time before-init-time)))
+  #+end_src
+* ~rename-buffer-and-file~
 
-   This function renames the current buffer, and the underlying file
-   if it has been written to disk.
+  This function renames the current buffer, and the underlying file
+  if it has been written to disk.
 
-   This is a modified version of the [[prelude][~prelude-rename-buffer-and-file~]]
-   function in Emacs Prelude.
+  This is a modified version of the [[prelude][~prelude-rename-buffer-and-file~]]
+  function in Emacs Prelude.
 
-   #+begin_src emacs-lisp
-     (defun rename-buffer-and-file ()
-       "Rename current buffer and if the buffer is visiting a file, rename it too."
-       (interactive)
-       (let ((filename (buffer-file-name)))
-         (if (not (and filename (file-exists-p filename)))
-             (rename-buffer (read-from-minibuffer "New name: " (buffer-name)))
-           (let ((new-name (read-file-name "New name: ")))
-             (cond
-              ((vc-backend filename) (vc-rename-file filename new-name))
-              (t
-               (rename-file filename new-name t)
-               (set-visited-file-name new-name t t)))))))
-   #+end_src
+  #+begin_src emacs-lisp
+    (defun rename-buffer-and-file ()
+      "Rename current buffer and if the buffer is visiting a file, rename it too."
+      (interactive)
+      (let ((filename (buffer-file-name)))
+        (if (not (and filename (file-exists-p filename)))
+            (rename-buffer (read-from-minibuffer "New name: " (buffer-name)))
+          (let ((new-name (read-file-name "New name: ")))
+            (cond
+             ((vc-backend filename) (vc-rename-file filename new-name))
+             (t
+              (rename-file filename new-name t)
+              (set-visited-file-name new-name t t)))))))
+  #+end_src

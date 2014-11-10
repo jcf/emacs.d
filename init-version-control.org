@@ -4,17 +4,15 @@
 #+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 
-* Version Control
+* diff-hl
 
-** diff-hl
+  #+begin_src emacs-lisp
+    (require 'diff-hl)
+    (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
+    (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode)
+  #+end_src
 
-   #+begin_src emacs-lisp
-     (require 'diff-hl)
-     (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
-     (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode)
-   #+end_src
-
-** Magit
+* Magit
 
   #+begin_src emacs-lisp
     (require 'magit)
@@ -33,7 +31,7 @@
 
     (after-load 'magit
       (diminish 'magit-auto-revert-mode))
-   #+end_src
+  #+end_src
 
   Jump to the parent section with Command-Control-<up>.
 
@@ -42,117 +40,117 @@
       (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-goto-parent-section))
   #+end_src
 
-** Disable ~command-h~ on OS X
+* Disable ~command-h~ on OS X
+
+  #+begin_src emacs-lisp
+   (when *is-a-mac*
+     (after-load 'magit
+       (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+  #+end_src
+
+* ~git-grep~ binding
+
+  #+begin_src emacs-lisp
+   (global-set-key (kbd "C-x v f") 'vc-git-grep)
+  #+end_src
+
+* Git SVN support
+
+  #+begin_src emacs-lisp
+    (require 'magit-svn)
+    (autoload 'magit-svn-enabled "magit-svn")
+
+    (defun jcf-maybe-enable-magit-svn-mode ()
+      (when (magit-svn-enabled)
+        (magit-svn-mode)))
+
+    (add-hook 'magit-status-mode-hook #'jcf-maybe-enable-magit-svn-mode)
+
+    (after-load 'compile
+      (dolist
+          (defn (list '(git-svn-updated "^\t[A-Z]\t\\(.*\\)$" 1 nil nil 0 1)
+                      '(git-svn-needs-update "^\\(.*\\): needs update$" 1 nil nil 2 1)))
+        (add-to-list 'compilation-error-regexp-alist-alist defn)
+        (add-to-list 'compilation-error-regexp-alist (car defn))))
+
+    (defvar git-svn--available-commands nil "Cached list of git svn subcommands")
+
+    (defun git-svn (dir)
+      "Run a git svn subcommand in DIR."
+      (interactive "DSelect directory: ")
+      (unless git-svn--available-commands
+        (setq git-svn--available-commands
+              (jcf-string-all-matches
+               "^  \\([a-z\\-]+\\) +"
+               (shell-command-to-string "git svn help") 1)))
+      (let* ((default-directory (vc-git-root dir))
+             (compilation-buffer-name-function (lambda (major-mode-name) "*git-svn*")))
+        (compile (concat "git svn "
+                         (ido-completing-read "git-svn command: "
+                                              git-svn--available-commands nil t)))))
+  #+end_src
+
+* ~git-wip~
+
+  Disabled because I found it irritating.
+
+  #+begin_src emacs-lisp
+   ;; (after-load 'magit
+   ;;   (global-magit-wip-save-mode)
+   ;;   (diminish 'magit-wip-save-mode))
+  #+end_src
+
+* TODO Git Messenger - explain what this is for
 
    #+begin_src emacs-lisp
-    (when *is-a-mac*
-      (after-load 'magit
-        (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+    (require 'git-messenger)
+    (global-set-key (kbd "C-x v p") #'git-messenger:popup-message)
    #+end_src
 
-** ~git-grep~ binding
+* GitHub
 
    #+begin_src emacs-lisp
-    (global-set-key (kbd "C-x v f") 'vc-git-grep)
+     (require 'gh)
    #+end_src
 
-** Git SVN support
+  Gist support.
 
    #+begin_src emacs-lisp
-     (require 'magit-svn)
-     (autoload 'magit-svn-enabled "magit-svn")
-
-     (defun jcf-maybe-enable-magit-svn-mode ()
-       (when (magit-svn-enabled)
-         (magit-svn-mode)))
-
-     (add-hook 'magit-status-mode-hook #'jcf-maybe-enable-magit-svn-mode)
-
-     (after-load 'compile
-       (dolist
-           (defn (list '(git-svn-updated "^\t[A-Z]\t\\(.*\\)$" 1 nil nil 0 1)
-                       '(git-svn-needs-update "^\\(.*\\): needs update$" 1 nil nil 2 1)))
-         (add-to-list 'compilation-error-regexp-alist-alist defn)
-         (add-to-list 'compilation-error-regexp-alist (car defn))))
-
-     (defvar git-svn--available-commands nil "Cached list of git svn subcommands")
-
-     (defun git-svn (dir)
-       "Run a git svn subcommand in DIR."
-       (interactive "DSelect directory: ")
-       (unless git-svn--available-commands
-         (setq git-svn--available-commands
-               (jcf-string-all-matches
-                "^  \\([a-z\\-]+\\) +"
-                (shell-command-to-string "git svn help") 1)))
-       (let* ((default-directory (vc-git-root dir))
-              (compilation-buffer-name-function (lambda (major-mode-name) "*git-svn*")))
-         (compile (concat "git svn "
-                          (ido-completing-read "git-svn command: "
-                                               git-svn--available-commands nil t)))))
+     (require 'yagist)
    #+end_src
 
-** ~git-wip~
+  Open buffers on GitHub.
 
-   Disabled because I found it irritating.
+  #+begin_src emacs-lisp
+    (require 'github-browse-file)
+  #+end_src
 
-   #+begin_src emacs-lisp
-    ;; (after-load 'magit
-    ;;   (global-magit-wip-save-mode)
-    ;;   (diminish 'magit-wip-save-mode))
-   #+end_src
+  Add GitHub issues support to bug-reference.
 
-** TODO Git Messenger - explain what this is for
+  https://github.com/arnested/bug-reference-github
 
-    #+begin_src emacs-lisp
-     (require 'git-messenger)
-     (global-set-key (kbd "C-x v p") #'git-messenger:popup-message)
-    #+end_src
+  #+begin_src emacs-lisp
+    (require 'bug-reference-github)
+    (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
+  #+end_src
 
-** GitHub
+  Add pull request support. Disabled because authentication is a
+  complete and utter mess.
 
-    #+begin_src emacs-lisp
-      (require 'gh)
-    #+end_src
+  #+begin_src emacs-lisp
+    (require 'magit-gh-pulls)
+    ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
+  #+end_src
 
-   Gist support.
+* Darcs
 
-    #+begin_src emacs-lisp
-      (require 'yagist)
-    #+end_src
+  #+begin_src emacs-lisp
+    (require 'darcsum)
+    (require 'vc-darcs)
 
-   Open buffers on GitHub.
+    (add-to-list 'vc-handled-backends 'DARCS)
+    (autoload 'vc-darcs-find-file-hook "vc-darcs")
+    (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
-   #+begin_src emacs-lisp
-     (require 'github-browse-file)
-   #+end_src
-
-   Add GitHub issues support to bug-reference.
-
-   https://github.com/arnested/bug-reference-github
-
-   #+begin_src emacs-lisp
-     (require 'bug-reference-github)
-     (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
-   #+end_src
-
-   Add pull request support. Disabled because authentication is a
-   complete and utter mess.
-
-   #+begin_src emacs-lisp
-     (require 'magit-gh-pulls)
-     ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
-   #+end_src
-
-** Darcs
-
-   #+begin_src emacs-lisp
-     (require 'darcsum)
-     (require 'vc-darcs)
-
-     (add-to-list 'vc-handled-backends 'DARCS)
-     (autoload 'vc-darcs-find-file-hook "vc-darcs")
-     (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
-
-     (setq darcsum-whatsnew-switches "-l")
-   #+end_src
+    (setq darcsum-whatsnew-switches "-l")
+  #+end_src

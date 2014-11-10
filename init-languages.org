@@ -4,7 +4,7 @@
 #+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 
-* Languages
+* Abstract
 
   We encounter a large number of programming languages on a daily
   basis, and Emacs has support for all of them.
@@ -12,889 +12,889 @@
   This module installs packages necessary to support the languages
   we're likely to encounter, and configures them for effective use.
 
-** Clojure
-
-   #+begin_src emacs-lisp
-     (use-package clojure-mode
-       :commands (clojure-mode cider cider-jack-in)
-       :config
-       (progn
-         (use-package clj-refactor :diminish clj-refactor)
-         (use-package cljsbuild-mode)
-         (use-package elein)
-         (use-package typed-clojure-mode :diminish typed-clojure))
-
-       (define-clojure-indent
-         (defroutes 'defun)
-         (GET 2)
-         (POST 2)
-         (PUT 2)
-         (DELETE 2)
-         (HEAD 2)
-         (ANY 2)
-         (context 2))
-
-       (defun slime-clojure-repl-setup ()
-         "Some REPL setup additional to that in durendal."
-         (when (string-equal (slime-lisp-implementation-name) "clojure")
-           (when (slime-inferior-process)
-             (message "Setting up repl for clojure")
-             (slime-redirect-inferior-output))
-
-           (set-syntax-table clojure-mode-syntax-table)
-           (setq lisp-indent-function 'clojure-indent-function)
-           (let (font-lock-mode)
-             (clojure-mode-font-lock-setup))))
-
-       (after-load 'slime-repl
-         (add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup))
-
-       (add-hook 'clojure-mode-hook 'jcf-lisp-setup)
-       ;; Undo activation of Paredit by clojure-mode
-       (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
-       (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
-       (add-hook 'clojure-mode-hook 'typed-clojure-mode)
-       (add-hook 'clojure-mode-hook 'subword-mode)
-
-       (use-package cider
-         :init
-         (setq cider-auto-select-error-buffer nil
-               cider-repl-pop-to-buffer-on-connect nil
-               cider-repl-use-clojure-font-lock t
-               cider-repl-wrap-history t
-               cider-repl-history-size 1000
-               cider-repl-history-file (f-expand ".cider-history"
-                                                 user-emacs-directory)
-               cider-show-error-buffer nil
-               nrepl-hide-special-buffers t
-               nrepl-popup-stacktraces nil)
-
-         :config
-         (progn
-           (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-           (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-           (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-           (add-hook 'cider-repl-mode-hook 'subword-mode)
-
-           ;; nrepl isn't based on comint
-           (add-hook 'cider-repl-mode-hook
-                     (lambda () (setq show-trailing-whitespace nil)))
-
-           (use-package slamhound))))
-   #+end_src
-
-** Clojurescript
-
-   Define our own ~clojurescript-mode~ that is derived from
-   ~clojure-mode~.
-
-   We disable Company mode because you can't complete Clojurescript
-   via a normal Clojure REPL, and if you try Emacs hangs until
-   Company times out.
-
-   #+begin_src emacs-lisp
-     (define-derived-mode clojurescript-mode clojure-mode
-       "Clojurescript"
-       "Extends clojure-mode with Clojurescript-specific settings."
-       (company-mode -1))
-   #+end_src
-
-   Use ~clojurescript-mode~ for files with a ~cljs~ extension.
-
-   #+begin_src emacs-lisp
-     (add-auto-mode 'clojurescript-mode "\\.cljs\\'")
-   #+end_src
-
-** Common-Lisp
-
-   #+begin_src emacs-lisp
-     (use-package lisp-mode
-       :mode (("\\.cl\\'" . lisp-mode))
-       :config
-       (progn
-         (defun lispdoc ()
-           "Searches lispdoc.com for SYMBOL, which is by default the symbol currently
-     under the cursor."
-           (interactive)
-           (let* ((word-at-point (word-at-point))
-                  (symbol-at-point (symbol-at-point))
-                  (default (symbol-name symbol-at-point))
-                  (inp (read-from-minibuffer
-                        (if (or word-at-point symbol-at-point)
-                            (concat "Symbol (default " default "): ")
-                          "Symbol (no default): "))))
-             (if (and (string= inp "") (not word-at-point) (not
-                                                            symbol-at-point))
-                 (message "you didn't enter a symbol!")
-               (let ((search-type (read-from-minibuffer
-                                   "full-text (f) or basic (b) search (default b)? ")))
-                 (browse-url (concat "http://lispdoc.com?q="
-                                     (if (string= inp "")
-                                         default
-                                       inp)
-                                     "&search="
-                                     (if (string-equal search-type "f")
-                                         "full+text+search"
-                                       "basic+search")))))))
-
-         (define-key lisp-mode-map (kbd "C-c l") 'lispdoc)))
-   #+end_src
-
-** Configuration
-
-   Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
-
-   #+begin_src emacs-lisp
-     (add-auto-mode 'conf-mode "Procfile")
-   #+end_src
-
-** Crontab
-
-   #+begin_src emacs-lisp
-     (use-package crontab-mode
-       :mode "\\.?cron\\(tab\\)?\\'")
-   #+end_src
-
-** CSS
+* Clojure
 
   #+begin_src emacs-lisp
-    (use-package css-mode
-      :commands css-mode
-      :init
-      (setq css-indent-offset 2)
+    (use-package clojure-mode
+      :commands (clojure-mode cider cider-jack-in)
       :config
       (progn
-        (use-package rainbow-mode
-          :init
-          (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
-            (add-hook hook 'rainbow-mode)))
+        (use-package clj-refactor :diminish clj-refactor)
+        (use-package cljsbuild-mode)
+        (use-package elein)
+        (use-package typed-clojure-mode :diminish typed-clojure))
 
-        (use-package css-eldoc)
+      (define-clojure-indent
+        (defroutes 'defun)
+        (GET 2)
+        (POST 2)
+        (PUT 2)
+        (DELETE 2)
+        (HEAD 2)
+        (ANY 2)
+        (context 2))
 
-        (use-package mmm-vars
-          :config
-          (mmm-add-group
-           'html-css
-           '((css-cdata
-              :submode css-mode
-              :face mmm-code-submode-face
-              :front "<style[^>]*>[ \t\n]*\\(//\\)?<!\\[CDATA\\[[ \t]*\n?"
-              :back "[ \t]*\\(//\\)?]]>[ \t\n]*</style>"
-              :insert ((?j js-tag nil @ "<style type=\"text/css\">"
-                           @ "\n" _ "\n" @ "</script>" @)))
-             (css
-              :submode css-mode
-              :face mmm-code-submode-face
-              :front "<style[^>]*>[ \t]*\n?"
-              :back "[ \t]*</style>"
-              :insert ((?j js-tag nil @ "<style type=\"text/css\">"
-                           @ "\n" _ "\n" @ "</style>" @)))
-             (css-inline
-              :submode css-mode
-              :face mmm-code-submode-face
-              :front "style=\""
-              :back "\""))))))
-  #+end_src
+      (defun slime-clojure-repl-setup ()
+        "Some REPL setup additional to that in durendal."
+        (when (string-equal (slime-lisp-implementation-name) "clojure")
+          (when (slime-inferior-process)
+            (message "Setting up repl for clojure")
+            (slime-redirect-inferior-output))
 
-** CSV
+          (set-syntax-table clojure-mode-syntax-table)
+          (setq lisp-indent-function 'clojure-indent-function)
+          (let (font-lock-mode)
+            (clojure-mode-font-lock-setup))))
 
-   #+begin_src emacs-lisp
-     (use-package csv-mode
-       :mode "\\.[Cc][Ss][Vv]\\'"
-       :init (setq csv-separators '("," ";" "|" " "))
-       :config (use-package csv-nav))
-   #+end_src
+      (after-load 'slime-repl
+        (add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup))
 
-** Cucumber
+      (add-hook 'clojure-mode-hook 'jcf-lisp-setup)
+      ;; Undo activation of Paredit by clojure-mode
+      (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
+      (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+      (add-hook 'clojure-mode-hook 'typed-clojure-mode)
+      (add-hook 'clojure-mode-hook 'subword-mode)
 
-   #+begin_src emacs-lisp
-     (use-package feature-mode
-       :commands feature-mode)
-   #+end_src
-
-** ERB
-
-    #+begin_src emacs-lisp
-      (use-package mmm-erb
-        :commands mmm-erb
-        :mode (("\\.rhtml\\'" . html-erb-mode)
-               ("\\.html\\.erb\\'" . html-erb-mode)
-               ("\\.jst\\.ejs\\'" . html-erb-mode))
+      (use-package cider
+        :init
+        (setq cider-auto-select-error-buffer nil
+              cider-repl-pop-to-buffer-on-connect nil
+              cider-repl-use-clojure-font-lock t
+              cider-repl-wrap-history t
+              cider-repl-history-size 1000
+              cider-repl-history-file (f-expand ".cider-history"
+                                                user-emacs-directory)
+              cider-show-error-buffer nil
+              nrepl-hide-special-buffers t
+              nrepl-popup-stacktraces nil)
 
         :config
         (progn
-          (use-package mmm-mode)
-
-          (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
-          (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
-
-          (defun jcf-set-up-mode-for-erb (mode)
-            (add-hook (derived-mode-hook-name mode) 'jcf-ensure-mmm-erb-loaded)
-            (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
-
-          (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
-            (dolist (mode html-erb-modes)
-              (jcf-set-up-mode-for-erb mode)
-              (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
-              (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
-
-          (require 'derived)
-
-          (mapc 'jcf-set-up-mode-for-erb
-                '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
-
-          (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
-            (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))))
-    #+end_src
-
-** Erlang
-
-   #+begin_src emacs-lisp
-     (use-package erlang
-       :commands erlang-mode
-       :config
-       (use-package erlang-start))
-   #+end_src
-
-** Golang
-
-   It is assumed your ~GOPATH~, and ~PATH~ are already setup. If this
-   is not the case you can set the relevant environment variables using
-   something like:
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (setenv "GOPATH" (expand-file-name "Go" (getenv "HOME")))
-     (setenv "PATH" (concat (getenv "PATH") ":"
-     (expand-file-name "bin" (getenv "GOPATH"))))
-   #+end_src
-
-   #+begin_src emacs-lisp
-     (use-package go-mode
-       :commands go-mode
-       :config
-       (progn
-         (add-hook 'before-save-hook #'gofmt-before-save)
-
-         ;; Flymake for Go requires a Go dependency. If it's in our
-         ;; `GOPATH` we can load it up.
-         (let ((flymake-path (expand-file-name "src/github.com/dougm/goflymake"
-                                               (getenv "GOPATH"))))
-           (when (file-exists-p flymake-path)
-             (add-to-list 'load-path flymake-path)
-             (use-package go-flymake)))))
-   #+end_src
-
-** Haml
-
-   #+begin_src emacs-lisp
-     (use-package haml-mode
-       :commands haml-mode
-       :config
-       (progn
-         (define-key haml-mode-map (kbd "C-o") 'open-line)
-         (when (fboundp 'electric-indent-mode)
-           (add-hook 'haml-mode-hook (lambda () (electric-indent-mode -1))))))
-   #+end_src
-
-** Haskell
-
-   #+begin_src emacs-lisp
-     (use-package haskell-mode
-       :commands haskell-mode
-       :mode "\\.ghci\\'"
-       :config
-       (progn
-         (setq-default haskell-stylish-on-save t)
-
-         (require 'flycheck-hdevtools)
-         (require 'flycheck-haskell)
-
-         (after-load 'flycheck
-           (require 'flycheck-hdevtools))
-
-         (dolist (hook '(haskell-mode-hook inferior-haskell-mode-hook))
-           (add-hook hook 'turn-on-haskell-doc-mode))
-
-         (use-package hi2)
-
-         (add-hook 'haskell-mode-hook 'turn-on-hi2)
-         (add-hook 'haskell-mode-hook (lambda () (subword-mode +1)))
-
-         (after-load 'haskell-mode
-           (define-key haskell-mode-map (kbd "C-c h") 'hoogle)
-           (define-key haskell-mode-map (kbd "C-o") 'open-line))
-
-         (use-package ghci-completion
-           :init
-           (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion))
-
-         (eval-after-load 'page-break-lines
-           '(push 'haskell-mode page-break-lines-modes))
-
-         ;; Make compilation-mode understand "at blah.hs:11:34-50" lines output by GHC
-         (after-load 'compile
-           (let ((alias 'ghc-at-regexp))
-             (add-to-list
-              'compilation-error-regexp-alist-alist
-              (list alias
-                    " at \\(.*\\.\\(?:l?[gh]hs\\|hi\\)\\):\\([0-9]+\\):\\([0-9]+\\)-[0-9]+$" 1 2 3 0 1))
-             (add-to-list
-              'compilation-error-regexp-alist alias)))))
-   #+end_src
-
-** HTML
-
-   See [[Ruby]] configuration for ERB setup.
-
-   #+begin_src emacs-lisp
-     ;; (use-package html-mode
-     ;;   :mode "\\.(jsp|tmpl)\\'"
-     ;;   :config
-     ;;   (progn
-     ;;     (use-package tidy
-     ;;       :config
-     ;;       (add-hook 'html-mode-hook (lambda () (tidy-build-menu html-mode-map))))
-
-     ;;     (use-package tagedit
-     ;;       :commands sgml-mode
-     ;;       :config
-     ;;       (progn
-     ;;         (tagedit-add-paredit-like-keybindings)
-     ;;         (add-hook 'sgml-mode-hook (lambda () (tagedit-mode 1)))))))
-   #+end_src
-
-** Javascript
-
-   #+begin_src emacs-lisp
-     (use-package coffee-mode
-       :commands coffee-mode
-       :mode "\\.coffee\\.erb\\'"
-       :init
-       (setq
-        coffee-js-mode 'js2-mode
-        coffee-tab-width 2))
-
-     (use-package js2-mode
-       :diminish ((js2-mode . "JS2"))
-       :mode "\\.js\\(\\.erb\\)?\\'"
-       :commands js2-mode
-       :init
-       (progn
-         (setq-default
-          js2-basic-offset 2
-          js2-bounce-indent-p nil)
-
-         (add-hook 'json-mode-hook 'rainbow-delimiters-mode)
-         (after-load 'js2-mode (js2-imenu-extras-mode))
-
-         (use-package skewer-mode
-           :commands skewer-mode)))
-
-     (use-package json-mode
-       :mode (("\\.bowerrc\\'" . json-mode)
-              ("\\.csslintrc\\'" . json-mode)
-              ("\\.jshintrc\\'" . json-mode))
-       :commands json-mode
-       :init
-       (progn
-         (defun jcf-json-mode-hook ()
-           (setq js-indent-level 2)
-           (rainbow-delimiters-mode))
-
-         (add-hook 'json-mode-hook 'jcf-json-mode-hook)))
-
-     (use-package jsx-mode
-       :commands jsx-mode
-       :mode "\\.jsx\\'")
-   #+end_src
-
-** LESS
-
-   #+begin_src emacs-lisp
-     (use-package less-css-mode
-       :commands less-css-mode
-       :config
-       (progn
-         (use-package js2-mode)
-         (use-package skewer-less)))
-   #+end_src
-
-** Lisp
-
-   Treat Cask file like elisp.
-
-   #+begin_src emacs-lisp
-     (use-package lisp-mode
-       :commands lisp-mode
-       :mode (("Cask\\'" . emacs-lisp-mode)
-              ("\\.emacs-project\\'" . emacs-lisp-mode)
-              ("archive-contents\\'" . emacs-lisp-mode))
-
-       :config
-       (progn
-         (require 'elisp-slime-nav)
-         (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-           (add-hook hook 'elisp-slime-nav-mode))
-
-         (require 'lively)
-
-         (defun jcf-eval-last-sexp-or-region (beg end prefix)
-           "Eval region from BEG to END if active, otherwise the last sexp."
-           (interactive "r\nP")
-           (if (use-region-p)
-               (eval-region beg end)
-             (pp-eval-last-sexp prefix)))
-
-         (global-set-key (kbd "M-:") 'pp-eval-expression)
-
-         (after-load 'lisp-mode
-           (define-key emacs-lisp-mode-map (kbd "C-x C-e")
-             'jcf-eval-last-sexp-or-region))
-
-         (defun jcf-emacs-lisp-module-name ()
-           "Search the buffer for `provide' declaration."
-           (save-excursion
-             (goto-char (point-min))
-             (when (search-forward-regexp "^(provide '" nil t)
-               (symbol-name (symbol-at-point)))))
-
-         ;; Credit to Chris Done for this one.
-         (defun jcf-try-complete-lisp-symbol-without-namespace (old)
-           "Hippie expand \"try\" function which expands \"-foo\" to
-           \"modname-foo\" in elisp."
-           (unless old
-             (he-init-string (he-lisp-symbol-beg) (point))
-             (when (string-prefix-p "-" he-search-string)
-               (let ((mod-name (jcf-emacs-lisp-module-name)))
-                 (when mod-name
-                   (setq he-expand-list (list (concat mod-name he-search-string)))))))
-           (when he-expand-list
-             (he-substitute-string (car he-expand-list))
-             (setq he-expand-list nil)
-             t))
-
-         (defun set-up-hippie-expand-for-elisp ()
-           "Locally set `hippie-expand' completion functions for use with Emacs Lisp."
-           (make-local-variable 'hippie-expand-try-functions-list)
-
-           (add-to-list 'hippie-expand-try-functions-list
-                        'try-complete-lisp-symbol
-                        t)
-
-           (add-to-list 'hippie-expand-try-functions-list
-                        'try-complete-lisp-symbol-partially
-                        t)
-
-           (add-to-list 'hippie-expand-try-functions-list
-                        'jcf-try-complete-lisp-symbol-without-namespace
-                        t)))
-
-       :bind
-       ("C-h K" . find-function-on-key))
-
-     (use-package ipretty :init
-       (ipretty-mode 1))
-   #+end_src
-
-   Auto-compile on save and load.
-
-   #+begin_src emacs-lisp
-     (use-package auto-compile :init
-       (progn
-         (auto-compile-on-save-mode 1)
-         (auto-compile-on-load-mode 1)))
-   #+end_src
-
-   Highlight current sexp.
-
-   #+begin_src emacs-lisp
-     (use-package hl-sexp
-       :commands hl-sexp-mode
-       :config
-       ;; Prevent flickery behaviour due to hl-sexp-mode unhighlighting
-       ;; before each command
-       (defadvice hl-sexp-mode (after unflicker (&optional turn-on) activate)
-         (when turn-on
-           (remove-hook 'pre-command-hook #'hl-sexp-unhighlight))))
-   #+end_src
-
-   Support byte-compilation in a sub-process, as required by
-   highlight-cl.
-
-   #+begin_src emacs-lisp
-     (defun jcf-byte-compile-file-batch (filename)
-       "Byte-compile FILENAME in batch mode, ie. a clean sub-process."
-       (interactive "fFile to byte-compile in batch mode: ")
-       (let ((emacs (car command-line-args)))
-         (compile
-          (concat
-           emacs " "
-           (mapconcat
-            'shell-quote-argument
-            (list "-Q" "-batch" "-f" "batch-byte-compile" filename)
-            " ")))))
-   #+end_src
-
-   Enable desired features for all lisp modes.
-
-   #+begin_src emacs-lisp
-     (defun jcf-lisp-setup ()
-       "Enable features useful in any Lisp mode."
-       (turn-on-eldoc-mode)
-       (redshank-mode)
-       (smartparens-strict-mode +1)
-       (rainbow-delimiters-mode +1)
-       (disable-paredit-mode))
-
-     (defun jcf-emacs-lisp-setup ()
-       "Enable features useful when working with elisp."
-       (elisp-slime-nav-mode t)
-       (set-up-hippie-expand-for-elisp)
-       (disable-paredit-mode))
-
-     (defconst jcf-elispy-modes
-       '(emacs-lisp-mode ielm-mode)
-       "Major modes relating to elisp.")
-
-     (defconst jcf-lispy-modes
-       (append jcf-elispy-modes
-               '(lisp-mode inferior-lisp-mode lisp-interaction-mode))
-       "All lispy major modes.")
-
-     (use-package rainbow-delimiters)
-
-     (use-package redshank
-       :commands redshank-mode
-       :diminish redshank-mode
-       :config
-       (use-package paredit))
-
-     (require 'derived)
-
-     (dolist (hook (mapcar #'derived-mode-hook-name jcf-lispy-modes))
-       (add-hook hook 'jcf-lisp-setup))
-
-     (dolist (hook (mapcar #'derived-mode-hook-name jcf-elispy-modes))
-       (add-hook hook 'jcf-emacs-lisp-setup))
-
-     (defun jcf-maybe-check-parens ()
-       "Run `check-parens' if this is a lispy mode."
-       (when (memq major-mode jcf-lispy-modes)
-         (check-parens)))
-
-     (add-hook 'after-save-hook #'jcf-maybe-check-parens)
-
-     (use-package eldoc-eval
-       :commands eldoc-eval)
-
-     (use-package cl-lib-highlight
-       :commands lisp-mode
-       :config
-       (cl-lib-highlight-initialize))
-   #+end_src
-
-   Delete .elc files when reverting the .el from VC or magit.
-
-   When .el files are open, we can intercept when they are modified by
-   VC or magit in order to remove .elc files that are likely to be out
-   of sync.
-
-   This is handy while actively working on elisp files, though
-   obviously it doesn't ensure that unopened files will also have
-   their .elc counterparts removed - VC hooks would be necessary for
-   that.
-
-   #+begin_src emacs-lisp
-     (defvar jcf-vc-reverting nil
-       "Whether or not VC or Magit is currently reverting buffers.")
-
-     (defadvice revert-buffer (after jcf-maybe-remove-elc activate)
-       "If reverting from VC, delete any .elc file that will now be out of sync."
-       (when jcf-vc-reverting
-         (when (and (eq 'emacs-lisp-mode major-mode)
-                    buffer-file-name
-                    (string= "el" (file-name-extension buffer-file-name)))
-           (let ((elc (concat buffer-file-name "c")))
-             (when (file-exists-p elc)
-               (message "Removing out-of-sync elc file %s" (file-name-nondirectory elc))
-               (delete-file elc))))))
-
-     (defadvice magit-revert-buffers (around jcf-reverting activate)
-       (let ((jcf-vc-reverting t))
-         ad-do-it))
-     (defadvice vc-revert-buffer-internal (around jcf-reverting activate)
-       (let ((jcf-vc-reverting t))
-         ad-do-it))
-   #+end_src
-
-   Macrostep.
-
-   #+begin_src emacs-lisp
-     (use-package macrostep
-       :commands lisp-mode
-       :config (define-key emacs-lisp-mode-map (kbd "C-c e") 'macrostep-expand))
-   #+end_src
-
-** Lua
-
-   #+begin_src emacs-lisp
-     (use-package lua-mode
-       :commands lua-mode)
-   #+end_src
-
-** Markdown
-
-   #+begin_src emacs-lisp
-     (use-package markdown-mode
-       :mode "\\.\\(md\\|markdown\\)\\'"
-       :commands markdown-mode
-       :config
-       (progn
-         (use-package pandoc-mode :init
-           (add-hook 'markdown-mode-hook 'turn-on-pandoc))
-
-         (add-hook 'markdown-mode-hook
-                   (lambda () (guide-key/add-local-guide-key-sequence "C-c /")))))
-   #+end_src
-
-** NXML
-
-   #+begin_src emacs-lisp
-     (use-package nxml-mode
-       :mode (("\\.gpx\\'" . nxml-mode)
-              ("\\.plist\\'" . nxml-mode)
-              ("\\.rng\\'" . nxml-mode)
-              ("\\.rss\\'" . nxml-mode)
-              ("\\.sch\\'" . nxml-mode)
-              ("\\.svg\\'" . nxml-mode)
-              ("\\.tcx\\'" . nxml-mode)
-              ("\\.xml\\'" . nxml-mode)
-              ("\\.xsd\\'" . nxml-mode)
-              ("\\.xslt\\'" . nxml-mode))
-
-       :init
-       (progn
-         (setq
-          magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist)
-          nxml-slash-auto-complete-flag t)
-
-         (add-hook
-          'nxml-mode-hook
-          (lambda () (set (make-local-variable 'ido-use-filename-at-point) nil)))
-
-         (fset 'xml-mode 'nxml-mode)))
-
-     (use-package tidy
-       :commands (tidy-buffer tidy-current-line)
-       :init
-       (add-hook 'nxml-mode-hook (lambda () (tidy-build-menu nxml-mode-map))))
-   #+end_src
-
-   http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-mode/
-
-   #+begin_src emacs-lisp
-     (defun jcf-pp-xml-region (begin end)
-       "Pretty format XML markup in region. The function inserts linebreaks
-     to separate tags that have nothing but whitespace between them.  It
-     then indents the markup by using nxml's indentation rules."
-       (interactive "r")
-       (save-excursion
-           (nxml-mode)
-           (goto-char begin)
-           (while (search-forward-regexp "\>[ \\t]*\<" nil t)
-             (backward-char) (insert "\n"))
-           (indent-region begin end)))
-   #+end_src
-
-** PHP
-
-   #+begin_src emacs-lisp
-     (use-package php-mode
-       :commands php-mode)
-
-     (use-package smarty-mode
-       :commands smarty-mode)
-   #+end_src
-
-** Python
-
-   #+begin_src emacs-lisp
-     (use-package python
-       :mode (("\\.py\\'" . python-mode)
-              ("SConstruct\\'" . python-mode)
-              ("SConscript\\'" . python-mode))
-       :init
-       (add-hook 'python-mode-hook 'elpy-initialize-local-variables)
-       :config
-       (use-package elpy
+          (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+          (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+          (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+          (add-hook 'cider-repl-mode-hook 'subword-mode)
+
+          ;; nrepl isn't based on comint
+          (add-hook 'cider-repl-mode-hook
+                    (lambda () (setq show-trailing-whitespace nil)))
+
+          (use-package slamhound))))
+  #+end_src
+
+* Clojurescript
+
+  Define our own ~clojurescript-mode~ that is derived from
+  ~clojure-mode~.
+
+  We disable Company mode because you can't complete Clojurescript
+  via a normal Clojure REPL, and if you try Emacs hangs until
+  Company times out.
+
+  #+begin_src emacs-lisp
+    (define-derived-mode clojurescript-mode clojure-mode
+      "Clojurescript"
+      "Extends clojure-mode with Clojurescript-specific settings."
+      (company-mode -1))
+  #+end_src
+
+  Use ~clojurescript-mode~ for files with a ~cljs~ extension.
+
+  #+begin_src emacs-lisp
+    (add-auto-mode 'clojurescript-mode "\\.cljs\\'")
+  #+end_src
+
+* Common-Lisp
+
+  #+begin_src emacs-lisp
+    (use-package lisp-mode
+      :mode (("\\.cl\\'" . lisp-mode))
+      :config
+      (progn
+        (defun lispdoc ()
+          "Searches lispdoc.com for SYMBOL, which is by default the symbol currently
+    under the cursor."
+          (interactive)
+          (let* ((word-at-point (word-at-point))
+                 (symbol-at-point (symbol-at-point))
+                 (default (symbol-name symbol-at-point))
+                 (inp (read-from-minibuffer
+                       (if (or word-at-point symbol-at-point)
+                           (concat "Symbol (default " default "): ")
+                         "Symbol (no default): "))))
+            (if (and (string= inp "") (not word-at-point) (not
+                                                           symbol-at-point))
+                (message "you didn't enter a symbol!")
+              (let ((search-type (read-from-minibuffer
+                                  "full-text (f) or basic (b) search (default b)? ")))
+                (browse-url (concat "http://lispdoc.com?q="
+                                    (if (string= inp "")
+                                        default
+                                      inp)
+                                    "&search="
+                                    (if (string-equal search-type "f")
+                                        "full+text+search"
+                                      "basic+search")))))))
+
+        (define-key lisp-mode-map (kbd "C-c l") 'lispdoc)))
+  #+end_src
+
+* Configuration
+
+  Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
+
+  #+begin_src emacs-lisp
+    (add-auto-mode 'conf-mode "Procfile")
+  #+end_src
+
+* Crontab
+
+  #+begin_src emacs-lisp
+    (use-package crontab-mode
+      :mode "\\.?cron\\(tab\\)?\\'")
+  #+end_src
+
+* CSS
+
+ #+begin_src emacs-lisp
+   (use-package css-mode
+     :commands css-mode
+     :init
+     (setq css-indent-offset 2)
+     :config
+     (progn
+       (use-package rainbow-mode
          :init
-         (progn
-           (elpy-enable)
-           (elpy-use-ipython))))
-   #+end_src
+         (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
+           (add-hook hook 'rainbow-mode)))
 
-** Ruby
+       (use-package css-eldoc)
+
+       (use-package mmm-vars
+         :config
+         (mmm-add-group
+          'html-css
+          '((css-cdata
+             :submode css-mode
+             :face mmm-code-submode-face
+             :front "<style[^>]*>[ \t\n]*\\(//\\)?<!\\[CDATA\\[[ \t]*\n?"
+             :back "[ \t]*\\(//\\)?]]>[ \t\n]*</style>"
+             :insert ((?j js-tag nil @ "<style type=\"text/css\">"
+                          @ "\n" _ "\n" @ "</script>" @)))
+            (css
+             :submode css-mode
+             :face mmm-code-submode-face
+             :front "<style[^>]*>[ \t]*\n?"
+             :back "[ \t]*</style>"
+             :insert ((?j js-tag nil @ "<style type=\"text/css\">"
+                          @ "\n" _ "\n" @ "</style>" @)))
+            (css-inline
+             :submode css-mode
+             :face mmm-code-submode-face
+             :front "style=\""
+             :back "\""))))))
+ #+end_src
+
+* CSV
+
+  #+begin_src emacs-lisp
+    (use-package csv-mode
+      :mode "\\.[Cc][Ss][Vv]\\'"
+      :init (setq csv-separators '("," ";" "|" " "))
+      :config (use-package csv-nav))
+  #+end_src
+
+* Cucumber
+
+  #+begin_src emacs-lisp
+    (use-package feature-mode
+      :commands feature-mode)
+  #+end_src
+
+* ERB
 
    #+begin_src emacs-lisp
-     (use-package ruby-mode
-       :commands ruby-mode
-       :mode (("Gemfile\\'" . ruby-mode)
-              ("Kirkfile\\'" . ruby-mode)
-              ("Rakefile\\'" . ruby-mode)
-              ("\\.builder\\'" . ruby-mode)
-              ("\\.gemspec\\'" . ruby-mode)
-              ("\\.irbrc\\'" . ruby-mode)
-              ("\\.pryrc\\'" . ruby-mode)
-              ("\\.rake\\'" . ruby-mode)
-              ("\\.rjs\\'" . ruby-mode)
-              ("\\.ru\\'" . ruby-mode)
-              ("\\.rxml\\'" . ruby-mode))
-
-       :init
-       (setq ruby-use-encoding-map nil)
+     (use-package mmm-erb
+       :commands mmm-erb
+       :mode (("\\.rhtml\\'" . html-erb-mode)
+              ("\\.html\\.erb\\'" . html-erb-mode)
+              ("\\.jst\\.ejs\\'" . html-erb-mode))
 
        :config
        (progn
-         (use-package inf-ruby)
-         (use-package ruby-hash-syntax)
+         (use-package mmm-mode)
 
-         (after-load 'ruby-mode
-           (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
-           (define-key ruby-mode-map (kbd "TAB") 'indent-for-tab-command))
+         (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
+         (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
 
-         (add-hook 'ruby-mode-hook 'subword-mode)
+         (defun jcf-set-up-mode-for-erb (mode)
+           (add-hook (derived-mode-hook-name mode) 'jcf-ensure-mmm-erb-loaded)
+           (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
 
-         (use-package robe
-           :config (add-hook 'ruby-mode-hook 'robe-mode))
+         (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
+           (dolist (mode html-erb-modes)
+             (jcf-set-up-mode-for-erb mode)
+             (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
+             (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
 
-         (use-package ruby-compilation
-           :config
-           (let ((m ruby-mode-map))
-             (define-key m [S-f7] 'ruby-compilation-this-buffer)
-             (define-key m [f7] 'ruby-compilation-this-test)
-             (define-key m [f6] 'recompile)))
+         (require 'derived)
 
-         (use-package yari
-           :init (defalias 'ri 'yari))
+         (mapc 'jcf-set-up-mode-for-erb
+               '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
 
-         (use-package rinari
-           :diminish ((rinari . "Rin"))
-           :init
-           (global-rinari-mode))
-
-         (use-package rspec-mode
-           :config (rspec-mode 1))
-
-         (use-package bundler)
-
-         ;; Stupidly the non-bundled ruby-mode isn't a derived mode of
-         ;; prog-mode: we run the latter's hooks anyway in that case.
-         (add-hook 'ruby-mode-hook
-                   (lambda ()
-                     (unless (derived-mode-p 'prog-mode)
-                       (run-hooks 'prog-mode-hook))))))
+         (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
+           (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))))
    #+end_src
 
-** SASS
+* Erlang
+
+  #+begin_src emacs-lisp
+    (use-package erlang
+      :commands erlang-mode
+      :config
+      (use-package erlang-start))
+  #+end_src
+
+* Golang
+
+  It is assumed your ~GOPATH~, and ~PATH~ are already setup. If this
+  is not the case you can set the relevant environment variables using
+  something like:
+
+  #+BEGIN_SRC emacs-lisp :tangle no
+    (setenv "GOPATH" (expand-file-name "Go" (getenv "HOME")))
+    (setenv "PATH" (concat (getenv "PATH") ":"
+    (expand-file-name "bin" (getenv "GOPATH"))))
+  #+end_src
+
+  #+begin_src emacs-lisp
+    (use-package go-mode
+      :commands go-mode
+      :config
+      (progn
+        (add-hook 'before-save-hook #'gofmt-before-save)
+
+        ;; Flymake for Go requires a Go dependency. If it's in our
+        ;; `GOPATH` we can load it up.
+        (let ((flymake-path (expand-file-name "src/github.com/dougm/goflymake"
+                                              (getenv "GOPATH"))))
+          (when (file-exists-p flymake-path)
+            (add-to-list 'load-path flymake-path)
+            (use-package go-flymake)))))
+  #+end_src
+
+* Haml
+
+  #+begin_src emacs-lisp
+    (use-package haml-mode
+      :commands haml-mode
+      :config
+      (progn
+        (define-key haml-mode-map (kbd "C-o") 'open-line)
+        (when (fboundp 'electric-indent-mode)
+          (add-hook 'haml-mode-hook (lambda () (electric-indent-mode -1))))))
+  #+end_src
+
+* Haskell
+
+  #+begin_src emacs-lisp
+    (use-package haskell-mode
+      :commands haskell-mode
+      :mode "\\.ghci\\'"
+      :config
+      (progn
+        (setq-default haskell-stylish-on-save t)
+
+        (require 'flycheck-hdevtools)
+        (require 'flycheck-haskell)
+
+        (after-load 'flycheck
+          (require 'flycheck-hdevtools))
+
+        (dolist (hook '(haskell-mode-hook inferior-haskell-mode-hook))
+          (add-hook hook 'turn-on-haskell-doc-mode))
+
+        (use-package hi2)
+
+        (add-hook 'haskell-mode-hook 'turn-on-hi2)
+        (add-hook 'haskell-mode-hook (lambda () (subword-mode +1)))
+
+        (after-load 'haskell-mode
+          (define-key haskell-mode-map (kbd "C-c h") 'hoogle)
+          (define-key haskell-mode-map (kbd "C-o") 'open-line))
+
+        (use-package ghci-completion
+          :init
+          (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion))
+
+        (eval-after-load 'page-break-lines
+          '(push 'haskell-mode page-break-lines-modes))
+
+        ;; Make compilation-mode understand "at blah.hs:11:34-50" lines output by GHC
+        (after-load 'compile
+          (let ((alias 'ghc-at-regexp))
+            (add-to-list
+             'compilation-error-regexp-alist-alist
+             (list alias
+                   " at \\(.*\\.\\(?:l?[gh]hs\\|hi\\)\\):\\([0-9]+\\):\\([0-9]+\\)-[0-9]+$" 1 2 3 0 1))
+            (add-to-list
+             'compilation-error-regexp-alist alias)))))
+  #+end_src
+
+* HTML
+
+  See [[Ruby]] configuration for ERB setup.
+
+  #+begin_src emacs-lisp
+    ;; (use-package html-mode
+    ;;   :mode "\\.(jsp|tmpl)\\'"
+    ;;   :config
+    ;;   (progn
+    ;;     (use-package tidy
+    ;;       :config
+    ;;       (add-hook 'html-mode-hook (lambda () (tidy-build-menu html-mode-map))))
+
+    ;;     (use-package tagedit
+    ;;       :commands sgml-mode
+    ;;       :config
+    ;;       (progn
+    ;;         (tagedit-add-paredit-like-keybindings)
+    ;;         (add-hook 'sgml-mode-hook (lambda () (tagedit-mode 1)))))))
+  #+end_src
+
+* Javascript
+
+  #+begin_src emacs-lisp
+    (use-package coffee-mode
+      :commands coffee-mode
+      :mode "\\.coffee\\.erb\\'"
+      :init
+      (setq
+       coffee-js-mode 'js2-mode
+       coffee-tab-width 2))
+
+    (use-package js2-mode
+      :diminish ((js2-mode . "JS2"))
+      :mode "\\.js\\(\\.erb\\)?\\'"
+      :commands js2-mode
+      :init
+      (progn
+        (setq-default
+         js2-basic-offset 2
+         js2-bounce-indent-p nil)
+
+        (add-hook 'json-mode-hook 'rainbow-delimiters-mode)
+        (after-load 'js2-mode (js2-imenu-extras-mode))
+
+        (use-package skewer-mode
+          :commands skewer-mode)))
+
+    (use-package json-mode
+      :mode (("\\.bowerrc\\'" . json-mode)
+             ("\\.csslintrc\\'" . json-mode)
+             ("\\.jshintrc\\'" . json-mode))
+      :commands json-mode
+      :init
+      (progn
+        (defun jcf-json-mode-hook ()
+          (setq js-indent-level 2)
+          (rainbow-delimiters-mode))
+
+        (add-hook 'json-mode-hook 'jcf-json-mode-hook)))
+
+    (use-package jsx-mode
+      :commands jsx-mode
+      :mode "\\.jsx\\'")
+  #+end_src
+
+* LESS
+
+  #+begin_src emacs-lisp
+    (use-package less-css-mode
+      :commands less-css-mode
+      :config
+      (progn
+        (use-package js2-mode)
+        (use-package skewer-less)))
+  #+end_src
+
+* Lisp
+
+  Treat Cask file like elisp.
+
+  #+begin_src emacs-lisp
+    (use-package lisp-mode
+      :commands lisp-mode
+      :mode (("Cask\\'" . emacs-lisp-mode)
+             ("\\.emacs-project\\'" . emacs-lisp-mode)
+             ("archive-contents\\'" . emacs-lisp-mode))
+
+      :config
+      (progn
+        (require 'elisp-slime-nav)
+        (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+          (add-hook hook 'elisp-slime-nav-mode))
+
+        (require 'lively)
+
+        (defun jcf-eval-last-sexp-or-region (beg end prefix)
+          "Eval region from BEG to END if active, otherwise the last sexp."
+          (interactive "r\nP")
+          (if (use-region-p)
+              (eval-region beg end)
+            (pp-eval-last-sexp prefix)))
+
+        (global-set-key (kbd "M-:") 'pp-eval-expression)
+
+        (after-load 'lisp-mode
+          (define-key emacs-lisp-mode-map (kbd "C-x C-e")
+            'jcf-eval-last-sexp-or-region))
+
+        (defun jcf-emacs-lisp-module-name ()
+          "Search the buffer for `provide' declaration."
+          (save-excursion
+            (goto-char (point-min))
+            (when (search-forward-regexp "^(provide '" nil t)
+              (symbol-name (symbol-at-point)))))
+
+        ;; Credit to Chris Done for this one.
+        (defun jcf-try-complete-lisp-symbol-without-namespace (old)
+          "Hippie expand \"try\" function which expands \"-foo\" to
+          \"modname-foo\" in elisp."
+          (unless old
+            (he-init-string (he-lisp-symbol-beg) (point))
+            (when (string-prefix-p "-" he-search-string)
+              (let ((mod-name (jcf-emacs-lisp-module-name)))
+                (when mod-name
+                  (setq he-expand-list (list (concat mod-name he-search-string)))))))
+          (when he-expand-list
+            (he-substitute-string (car he-expand-list))
+            (setq he-expand-list nil)
+            t))
+
+        (defun set-up-hippie-expand-for-elisp ()
+          "Locally set `hippie-expand' completion functions for use with Emacs Lisp."
+          (make-local-variable 'hippie-expand-try-functions-list)
+
+          (add-to-list 'hippie-expand-try-functions-list
+                       'try-complete-lisp-symbol
+                       t)
+
+          (add-to-list 'hippie-expand-try-functions-list
+                       'try-complete-lisp-symbol-partially
+                       t)
+
+          (add-to-list 'hippie-expand-try-functions-list
+                       'jcf-try-complete-lisp-symbol-without-namespace
+                       t)))
+
+      :bind
+      ("C-h K" . find-function-on-key))
+
+    (use-package ipretty :init
+      (ipretty-mode 1))
+  #+end_src
+
+  Auto-compile on save and load.
+
+  #+begin_src emacs-lisp
+    (use-package auto-compile :init
+      (progn
+        (auto-compile-on-save-mode 1)
+        (auto-compile-on-load-mode 1)))
+  #+end_src
+
+  Highlight current sexp.
+
+  #+begin_src emacs-lisp
+    (use-package hl-sexp
+      :commands hl-sexp-mode
+      :config
+      ;; Prevent flickery behaviour due to hl-sexp-mode unhighlighting
+      ;; before each command
+      (defadvice hl-sexp-mode (after unflicker (&optional turn-on) activate)
+        (when turn-on
+          (remove-hook 'pre-command-hook #'hl-sexp-unhighlight))))
+  #+end_src
+
+  Support byte-compilation in a sub-process, as required by
+  highlight-cl.
+
+  #+begin_src emacs-lisp
+    (defun jcf-byte-compile-file-batch (filename)
+      "Byte-compile FILENAME in batch mode, ie. a clean sub-process."
+      (interactive "fFile to byte-compile in batch mode: ")
+      (let ((emacs (car command-line-args)))
+        (compile
+         (concat
+          emacs " "
+          (mapconcat
+           'shell-quote-argument
+           (list "-Q" "-batch" "-f" "batch-byte-compile" filename)
+           " ")))))
+  #+end_src
+
+  Enable desired features for all lisp modes.
+
+  #+begin_src emacs-lisp
+    (defun jcf-lisp-setup ()
+      "Enable features useful in any Lisp mode."
+      (turn-on-eldoc-mode)
+      (redshank-mode)
+      (smartparens-strict-mode +1)
+      (rainbow-delimiters-mode +1)
+      (disable-paredit-mode))
+
+    (defun jcf-emacs-lisp-setup ()
+      "Enable features useful when working with elisp."
+      (elisp-slime-nav-mode t)
+      (set-up-hippie-expand-for-elisp)
+      (disable-paredit-mode))
+
+    (defconst jcf-elispy-modes
+      '(emacs-lisp-mode ielm-mode)
+      "Major modes relating to elisp.")
+
+    (defconst jcf-lispy-modes
+      (append jcf-elispy-modes
+              '(lisp-mode inferior-lisp-mode lisp-interaction-mode))
+      "All lispy major modes.")
+
+    (use-package rainbow-delimiters)
+
+    (use-package redshank
+      :commands redshank-mode
+      :diminish redshank-mode
+      :config
+      (use-package paredit))
+
+    (require 'derived)
+
+    (dolist (hook (mapcar #'derived-mode-hook-name jcf-lispy-modes))
+      (add-hook hook 'jcf-lisp-setup))
+
+    (dolist (hook (mapcar #'derived-mode-hook-name jcf-elispy-modes))
+      (add-hook hook 'jcf-emacs-lisp-setup))
+
+    (defun jcf-maybe-check-parens ()
+      "Run `check-parens' if this is a lispy mode."
+      (when (memq major-mode jcf-lispy-modes)
+        (check-parens)))
+
+    (add-hook 'after-save-hook #'jcf-maybe-check-parens)
+
+    (use-package eldoc-eval
+      :commands eldoc-eval)
+
+    (use-package cl-lib-highlight
+      :commands lisp-mode
+      :config
+      (cl-lib-highlight-initialize))
+  #+end_src
+
+  Delete .elc files when reverting the .el from VC or magit.
+
+  When .el files are open, we can intercept when they are modified by
+  VC or magit in order to remove .elc files that are likely to be out
+  of sync.
+
+  This is handy while actively working on elisp files, though
+  obviously it doesn't ensure that unopened files will also have
+  their .elc counterparts removed - VC hooks would be necessary for
+  that.
+
+  #+begin_src emacs-lisp
+    (defvar jcf-vc-reverting nil
+      "Whether or not VC or Magit is currently reverting buffers.")
+
+    (defadvice revert-buffer (after jcf-maybe-remove-elc activate)
+      "If reverting from VC, delete any .elc file that will now be out of sync."
+      (when jcf-vc-reverting
+        (when (and (eq 'emacs-lisp-mode major-mode)
+                   buffer-file-name
+                   (string= "el" (file-name-extension buffer-file-name)))
+          (let ((elc (concat buffer-file-name "c")))
+            (when (file-exists-p elc)
+              (message "Removing out-of-sync elc file %s" (file-name-nondirectory elc))
+              (delete-file elc))))))
+
+    (defadvice magit-revert-buffers (around jcf-reverting activate)
+      (let ((jcf-vc-reverting t))
+        ad-do-it))
+    (defadvice vc-revert-buffer-internal (around jcf-reverting activate)
+      (let ((jcf-vc-reverting t))
+        ad-do-it))
+  #+end_src
+
+  Macrostep.
+
+  #+begin_src emacs-lisp
+    (use-package macrostep
+      :commands lisp-mode
+      :config (define-key emacs-lisp-mode-map (kbd "C-c e") 'macrostep-expand))
+  #+end_src
+
+* Lua
+
+  #+begin_src emacs-lisp
+    (use-package lua-mode
+      :commands lua-mode)
+  #+end_src
+
+* Markdown
+
+  #+begin_src emacs-lisp
+    (use-package markdown-mode
+      :mode "\\.\\(md\\|markdown\\)\\'"
+      :commands markdown-mode
+      :config
+      (progn
+        (use-package pandoc-mode :init
+          (add-hook 'markdown-mode-hook 'turn-on-pandoc))
+
+        (add-hook 'markdown-mode-hook
+                  (lambda () (guide-key/add-local-guide-key-sequence "C-c /")))))
+  #+end_src
+
+* NXML
+
+  #+begin_src emacs-lisp
+    (use-package nxml-mode
+      :mode (("\\.gpx\\'" . nxml-mode)
+             ("\\.plist\\'" . nxml-mode)
+             ("\\.rng\\'" . nxml-mode)
+             ("\\.rss\\'" . nxml-mode)
+             ("\\.sch\\'" . nxml-mode)
+             ("\\.svg\\'" . nxml-mode)
+             ("\\.tcx\\'" . nxml-mode)
+             ("\\.xml\\'" . nxml-mode)
+             ("\\.xsd\\'" . nxml-mode)
+             ("\\.xslt\\'" . nxml-mode))
+
+      :init
+      (progn
+        (setq
+         magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist)
+         nxml-slash-auto-complete-flag t)
+
+        (add-hook
+         'nxml-mode-hook
+         (lambda () (set (make-local-variable 'ido-use-filename-at-point) nil)))
+
+        (fset 'xml-mode 'nxml-mode)))
+
+    (use-package tidy
+      :commands (tidy-buffer tidy-current-line)
+      :init
+      (add-hook 'nxml-mode-hook (lambda () (tidy-build-menu nxml-mode-map))))
+  #+end_src
+
+  http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-mode/
+
+  #+begin_src emacs-lisp
+    (defun jcf-pp-xml-region (begin end)
+      "Pretty format XML markup in region. The function inserts linebreaks
+    to separate tags that have nothing but whitespace between them.  It
+    then indents the markup by using nxml's indentation rules."
+      (interactive "r")
+      (save-excursion
+          (nxml-mode)
+          (goto-char begin)
+          (while (search-forward-regexp "\>[ \\t]*\<" nil t)
+            (backward-char) (insert "\n"))
+          (indent-region begin end)))
+  #+end_src
+
+* PHP
+
+  #+begin_src emacs-lisp
+    (use-package php-mode
+      :commands php-mode)
+
+    (use-package smarty-mode
+      :commands smarty-mode)
+  #+end_src
+
+* Python
+
+  #+begin_src emacs-lisp
+    (use-package python
+      :mode (("\\.py\\'" . python-mode)
+             ("SConstruct\\'" . python-mode)
+             ("SConscript\\'" . python-mode))
+      :init
+      (add-hook 'python-mode-hook 'elpy-initialize-local-variables)
+      :config
+      (use-package elpy
+        :init
+        (progn
+          (elpy-enable)
+          (elpy-use-ipython))))
+  #+end_src
+
+* Ruby
+
+  #+begin_src emacs-lisp
+    (use-package ruby-mode
+      :commands ruby-mode
+      :mode (("Gemfile\\'" . ruby-mode)
+             ("Kirkfile\\'" . ruby-mode)
+             ("Rakefile\\'" . ruby-mode)
+             ("\\.builder\\'" . ruby-mode)
+             ("\\.gemspec\\'" . ruby-mode)
+             ("\\.irbrc\\'" . ruby-mode)
+             ("\\.pryrc\\'" . ruby-mode)
+             ("\\.rake\\'" . ruby-mode)
+             ("\\.rjs\\'" . ruby-mode)
+             ("\\.ru\\'" . ruby-mode)
+             ("\\.rxml\\'" . ruby-mode))
+
+      :init
+      (setq ruby-use-encoding-map nil)
+
+      :config
+      (progn
+        (use-package inf-ruby)
+        (use-package ruby-hash-syntax)
+
+        (after-load 'ruby-mode
+          (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
+          (define-key ruby-mode-map (kbd "TAB") 'indent-for-tab-command))
+
+        (add-hook 'ruby-mode-hook 'subword-mode)
+
+        (use-package robe
+          :config (add-hook 'ruby-mode-hook 'robe-mode))
+
+        (use-package ruby-compilation
+          :config
+          (let ((m ruby-mode-map))
+            (define-key m [S-f7] 'ruby-compilation-this-buffer)
+            (define-key m [f7] 'ruby-compilation-this-test)
+            (define-key m [f6] 'recompile)))
+
+        (use-package yari
+          :init (defalias 'ri 'yari))
+
+        (use-package rinari
+          :diminish ((rinari . "Rin"))
+          :init
+          (global-rinari-mode))
+
+        (use-package rspec-mode
+          :config (rspec-mode 1))
+
+        (use-package bundler)
+
+        ;; Stupidly the non-bundled ruby-mode isn't a derived mode of
+        ;; prog-mode: we run the latter's hooks anyway in that case.
+        (add-hook 'ruby-mode-hook
+                  (lambda ()
+                    (unless (derived-mode-p 'prog-mode)
+                      (run-hooks 'prog-mode-hook))))))
+  #+end_src
+
+* SASS
+
+  #+begin_src emacs-lisp
+    (use-package sass-mode
+      :commands sass-mode)
+
+    (use-package scss-mode
+      :commands scss-mode
+      :init
+      (setq-default scss-compile-at-save nil))
+  #+end_src
+
+* Shell
+
+  #+begin_src emacs-lisp
+    (defun jcf-setup-sh-mode ()
+      (interactive)
+      (setq sh-basic-offset 2
+            sh-indentation 2))
+
+    (add-hook 'sh-mode-hook 'jcf-setup-sh-mode)
+
+    (add-auto-mode 'sh-mode
+                   "\\.zsh\\'"
+                   "\\'zlogin\\'"
+                   "\\'zlogout\\'"
+                   "\\'zpretzorc\\'"
+                   "\\'zprofile\\'"
+                   "\\'zshenv\\'"
+                   "\\'zshrc\\'")
+  #+end_src
+
+* Slim
+
+  #+begin_src emacs-lisp
+    (use-package slim-mode
+      :commands slim-mode)
+  #+end_src
+
+* SQL
+
+  #+begin_src emacs-lisp
+    (use-package sql
+      :commands sql-mode
+      :config
+      (progn
+        (use-package sql-indent)
+
+        (defun jcf-pop-to-sqli-buffer ()
+          "Switch to the corresponding sqli buffer."
+          (interactive)
+          (if sql-buffer
+              (progn
+                (pop-to-buffer sql-buffer)
+                (goto-char (point-max)))
+            (sql-set-sqli-buffer)
+            (when sql-buffer
+              (jcf-pop-to-sqli-buffer))))
+
+        (after-load 'sql
+          (define-key sql-mode-map (kbd "C-c C-z") 'jcf-pop-to-sqli-buffer)
+          (add-hook 'sql-interactive-mode-hook 'jcf-never-indent)
+          (when (package-installed-p 'dash-at-point)
+            (defun jcf-maybe-set-dash-db-docset ()
+              (when (eq sql-product 'postgres)
+                (setq dash-at-point-docset "psql")))
+
+            (add-hook 'sql-mode-hook 'jcf-maybe-set-dash-db-docset)
+            (add-hook 'sql-interactive-mode-hook 'jcf-maybe-set-dash-db-docset)
+            (defadvice sql-set-product (after set-dash-docset activate)
+              (jcf-maybe-set-dash-db-docset))))
+
+        (setq-default sql-input-ring-file-name
+                      (expand-file-name ".sqli_history" user-emacs-directory))
+
+        (after-load 'page-break-lines
+          (push 'sql-mode page-break-lines-modes))))
+  #+end_src
+
+* TCL
+
+  Minimal TCL support for creating Portfiles, used in [[https://guide.macports.org/chunked/development.html][MacPorts
+  development]].
+
+  #+begin_src emacs-lisp
+    (use-package tcl :mode
+      ("Portfile\\'" . tcl-mode))
+  #+end_src
+
+* Textile
+
+  #+begin_src emacs-lisp
+    (use-package textile-mode
+      :commands textile-mode
+      :mode "\\.textile\\'")
+  #+end_src
+
+* YAML
 
    #+begin_src emacs-lisp
-     (use-package sass-mode
-       :commands sass-mode)
-
-     (use-package scss-mode
-       :commands scss-mode
-       :init
-       (setq-default scss-compile-at-save nil))
+     (use-package yaml-mode
+       :commands yaml-mode)
    #+end_src
-
-** Shell
-
-   #+begin_src emacs-lisp
-     (defun jcf-setup-sh-mode ()
-       (interactive)
-       (setq sh-basic-offset 2
-             sh-indentation 2))
-
-     (add-hook 'sh-mode-hook 'jcf-setup-sh-mode)
-
-     (add-auto-mode 'sh-mode
-                    "\\.zsh\\'"
-                    "\\'zlogin\\'"
-                    "\\'zlogout\\'"
-                    "\\'zpretzorc\\'"
-                    "\\'zprofile\\'"
-                    "\\'zshenv\\'"
-                    "\\'zshrc\\'")
-   #+end_src
-
-** Slim
-
-   #+begin_src emacs-lisp
-     (use-package slim-mode
-       :commands slim-mode)
-   #+end_src
-
-** SQL
-
-   #+begin_src emacs-lisp
-     (use-package sql
-       :commands sql-mode
-       :config
-       (progn
-         (use-package sql-indent)
-
-         (defun jcf-pop-to-sqli-buffer ()
-           "Switch to the corresponding sqli buffer."
-           (interactive)
-           (if sql-buffer
-               (progn
-                 (pop-to-buffer sql-buffer)
-                 (goto-char (point-max)))
-             (sql-set-sqli-buffer)
-             (when sql-buffer
-               (jcf-pop-to-sqli-buffer))))
-
-         (after-load 'sql
-           (define-key sql-mode-map (kbd "C-c C-z") 'jcf-pop-to-sqli-buffer)
-           (add-hook 'sql-interactive-mode-hook 'jcf-never-indent)
-           (when (package-installed-p 'dash-at-point)
-             (defun jcf-maybe-set-dash-db-docset ()
-               (when (eq sql-product 'postgres)
-                 (setq dash-at-point-docset "psql")))
-
-             (add-hook 'sql-mode-hook 'jcf-maybe-set-dash-db-docset)
-             (add-hook 'sql-interactive-mode-hook 'jcf-maybe-set-dash-db-docset)
-             (defadvice sql-set-product (after set-dash-docset activate)
-               (jcf-maybe-set-dash-db-docset))))
-
-         (setq-default sql-input-ring-file-name
-                       (expand-file-name ".sqli_history" user-emacs-directory))
-
-         (after-load 'page-break-lines
-           (push 'sql-mode page-break-lines-modes))))
-   #+end_src
-
-** TCL
-
-   Minimal TCL support for creating Portfiles, used in [[https://guide.macports.org/chunked/development.html][MacPorts
-   development]].
-
-   #+begin_src emacs-lisp
-     (use-package tcl :mode
-       ("Portfile\\'" . tcl-mode))
-   #+end_src
-
-** Textile
-
-   #+begin_src emacs-lisp
-     (use-package textile-mode
-       :commands textile-mode
-       :mode "\\.textile\\'")
-   #+end_src
-
-** YAML
-
-    #+begin_src emacs-lisp
-      (use-package yaml-mode
-        :commands yaml-mode)
-    #+end_src

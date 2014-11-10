@@ -4,248 +4,246 @@
 #+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 
-* Org
+* Installation
 
-** Installation
-
-   Always install Org from package to ensure we get a recent version.
-
-   #+begin_src emacs-lisp
-     (require 'org)
-   #+end_src
-
-** Basics
-
-   #+begin_src emacs-lisp
-     (setq org-log-done t
-           org-completion-use-ido t
-           org-edit-timestamp-down-means-later t
-           org-agenda-start-on-weekday nil
-           org-agenda-span 14
-           org-agenda-include-diary t
-           org-agenda-window-setup 'current-window
-           org-agenda-inhibit-startup t
-           org-fast-tag-selection-single-key 'expert
-           org-export-kill-product-buffer-when-displayed t
-           org-tags-column 80)
-   #+end_src
-
-   Refile targets include this file and any file contributing to the
-   agenda - up to 5 levels deep.
-
-   #+begin_src emacs-lisp
-     (setq org-refile-targets (quote ((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))))
-   #+end_src
-
-   Targets start with the file name - allows creating level 1 tasks.
-
-   #+begin_src emacs-lisp
-     (setq org-refile-use-outline-path (quote file))
-   #+end_src
-
-   Targets complete in steps so we start with filename, TAB shows the
-   next level of targets etc.
-
-   #+begin_src emacs-lisp
-     (setq org-outline-path-complete-in-steps t)
-   #+end_src
-
-** fstree
+  Always install Org from package to ensure we get a recent version.
 
   #+begin_src emacs-lisp
-     (require 'org-fstree)
-     (when *is-a-mac*
-       (require 'org-mac-link)
-       (autoload 'org-mac-grab-link "org-mac-link" nil t)
-       (require 'org-mac-iCal))
-   #+end_src
-
-** Syntax highlight inline code blocks
-
-   #+begin_src emacs-lisp
-     (setq org-src-fontify-natively t)
-   #+end_src
-
-** HTML export workaround
-
-   Fix an issue where exporting to HTML results in the following
-   error:
-
-   #+begin_src prog
-     org-html-fontify-code: Wrong number of arguments:
-       #[(_beg _end) "À " [font-lock-fontify-buffer] 1], 0
-   #+end_src
-
-   #+begin_src emacs-lisp
-     (defun org-font-lock-ensure ()
-       (font-lock-fontify-buffer))
-   #+end_src
-
-** Locations
-
-   #+begin_src emacs-lisp
-     (setq org-directory "~/Dropbox/Org"
-           org-agenda-files '("~/Dropbox/Agenda/")
-           org-default-notes-file "~/Dropbox/Agenda/refile.org")
-   #+end_src
-
-** TODOs
-
-   #+begin_src emacs-lisp
-     (setq org-todo-keywords
-           (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
-                   (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)"))))
-   #+end_src
-
-** Capture templates
-
-   #+begin_src emacs-lisp
-     (setq org-capture-templates
-           (quote (("t" "todo" entry (file "~/Dropbox/Agenda/refile.org")
-                    "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-                   ("r" "respond" entry (file "~/Dropbox/Agenda/refile.org")
-                    "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
-                   ("n" "note" entry (file "~/Dropbox/Agenda/refile.org")
-                    "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
-                   ("j" "Journal" entry (file+datetree "~/git/org/diary.org")
-                    "* %?\n%U\n" :clock-in t :clock-resume t)
-                   ("w" "org-protocol" entry (file "~/Dropbox/Agenda/refile.org")
-                    "* TODO Review %c\n%U\n" :immediate-finish t)
-                   ("m" "Meeting" entry (file "~/Dropbox/Agenda/refile.org")
-                    "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
-                   ("p" "Phone call" entry (file "~/Dropbox/Agenda/refile.org")
-                    "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
-                   ("h" "Habit" entry (file "~/Dropbox/Agenda/refile.org")
-                    "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
-   #+end_src
-
-** Remove empty LOGBOOK drawers on clock out
-
-   #+begin_src emacs-lisp
-     (defun jcf-remove-empty-drawer-on-clock-out ()
-       (interactive)
-       (save-excursion
-         (beginning-of-line 0)
-         (org-remove-empty-drawer-at (point))))
-
-     (add-hook 'org-clock-out-hook 'jcf-remove-empty-drawer-on-clock-out 'append)
-   #+end_src
-
-** Org clock
-
-   #+begin_src emacs-lisp
-     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
-     (setq org-clock-persistence-insinuate t)
-     (setq org-clock-persist t)
-     (setq org-clock-in-resume t)
-
-     ;; Change task state to STARTED when clocking in
-     (setq org-clock-in-switch-to-state "STARTED")
-     ;; Save clock data and notes in the LOGBOOK drawer
-     (setq org-clock-into-drawer t)
-     ;; Removes clocked tasks with 0:00 duration
-     (setq org-clock-out-remove-zero-time-clocks t)
-
-     ;; Show clock sums as hours and minutes, not "n days" etc.
-     (setq org-time-clocksum-format
-           '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
-
-     ;; Show the clocked-in task - if any - in the header line
-     (defun jcf-show-org-clock-in-header-line ()
-       (setq-default header-line-format '((" " org-mode-line-string " "))))
-
-     (defun jcf-hide-org-clock-from-header-line ()
-       (setq-default header-line-format nil))
-
-     (add-hook 'org-clock-in-hook 'jcf-show-org-clock-in-header-line)
-     (add-hook 'org-clock-out-hook 'jcf-hide-org-clock-from-header-line)
-     (add-hook 'org-clock-cancel-hook 'jcf-hide-org-clock-from-header-line)
-
-     (after-load 'org-clock
-       (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
-       (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
-   #+end_src
-
-** Pomodoro
-
-   #+begin_src emacs-lisp
-     (require 'org-pomodoro)
-     (after-load 'org-agenda
-       (define-key org-agenda-mode-map (kbd "P") 'org-pomodoro))
-   #+end_src
-
-** iCal in agenda
-
-   Disabled for now.
-
-   #+begin_src emacs-lisp
-     ;; (when (and *is-a-mac* (require 'org-mac-iCal nil t))
-     ;;   (setq org-agenda-include-diary t
-     ;;         org-agenda-custom-commands
-     ;;         '(("I" "Import diary from iCal" agenda ""
-     ;;            ((org-agenda-mode-hook #'org-mac-iCal)))))
-
-     ;;   (add-hook 'org-agenda-cleanup-fancy-diary-hook
-     ;;             (lambda ()
-     ;;               (goto-char (point-min))
-     ;;               (save-excursion
-     ;;                 (while (re-search-forward "^[a-z]" nil t)
-     ;;                   (goto-char (match-beginning 0))
-     ;;                   (insert "0:00-24:00 ")))
-     ;;               (while (re-search-forward "^ [a-z]" nil t)
-     ;;                 (goto-char (match-beginning 0))
-     ;;                 (save-excursion
-     ;;                   (re-search-backward "^[0-9]+:[0-9]+-[0-9]+:[0-9]+ " nil t))
-     ;;                 (insert (match-string 0))))))
-   #+end_src
-
-** Babel languages
-
-   #+begin_src emacs-lisp
-     (org-babel-do-load-languages
-      'org-babel-load-languages
-      '((ditaa . t)
-        (R . t)
-        (sh . t)))
-   #+end_src
-
-   Clojure support via Cider.
-
-   #+begin_src emacs-lisp
-     (require 'ob-clojure)
-     (setq org-babel-clojure-backend 'cider)
-   #+end_src
-
-   Ditaa support, installed using Homebrew.
-
-   #+begin_src emacs-lisp
-     (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.9/libexec/ditaa0_9.jar")
-   #+end_src
-
-   Trust benign languages when evaluating code blocks.
-
-   #+begin_src emacs-lisp
-     (defun jcf-org-confirm-babel-evaluate (lang body)
-       (not (string= lang "ditaa")))
-     (setq org-confirm-babel-evaluate 'jcf-org-confirm-babel-evaluate)
-   #+end_src
-
-   See http://orgmode.org/manual/Code-evaluation-security.html for more information.
-
-** Keybindings
-
-   #+begin_src emacs-lisp
-     (define-key global-map (kbd "C-c l") 'org-store-link)
-     (define-key global-map (kbd "C-c a") 'org-agenda)
-   #+end_src
-
-** Bindings
-
-   #+begin_src emacs-lisp
-     (define-key org-mode-map (kbd "C-M-<down>") 'org-down-element)
-     (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
-
-     (when *is-a-mac*
-       (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)
-       (define-key org-mode-map (kbd "M-h") nil))
+    (require 'org)
   #+end_src
+
+* Basics
+
+  #+begin_src emacs-lisp
+    (setq org-log-done t
+          org-completion-use-ido t
+          org-edit-timestamp-down-means-later t
+          org-agenda-start-on-weekday nil
+          org-agenda-span 14
+          org-agenda-include-diary t
+          org-agenda-window-setup 'current-window
+          org-agenda-inhibit-startup t
+          org-fast-tag-selection-single-key 'expert
+          org-export-kill-product-buffer-when-displayed t
+          org-tags-column 80)
+  #+end_src
+
+  Refile targets include this file and any file contributing to the
+  agenda - up to 5 levels deep.
+
+  #+begin_src emacs-lisp
+    (setq org-refile-targets (quote ((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))))
+  #+end_src
+
+  Targets start with the file name - allows creating level 1 tasks.
+
+  #+begin_src emacs-lisp
+    (setq org-refile-use-outline-path (quote file))
+  #+end_src
+
+  Targets complete in steps so we start with filename, TAB shows the
+  next level of targets etc.
+
+  #+begin_src emacs-lisp
+    (setq org-outline-path-complete-in-steps t)
+  #+end_src
+
+* fstree
+
+ #+begin_src emacs-lisp
+    (require 'org-fstree)
+    (when *is-a-mac*
+      (require 'org-mac-link)
+      (autoload 'org-mac-grab-link "org-mac-link" nil t)
+      (require 'org-mac-iCal))
+  #+end_src
+
+* Syntax highlight inline code blocks
+
+  #+begin_src emacs-lisp
+    (setq org-src-fontify-natively t)
+  #+end_src
+
+* HTML export workaround
+
+  Fix an issue where exporting to HTML results in the following
+  error:
+
+  #+begin_src prog
+    org-html-fontify-code: Wrong number of arguments:
+      #[(_beg _end) "À " [font-lock-fontify-buffer] 1], 0
+  #+end_src
+
+  #+begin_src emacs-lisp
+    (defun org-font-lock-ensure ()
+      (font-lock-fontify-buffer))
+  #+end_src
+
+* Locations
+
+  #+begin_src emacs-lisp
+    (setq org-directory "~/Dropbox/Org"
+          org-agenda-files '("~/Dropbox/Agenda/")
+          org-default-notes-file "~/Dropbox/Agenda/refile.org")
+  #+end_src
+
+* TODOs
+
+  #+begin_src emacs-lisp
+    (setq org-todo-keywords
+          (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
+                  (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)"))))
+  #+end_src
+
+* Capture templates
+
+  #+begin_src emacs-lisp
+    (setq org-capture-templates
+          (quote (("t" "todo" entry (file "~/Dropbox/Agenda/refile.org")
+                   "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                  ("r" "respond" entry (file "~/Dropbox/Agenda/refile.org")
+                   "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+                  ("n" "note" entry (file "~/Dropbox/Agenda/refile.org")
+                   "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+                  ("j" "Journal" entry (file+datetree "~/git/org/diary.org")
+                   "* %?\n%U\n" :clock-in t :clock-resume t)
+                  ("w" "org-protocol" entry (file "~/Dropbox/Agenda/refile.org")
+                   "* TODO Review %c\n%U\n" :immediate-finish t)
+                  ("m" "Meeting" entry (file "~/Dropbox/Agenda/refile.org")
+                   "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+                  ("p" "Phone call" entry (file "~/Dropbox/Agenda/refile.org")
+                   "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+                  ("h" "Habit" entry (file "~/Dropbox/Agenda/refile.org")
+                   "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
+  #+end_src
+
+* Remove empty LOGBOOK drawers on clock out
+
+  #+begin_src emacs-lisp
+    (defun jcf-remove-empty-drawer-on-clock-out ()
+      (interactive)
+      (save-excursion
+        (beginning-of-line 0)
+        (org-remove-empty-drawer-at (point))))
+
+    (add-hook 'org-clock-out-hook 'jcf-remove-empty-drawer-on-clock-out 'append)
+  #+end_src
+
+* Org clock
+
+  #+begin_src emacs-lisp
+    ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+    (setq org-clock-persistence-insinuate t)
+    (setq org-clock-persist t)
+    (setq org-clock-in-resume t)
+
+    ;; Change task state to STARTED when clocking in
+    (setq org-clock-in-switch-to-state "STARTED")
+    ;; Save clock data and notes in the LOGBOOK drawer
+    (setq org-clock-into-drawer t)
+    ;; Removes clocked tasks with 0:00 duration
+    (setq org-clock-out-remove-zero-time-clocks t)
+
+    ;; Show clock sums as hours and minutes, not "n days" etc.
+    (setq org-time-clocksum-format
+          '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+
+    ;; Show the clocked-in task - if any - in the header line
+    (defun jcf-show-org-clock-in-header-line ()
+      (setq-default header-line-format '((" " org-mode-line-string " "))))
+
+    (defun jcf-hide-org-clock-from-header-line ()
+      (setq-default header-line-format nil))
+
+    (add-hook 'org-clock-in-hook 'jcf-show-org-clock-in-header-line)
+    (add-hook 'org-clock-out-hook 'jcf-hide-org-clock-from-header-line)
+    (add-hook 'org-clock-cancel-hook 'jcf-hide-org-clock-from-header-line)
+
+    (after-load 'org-clock
+      (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
+      (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
+  #+end_src
+
+* Pomodoro
+
+  #+begin_src emacs-lisp
+    (require 'org-pomodoro)
+    (after-load 'org-agenda
+      (define-key org-agenda-mode-map (kbd "P") 'org-pomodoro))
+  #+end_src
+
+* iCal in agenda
+
+  Disabled for now.
+
+  #+begin_src emacs-lisp
+    ;; (when (and *is-a-mac* (require 'org-mac-iCal nil t))
+    ;;   (setq org-agenda-include-diary t
+    ;;         org-agenda-custom-commands
+    ;;         '(("I" "Import diary from iCal" agenda ""
+    ;;            ((org-agenda-mode-hook #'org-mac-iCal)))))
+
+    ;;   (add-hook 'org-agenda-cleanup-fancy-diary-hook
+    ;;             (lambda ()
+    ;;               (goto-char (point-min))
+    ;;               (save-excursion
+    ;;                 (while (re-search-forward "^[a-z]" nil t)
+    ;;                   (goto-char (match-beginning 0))
+    ;;                   (insert "0:00-24:00 ")))
+    ;;               (while (re-search-forward "^ [a-z]" nil t)
+    ;;                 (goto-char (match-beginning 0))
+    ;;                 (save-excursion
+    ;;                   (re-search-backward "^[0-9]+:[0-9]+-[0-9]+:[0-9]+ " nil t))
+    ;;                 (insert (match-string 0))))))
+  #+end_src
+
+* Babel languages
+
+  #+begin_src emacs-lisp
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((ditaa . t)
+       (R . t)
+       (sh . t)))
+  #+end_src
+
+  Clojure support via Cider.
+
+  #+begin_src emacs-lisp
+    (require 'ob-clojure)
+    (setq org-babel-clojure-backend 'cider)
+  #+end_src
+
+  Ditaa support, installed using Homebrew.
+
+  #+begin_src emacs-lisp
+    (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.9/libexec/ditaa0_9.jar")
+  #+end_src
+
+  Trust benign languages when evaluating code blocks.
+
+  #+begin_src emacs-lisp
+    (defun jcf-org-confirm-babel-evaluate (lang body)
+      (not (string= lang "ditaa")))
+    (setq org-confirm-babel-evaluate 'jcf-org-confirm-babel-evaluate)
+  #+end_src
+
+  See http://orgmode.org/manual/Code-evaluation-security.html for more information.
+
+* Keybindings
+
+  #+begin_src emacs-lisp
+    (define-key global-map (kbd "C-c l") 'org-store-link)
+    (define-key global-map (kbd "C-c a") 'org-agenda)
+  #+end_src
+
+* Bindings
+
+  #+begin_src emacs-lisp
+    (define-key org-mode-map (kbd "C-M-<down>") 'org-down-element)
+    (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
+
+    (when *is-a-mac*
+      (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)
+      (define-key org-mode-map (kbd "M-h") nil))
+ #+end_src
