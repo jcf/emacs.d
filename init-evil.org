@@ -80,6 +80,7 @@
       "pb" 'projectile-switch-to-buffer
       "pd" 'projectile-switch-project
       "pf" 'projectile-find-file
+      "rf" 'rename-buffer-and-file
       "sd" 'jcf-delete-window
       "sf" 'delete-other-windows
       "ss" 'jcf-split-window-horizontally
