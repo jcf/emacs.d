@@ -501,8 +501,11 @@
 * flycheck
 
    #+begin_src emacs-lisp
-     (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
-           flycheck-idle-change-delay 0.8)
+     (use-package flycheck
+       :init (global-flycheck-mode)
+       :config
+       (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
+             flycheck-idle-change-delay 0.8))
    #+END_SRC
 
 * Spelling
