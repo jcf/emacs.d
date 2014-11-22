@@ -1,7 +1,9 @@
+alias cdot cd /Users/jcf/.dotfiles
 alias clear recenter 0
 alias d (progn (magit-status ".") nil)
 alias du du -kh
 alias e find-file $1
+alias edot dired /Users/jcf/.dotfiles
 alias ff find-file $1
 alias g gh -c color.ui=always $*
 alias ga gh add $*
