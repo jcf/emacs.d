@@ -18,9 +18,7 @@
 * Ace Jump
 
   #+begin_src emacs-lisp
-    (use-package ace-jump-mode :bind
-      (("C-;" . ace-jump-mode)
-       ("C-:" . ace-jump-word-mode)))
+    (use-package ace-jump-mode)
   #+end_src
 
 * Company

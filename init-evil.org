@@ -46,6 +46,7 @@
 
   #+begin_src emacs-lisp
     (evil-leader/set-key
+      "<SPC>" 'ace-jump-char-mode
       "a"  'projectile-toggle-between-implementation-and-test
       "b"  'ibuffer
       "db" 'kill-buffer
