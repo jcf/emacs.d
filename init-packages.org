@@ -537,16 +537,16 @@
 
   #+begin_src emacs-lisp
     (use-package vagrant
-      :commands '(vagrant-destroy
-                  vagrant-edit
-                  vagrant-halt
-                  vagrant-provision
-                  vagrant-reload
-                  vagrant-resume
-                  vagrant-ssh
-                  vagrant-status
-                  vagrant-suspend
-                  vagrant-up))
+      :commands (vagrant-destroy
+                 vagrant-edit
+                 vagrant-halt
+                 vagrant-provision
+                 vagrant-reload
+                 vagrant-resume
+                 vagrant-ssh
+                 vagrant-status
+                 vagrant-suspend
+                 vagrant-up))
   #+end_src
 
   Vagrant TRAMP adds an Emacs TRAMP method for Vagrant boxes.
