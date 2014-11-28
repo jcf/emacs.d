@@ -12,7 +12,7 @@
 * Setup
 
   #+begin_src emacs-lisp
-    (require 'evil)
+    (use-package evil)
   #+end_src
 
 * Exchange
@@ -21,7 +21,7 @@
   exchange two regions.
 
   #+begin_src emacs-lisp
-    (require 'evil-exchange)
+    (use-package evil-exchange)
   #+end_src
 
 * Indent Textobject
@@ -29,7 +29,7 @@
   [[https://github.com/cofi/evil-indent-textobject][evil-indent-text-object]] defines textobjects based on indentation.
 
   #+begin_src emacs-lisp
-    (require 'evil-indent-textobject)
+    (use-package evil-indent-textobject)
   #+end_src
 
 * Leader
@@ -38,7 +38,7 @@
   any Vim user will be very accustomed to.
 
   #+begin_src emacs-lisp
-    (require 'evil-leader)
+    (use-package evil-leader)
     (setq evil-leader/leader ",")
   #+end_src
 
@@ -140,7 +140,7 @@
   enhances ~%~ to match HTML tags, ~do~/~end~ blocks and more.
 
   #+begin_src emacs-lisp
-    (require 'evil-matchit)
+    (use-package evil-matchit)
   #+end_src
 
 * NERD commenter
@@ -149,7 +149,7 @@
   [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]], but it's here in case I decide to regress.
 
   #+begin_src emacs-lisp
-    (require 'evil-nerd-commenter)
+    (use-package evil-nerd-commenter)
   #+end_src
 
 * Numbers
@@ -159,7 +159,7 @@
   Pope's [[https://github.com/tpope/vim-speeddating][speeddating.vim]].
 
   #+begin_src emacs-lisp
-    (require 'evil-numbers)
+    (use-package evil-numbers)
 
     (define-key evil-normal-state-map (kbd "C-A")
       'evil-numbers/inc-at-pt)
@@ -170,26 +170,26 @@
 * Visual star
 
   #+begin_src emacs-lisp
-    (require 'evil-visualstar)
+    (use-package evil-visualstar)
     (setq-default evil-symbol-word-search t)
   #+end_src
 
 * ~goto-chg~
 
   #+begin_src emacs-lisp
-    (require 'goto-chg)
+    (use-package goto-chg)
   #+end_src
 
 * Surround
 
   #+begin_src emacs-lisp
-    (require 'evil-surround)
+    (use-package evil-surround)
   #+end_src
 
 * Jumper
 
   #+begin_src emacs-lisp
-    (require 'evil-jumper)
+    (use-package evil-jumper)
   #+end_src
 
 * Fire up the modes
@@ -203,7 +203,7 @@
     (global-evil-surround-mode 1)
     (global-evil-matchit-mode 1)
     (evil-exchange-install)
-    (require 'evil-jumper)
+    (use-package evil-jumper)
   #+end_src
 
 * Motions around wrapped lines
