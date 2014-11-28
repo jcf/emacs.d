@@ -40,6 +40,13 @@
       (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-goto-parent-section))
   #+end_src
 
+* Treat git-commit-mode more like prose
+
+  #+begin_src emacs-lisp
+    (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
+    (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))
+  #+end_src
+
 * Disable ~command-h~ on OS X
 
   #+begin_src emacs-lisp
