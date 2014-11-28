@@ -16,9 +16,10 @@
   two.
 
   #+begin_src emacs-lisp
-    (require 'switch-window)
-    (setq switch-window-shortcut-style 'alphabet)
-    (global-set-key (kbd "C-x o") 'switch-window)
+    (use-package switch-window
+      :bind ("C-x o" . switch-window)
+      :init
+      (setq switch-window-shortcut-style 'alphabet))
   #+end_src
 
 * Show other buffer when splitting

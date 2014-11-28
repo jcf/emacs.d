@@ -238,7 +238,7 @@
              (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
              (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
 
-         (require 'derived)
+         (use-package derived)
 
          (mapc 'jcf-set-up-mode-for-erb
                '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
@@ -307,11 +307,11 @@
         (setq-default haskell-stylish-on-save t
                       hs-config-use-cabal-dev t)
 
-        (require 'flycheck-hdevtools)
-        (require 'flycheck-haskell)
+        (use-package flycheck-hdevtools)
+        (use-package flycheck-haskell)
 
         (after-load 'flycheck
-          (require 'flycheck-hdevtools))
+          (use-package flycheck-hdevtools))
 
         (dolist (hook '(haskell-mode-hook inferior-haskell-mode-hook))
           (add-hook hook 'turn-on-haskell-doc-mode))
@@ -433,11 +433,11 @@
 
       :config
       (progn
-        (require 'elisp-slime-nav)
+        (use-package elisp-slime-nav)
         (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
           (add-hook hook 'elisp-slime-nav-mode))
 
-        (require 'lively)
+        (use-package lively)
 
         (defun jcf-eval-last-sexp-or-region (beg end prefix)
           "Eval region from BEG to END if active, otherwise the last sexp."
@@ -570,7 +570,7 @@
       :config
       (use-package paredit))
 
-    (require 'derived)
+    (use-package derived)
 
     (dolist (hook (mapcar #'derived-mode-hook-name jcf-lispy-modes))
       (add-hook hook 'jcf-lisp-setup))

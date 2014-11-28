@@ -463,10 +463,10 @@
       :config
       (progn
         ;; Enable smartparens everywhere
-        (require 'smartparens-config)
+        (use-package smartparens-config)
 
         ;; Require and disable paredit because some packages rely on it.
-        (require 'paredit)
+        (use-package paredit)
         (disable-paredit-mode)
 
         (setq
@@ -515,7 +515,7 @@
       :if executable-ag-available?
       :init
       (progn
-        (require 'wgrep-ag)
+        (use-package wgrep-ag)
         (setq-default ag-highlight-search t))
       :bind
       ("M-?" . ag-project))

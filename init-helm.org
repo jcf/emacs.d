@@ -7,7 +7,7 @@
 * Abstract
 
   #+begin_src emacs-lisp
-    (require 'helm)
+    (use-package helm)
   #+end_src
 
   Use "C-c h" instead of the default "C-x c", because it can too
@@ -32,9 +32,9 @@
 * Require built-ins
 
  #+begin_src emacs-lisp
-   (require 'helm-config)
-   (require 'helm-files)
-   (require 'helm-grep)
+   (use-package helm-config)
+   (use-package helm-files)
+   (use-package helm-grep)
  #+end_src
 
 * Keybindings

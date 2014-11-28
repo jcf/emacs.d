@@ -139,5 +139,5 @@
 * Location
 
   #+begin_src emacs-lisp
-    (require 'osx-location)
+    (use-package osx-location)
   #+end_src

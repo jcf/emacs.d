@@ -15,7 +15,7 @@
   packages we use on a daily basis. [[zenburn][Zenburn]] is its name.
 
   #+begin_src emacs-lisp
-    (require 'zenburn-theme)
+    (use-package zenburn-theme)
     (load-theme 'zenburn t)
   #+end_src
 
@@ -159,7 +159,7 @@
   Improved naming of buffers for files with identical names.
 
   #+begin_src emacs-lisp
-    (require 'uniquify)
+    (use-package uniquify)
 
     (setq
      uniquify-buffer-name-style 'reverse
@@ -211,7 +211,7 @@
   Command-Control-- respectively.
 
   #+begin_src emacs-lisp
-    (require 'cl)
+    (use-package cl)
 
     (defun jcf-font-name-replace-size (font-name new-size)
       (let ((parts (split-string font-name "-")))
@@ -254,7 +254,7 @@
   command, like ~magit-status~ for example.
 
   #+begin_src emacs-lisp
-    (require 'fullframe)
+    (use-package fullframe)
   #+end_src
 
   It's important to setup our fullframe functions before they are
