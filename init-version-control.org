@@ -37,7 +37,8 @@
 
   #+begin_src emacs-lisp
     (after-load 'magit
-      (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-goto-parent-section))
+      (define-key magit-status-mode-map
+        (kbd "C-M-<up>") 'magit-goto-parent-section))
   #+end_src
 
 * Treat git-commit-mode more like prose
