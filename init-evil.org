@@ -68,6 +68,7 @@
       "fm" 'helm-mini
       "fp" 'helm-projectile
       "fy" 'helm-show-kill-ring
+      "ga" 'git-messenger:popup-message
       "gb" 'magit-blame-mode
       "gc" 'magit-commit
       "gl" 'magit-log
