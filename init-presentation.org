@@ -104,6 +104,13 @@
    (setq indicate-empty-lines t)
  #+end_src
 
+* Highlight current line
+
+  #+begin_src emacs-lisp
+    (use-package hl-line
+      :config (global-hl-line-mode))
+  #+end_src
+
 * Opacity
 
   I don't think I've ever used this, but it's a novel feature to
