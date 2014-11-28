@@ -7,9 +7,11 @@
 * diff-hl
 
   #+begin_src emacs-lisp
-    (require 'diff-hl)
-    (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
-    (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode)
+    (use-package diff-hl
+      :init
+      (progn
+        (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
+        (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode)))
   #+end_src
 
 * Magit
@@ -25,10 +27,19 @@
        magit-diff-refine-hunk t
        magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
        magit-completing-read-function 'magit-ido-completing-read)
+
       :config
       (progn
+        (when *is-a-mac*
+          (after-load 'magit
+            (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+
         (use-package git-blame)
-        (use-package git-commit-mode)
+        (use-package git-commit-mode
+          :config
+          (progn
+            (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
+            (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))))
         (use-package git-rebase-mode)
         (use-package gitignore-mode)
         (use-package gitconfig-mode)))
@@ -42,21 +53,6 @@
         (kbd "C-M-<up>") 'magit-goto-parent-section))
   #+end_src
 
-* Treat git-commit-mode more like prose
-
-  #+begin_src emacs-lisp
-    (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
-    (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))
-  #+end_src
-
-* Disable ~command-h~ on OS X
-
-  #+begin_src emacs-lisp
-   (when *is-a-mac*
-     (after-load 'magit
-       (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
-  #+end_src
-
 * ~git-grep~ binding
 
   #+begin_src emacs-lisp
@@ -66,37 +62,38 @@
 * Git SVN support
 
   #+begin_src emacs-lisp
-    (require 'magit-svn)
-    (autoload 'magit-svn-enabled "magit-svn")
+    (use-package magit-svn
+      :config
+      (progn
+        (defun jcf-maybe-enable-magit-svn-mode ()
+          (when (magit-svn-enabled)
+            (magit-svn-mode)))
 
-    (defun jcf-maybe-enable-magit-svn-mode ()
-      (when (magit-svn-enabled)
-        (magit-svn-mode)))
+        (add-hook 'magit-status-mode-hook #'jcf-maybe-enable-magit-svn-mode)
 
-    (add-hook 'magit-status-mode-hook #'jcf-maybe-enable-magit-svn-mode)
+        (after-load 'compile
+          (dolist
+              (defn (list '(git-svn-updated "^\t[A-Z]\t\\(.*\\)$" 1 nil nil 0 1)
+                          '(git-svn-needs-update "^\\(.*\\): needs update$" 1 nil nil 2 1)))
+            (add-to-list 'compilation-error-regexp-alist-alist defn)
+            (add-to-list 'compilation-error-regexp-alist (car defn))))
 
-    (after-load 'compile
-      (dolist
-          (defn (list '(git-svn-updated "^\t[A-Z]\t\\(.*\\)$" 1 nil nil 0 1)
-                      '(git-svn-needs-update "^\\(.*\\): needs update$" 1 nil nil 2 1)))
-        (add-to-list 'compilation-error-regexp-alist-alist defn)
-        (add-to-list 'compilation-error-regexp-alist (car defn))))
+        (defvar git-svn--available-commands nil "Cached list of git svn subcommands")
 
-    (defvar git-svn--available-commands nil "Cached list of git svn subcommands")
+        (defun git-svn (dir)
+          "Run a git svn subcommand in DIR."
+          (interactive "DSelect directory: ")
+          (unless git-svn--available-commands
+            (setq git-svn--available-commands
+                  (jcf-string-all-matches
+                   "^  \\([a-z\\-]+\\) +"
+                   (shell-command-to-string "git svn help") 1)))
+          (let* ((default-directory (vc-git-root dir))
+                 (compilation-buffer-name-function (lambda (major-mode-name) "*git-svn*")))
+            (compile (concat "git svn "
+                             (ido-completing-read "git-svn command: "
+                                                  git-svn--available-commands nil t)))))))
 
-    (defun git-svn (dir)
-      "Run a git svn subcommand in DIR."
-      (interactive "DSelect directory: ")
-      (unless git-svn--available-commands
-        (setq git-svn--available-commands
-              (jcf-string-all-matches
-               "^  \\([a-z\\-]+\\) +"
-               (shell-command-to-string "git svn help") 1)))
-      (let* ((default-directory (vc-git-root dir))
-             (compilation-buffer-name-function (lambda (major-mode-name) "*git-svn*")))
-        (compile (concat "git svn "
-                         (ido-completing-read "git-svn command: "
-                                              git-svn--available-commands nil t)))))
   #+end_src
 
 * ~git-wip~
@@ -118,20 +115,21 @@
 
 * GitHub
 
-   #+begin_src emacs-lisp
-     (require 'gh)
-   #+end_src
+  #+begin_src emacs-lisp
+    (use-package gh
+      :defer t)
+  #+end_src
 
   Gist support.
 
-   #+begin_src emacs-lisp
-     (require 'yagist)
-   #+end_src
+  #+begin_src emacs-lisp
+    (use-package yagist)
+  #+end_src
 
   Open buffers on GitHub.
 
   #+begin_src emacs-lisp
-    (require 'github-browse-file)
+    (use-package github-browse-file)
   #+end_src
 
   Add GitHub issues support to bug-reference.
@@ -139,27 +137,32 @@
   https://github.com/arnested/bug-reference-github
 
   #+begin_src emacs-lisp
-    (require 'bug-reference-github)
-    (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
+    (use-package bug-reference-github
+      :init
+      (add-hook 'prog-mode-hook 'bug-reference-prog-mode))
   #+end_src
 
-  Add pull request support. Disabled because authentication is a
-  complete and utter mess.
+  Add pull request support. Disabled because authentication is a complete and
+  utter mess.
 
   #+begin_src emacs-lisp
-    (require 'magit-gh-pulls)
-    ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
+    (use-package magit-gh-pulls
+      ;; :config
+      ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
+      )
   #+end_src
 
 * Darcs
 
   #+begin_src emacs-lisp
-    (require 'darcsum)
-    (require 'vc-darcs)
+    (use-package darcsum
+      :init
+      (setq darcsum-whatsnew-switches "-l"))
 
-    (add-to-list 'vc-handled-backends 'DARCS)
-    (autoload 'vc-darcs-find-file-hook "vc-darcs")
-    (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
-
-    (setq darcsum-whatsnew-switches "-l")
+    (use-package vc-darcs
+      :commands vc-darcs-find-file-hook
+      :config
+      (progn
+        (add-to-list 'vc-handled-backends 'DARCS)
+        (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)))
   #+end_src
