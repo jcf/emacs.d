@@ -15,22 +15,23 @@
 * Magit
 
   #+begin_src emacs-lisp
-    (require 'magit)
-    (require 'git-blame)
-    (require 'git-commit-mode)
-    (require 'git-rebase-mode)
-    (require 'gitignore-mode)
-    (require 'gitconfig-mode)
-
-    (setq-default
-     magit-save-some-buffers nil
-     magit-process-popup-time 10
-     magit-diff-refine-hunk t
-     magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
-     magit-completing-read-function 'magit-ido-completing-read)
-
-    (after-load 'magit
-      (diminish 'magit-auto-revert-mode))
+    (use-package magit
+      :commands magit-get-top-dir
+      :diminish magit-auto-revert-mode
+      :init
+      (setq-default
+       magit-save-some-buffers nil
+       magit-process-popup-time 10
+       magit-diff-refine-hunk t
+       magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
+       magit-completing-read-function 'magit-ido-completing-read)
+      :config
+      (progn
+        (use-package git-blame)
+        (use-package git-commit-mode)
+        (use-package git-rebase-mode)
+        (use-package gitignore-mode)
+        (use-package gitconfig-mode)))
   #+end_src
 
   Jump to the parent section with Command-Control-<up>.
