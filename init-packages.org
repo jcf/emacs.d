@@ -152,10 +152,15 @@
   #+begin_src emacs-lisp
     (use-package fill-column-indicator
       :init
-      (fci-mode 1)
+      (turn-on-fci-mode)
 
       :config
       (progn
+        (defun jcf-fci-enabled-p ()
+          (and (boundp 'fci-mode) fci-mode))
+
+        (defvar jcf-fci-mode-suppressed nil)
+
         (defadvice popup-create (before suppress-fci-mode activate)
           "Suspend fci-mode while popups are visible"
           (let ((fci-enabled (jcf-fci-enabled-p)))
