@@ -67,6 +67,7 @@
       "fl" 'helm-occur
       "fm" 'helm-mini
       "fp" 'helm-projectile
+      "fs" 'eshell
       "fy" 'helm-show-kill-ring
       "ga" 'git-messenger:popup-message
       "gb" 'magit-blame-mode
