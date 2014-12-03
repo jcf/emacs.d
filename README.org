@@ -118,6 +118,7 @@
     (require 'cask "~/.cask/cask.el")
     (cask-initialize)
     (require 'pallet)
+    (pallet-mode t)
   #+end_src
 
   With all of our packages available we can start configuration. To
