@@ -110,6 +110,7 @@
       "cc" 'cider-connect
       "cj" 'cider-jack-in
       "cq" 'cider-quit
+      "cr" 'cider-restart
       "eb" 'cider-eval-buffer
       "ed" 'cider-eval-defun-at-point
       "es" 'cider-eval-last-sexp
