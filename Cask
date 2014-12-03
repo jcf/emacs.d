@@ -39,6 +39,7 @@
 (depends-on "dockerfile-mode")
 (depends-on "drag-stuff")
 (depends-on "dsvn")
+(depends-on "ecukes")
 (depends-on "editorconfig")
 (depends-on "eldoc-eval")
 (depends-on "elein")
