@@ -58,6 +58,7 @@
        "es" 'eval-last-sexp
        "er" 'eval-region
        "fa" 'helm-ag
+       "fA" 'helm-do-ag
        "fb" 'helm-buffers-list
        "fd" 'projectile-dired
        "ff" 'helm-find-files
