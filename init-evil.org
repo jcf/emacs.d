@@ -80,6 +80,9 @@
        "hv" 'describe-variable
        "oa" 'org-agenda
        "oc" 'org-capture
+       "pl" 'package-list-packages
+       "pL" 'package-list-packages-no-fetch
+       "pi" 'package-install
        "rf" 'rename-buffer-and-file
        "sd" 'jcf-delete-window
        "sf" 'delete-other-windows
