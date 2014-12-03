@@ -120,6 +120,16 @@
       "ru" 'cljr-add-use-to-ns)
   #+end_src
 
+** Cider
+
+   #+begin_src emacs-lisp
+     (evil-leader/set-key-for-mode 'cider-mode
+       "cc" 'cider-connect
+       "cj" 'cider-jack-in
+       "cq" 'cider-quit
+       "cr" 'cider-restart)
+   #+end_src
+
 ** Ruby
 
   #+begin_src emacs-lisp
