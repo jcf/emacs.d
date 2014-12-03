@@ -80,9 +80,6 @@
        "hv" 'describe-variable
        "oa" 'org-agenda
        "oc" 'org-capture
-       "pb" 'projectile-switch-to-buffer
-       "pd" 'projectile-switch-project
-       "pf" 'projectile-find-file
        "rf" 'rename-buffer-and-file
        "sd" 'jcf-delete-window
        "sf" 'delete-other-windows
