@@ -11,7 +11,6 @@ all: test
 test:
 	$(MAKE) ecukes
 
-elpa: $(PKG_DIR)
 $(PKG_DIR): Cask
 	$(CASK) install
 	touch $@
