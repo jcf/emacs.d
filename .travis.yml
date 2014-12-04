@@ -1,12 +1,18 @@
 language: emacs-lisp
+
 env:
   - EVM_EMACS=emacs-24.3-bin
+
 before_install:
   - curl -fsSkL https://gist.github.com/jcf/94acfa3190f96abf2262/raw | sh
   - export PATH="/home/travis/.cask/bin:$PATH"
   - export PATH="/home/travis/.evm/bin:$PATH"
   - evm install $EVM_EMACS --use --skip
   - cask
+
 script:
   - emacs --version
   - make test
+
+notifications:
+  email: false
