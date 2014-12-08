@@ -21,6 +21,43 @@
     (use-package ace-jump-mode)
   #+end_src
 
+* Cider
+
+  #+begin_src emacs-lisp
+    (use-package cider
+      :commands (cider cider-connect cider-jack-in)
+      :init
+      (progn
+        (setq cider-auto-select-error-buffer nil
+              cider-repl-pop-to-buffer-on-connect nil
+              cider-repl-use-clojure-font-lock t
+              cider-repl-wrap-history t
+              cider-repl-history-size 1000
+              cider-repl-history-file (f-expand ".cider-history"
+                                                user-emacs-directory)
+              cider-show-error-buffer nil
+              nrepl-hide-special-buffers t
+              nrepl-popup-stacktraces nil)
+        (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+        (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+        (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+        (add-hook 'cider-repl-mode-hook 'subword-mode)
+        ;; nrepl isn't based on comint
+        (add-hook 'cider-repl-mode-hook
+                  (lambda () (setq show-trailing-whitespace nil))))
+
+      :config
+      (use-package slamhound))
+  #+end_src
+
+* Clojure Refactor
+
+  #+begin_src emacs-lisp
+    (use-package clj-refactor
+      :init
+      (add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache))
+  #+end_src
+
 * Company
 
   #+begin_src emacs-lisp

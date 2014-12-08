@@ -16,15 +16,21 @@
 
   #+begin_src emacs-lisp
     (use-package clojure-mode
-      :commands (clojure-mode cider cider-jack-in)
+      :commands (clojure-mode)
+      :init
+      (progn
+        (add-hook 'clojure-mode-hook 'jcf-lisp-setup)
+        ;; Undo activation of Paredit by clojure-mode
+        (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
+        (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+        (add-hook 'clojure-mode-hook 'typed-clojure-mode)
+        (add-hook 'clojure-mode-hook 'subword-mode))
+
       :config
       (progn
         (use-package cljsbuild-mode)
         (use-package elein)
         (use-package typed-clojure-mode :diminish typed-clojure)
-        (use-package clj-refactor
-          :init
-          (add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache))
 
         (define-clojure-indent
           (defroutes 'defun)
@@ -35,40 +41,7 @@
           (DELETE 2)
           (HEAD 2)
           (ANY 2)
-          (context 2))
-
-        (add-hook 'clojure-mode-hook 'jcf-lisp-setup)
-        ;; Undo activation of Paredit by clojure-mode
-        (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
-        (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
-        (add-hook 'clojure-mode-hook 'typed-clojure-mode)
-        (add-hook 'clojure-mode-hook 'subword-mode)
-
-        (use-package cider
-          :init
-          (setq cider-auto-select-error-buffer nil
-                cider-repl-pop-to-buffer-on-connect nil
-                cider-repl-use-clojure-font-lock t
-                cider-repl-wrap-history t
-                cider-repl-history-size 1000
-                cider-repl-history-file (f-expand ".cider-history"
-                                                  user-emacs-directory)
-                cider-show-error-buffer nil
-                nrepl-hide-special-buffers t
-                nrepl-popup-stacktraces nil)
-
-          :config
-          (progn
-            (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-            (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-            (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-            (add-hook 'cider-repl-mode-hook 'subword-mode)
-
-            ;; nrepl isn't based on comint
-            (add-hook 'cider-repl-mode-hook
-                      (lambda () (setq show-trailing-whitespace nil)))
-
-            (use-package slamhound)))))
+          (context 2))))
   #+end_src
 
 * Clojurescript
