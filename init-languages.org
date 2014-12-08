@@ -22,7 +22,9 @@
         (use-package cljsbuild-mode)
         (use-package elein)
         (use-package typed-clojure-mode :diminish typed-clojure)
-        (use-package clj-refactor)
+        (use-package clj-refactor
+          :init
+          (add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache))
 
         (define-clojure-indent
           (defroutes 'defun)
