@@ -155,12 +155,6 @@
        "ruw" 'cljr-unwind)
    #+end_src
 
-   Setup guide-key while we're learning the default clj-refactor bindings.
-
-   #+begin_src emacs-lisp
-     (guide-key/add-local-guide-key-sequence ",r")
-   #+end_src
-
 ** Cider
 
    #+begin_src emacs-lisp
