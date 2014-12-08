@@ -12,7 +12,7 @@ before_install:
 
 script:
   - emacs --version
-  - make test
+  - cask exec ecukes --no-win
 
 notifications:
   email: false
