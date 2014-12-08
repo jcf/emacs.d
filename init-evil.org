@@ -115,10 +115,50 @@
        "eb" 'cider-eval-buffer
        "ed" 'cider-eval-defun-at-point
        "es" 'cider-eval-last-sexp
-       "er" 'cider-eval-region
-       "rs" 'cljr-sort-ns
-       "rr" 'cljr-add-require-to-ns
-       "ru" 'cljr-add-use-to-ns)
+       "er" 'cider-eval-region)
+   #+end_src
+
+   Use the default [[https://github.com/cider-emacs/clj-refactor.el][clj-refactor]] bindings, via ~<leader>r~.
+
+   #+begin_src emacs-lisp
+     (evil-leader/set-key-for-mode 'clojure-mode
+       "rad" 'cljr-add-declaration
+       "rai" 'cljr-add-import-to-ns
+       "rap" 'cljr-add-project-dependency
+       "rar" 'cljr-add-require-to-ns
+       "rau" 'cljr-add-use-to-ns
+       "rcc" 'cljr-cycle-coll
+       "rci" 'cljr-cycle-if
+       "rcp" 'cljr-cycle-privacy
+       "rcs" 'cljr-cycle-stringlike
+       "rct" 'cljr-cycle-thread
+       "rdk" 'cljr-destructure-keys
+       "rel" 'cljr-expand-let
+       "rfu" 'cljr-find-usages
+       "ril" 'cljr-introduce-let
+       "rmf" 'cljr-move-form
+       "rml" 'cljr-move-to-let
+       "rpc" 'cljr-project-clean
+       "rpf" 'cljr-promote-function
+       "rrd" 'cljr-remove-debug-fns
+       "rrf" 'cljr-rename-file
+       "rrr" 'cljr-remove-unused-requires
+       "rrs" 'cljr-rename-symbol
+       "rru" 'cljr-replace-use
+       "rsn" 'cljr-sort-ns
+       "rsp" 'cljr-sort-project-dependencies
+       "rsr" 'cljr-stop-referring
+       "rtf" 'cljr-thread-first-all
+       "rth" 'cljr-thread
+       "rtl" 'cljr-thread-last-all
+       "rua" 'cljr-unwind-all
+       "ruw" 'cljr-unwind)
+   #+end_src
+
+   Setup guide-key while we're learning the default clj-refactor bindings.
+
+   #+begin_src emacs-lisp
+     (guide-key/add-local-guide-key-sequence ",r")
    #+end_src
 
 ** Cider
