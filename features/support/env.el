@@ -24,4 +24,4 @@
 
 (After
  (save-all-buffers-dont-ask)
- (kill-matching-buffers-dont-ask))
+ (kill-matching-buffers-dont-ask ".*"))
