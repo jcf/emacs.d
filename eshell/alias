@@ -9,6 +9,7 @@ alias g gh -c color.ui=always $*
 alias ga gh add $*
 alias gbs git-branches $*
 alias git gh $*
+alias glg (progn (magit-log) nil)
 alias gmt gh mergetool $*
 alias gp g push $*
 alias l ls -1A $*
