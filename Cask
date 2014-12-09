@@ -163,6 +163,7 @@
 (depends-on "regex-tool")
 (depends-on "request")
 (depends-on "restclient")
+(depends-on "rich-minority")
 (depends-on "rinari")
 (depends-on "robe")
 (depends-on "rspec-mode")
