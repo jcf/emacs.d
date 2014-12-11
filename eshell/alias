@@ -21,6 +21,7 @@ alias lr ll -R $*
 alias lt ll -tr $*
 alias lu lt -u $*
 alias lx lt -XB $*
+alias o open $*
 alias rb ruby $*
 alias s g status -sb $*
 alias v vagrant $*
