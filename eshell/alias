@@ -8,6 +8,7 @@ alias ff find-file $1
 alias g gh -c color.ui=always $*
 alias ga gh add $*
 alias gbs git-branches $*
+alias gf gh fetch $*
 alias git gh $*
 alias glg (progn (magit-log) nil)
 alias gmt gh mergetool $*
