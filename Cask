@@ -111,6 +111,7 @@
 (depends-on "ido-ubiquitous")
 (depends-on "ido-vertical-mode")
 (depends-on "idomenu")
+(depends-on "inf-clojure")
 (depends-on "inf-ruby")
 (depends-on "inflections")
 (depends-on "ipretty")
