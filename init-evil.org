@@ -69,6 +69,7 @@
        "fm" 'helm-mini
        "fp" 'helm-projectile
        "fs" 'eshell
+       "fS" 'jcf-eshell-here
        "fy" 'helm-show-kill-ring
        "ga" 'git-messenger:popup-message
        "gb" 'magit-blame-mode

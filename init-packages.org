@@ -172,9 +172,14 @@
        eshell-glob-case-insensitive t
        eshell-scroll-to-bottom-on-input 'all)
       :config
-      (add-hook 'eshell-mode-hook
-                (lambda ()
-                  (eshell/export "NODE_NO_READLINE=1"))))
+      (progn
+        (defun jcf-eshell-here ()
+          (interactive)
+          (eshell "here"))
+
+        (add-hook 'eshell-mode-hook
+                  (lambda ()
+                    (eshell/export "NODE_NO_READLINE=1")))))
   #+end_src
 
 * Expand region
