@@ -482,11 +482,8 @@
 
 * Smart mode line
 
-  Disabled for now.
-
   #+begin_src emacs-lisp
     (use-package smart-mode-line
-      :disabled t
       :init
       (progn
         (setq sml/theme nil)
