@@ -781,12 +781,12 @@
 
     (add-auto-mode 'sh-mode
                    "\\.zsh\\'"
-                   "\\'zlogin\\'"
-                   "\\'zlogout\\'"
-                   "\\'zpretzorc\\'"
-                   "\\'zprofile\\'"
-                   "\\'zshenv\\'"
-                   "\\'zshrc\\'")
+                   "zlogin\\'"
+                   "zlogout\\'"
+                   "zpretzorc\\'"
+                   "zprofile\\'"
+                   "zshenv\\'"
+                   "zshrc\\'")
   #+end_src
 
 * Slim
