@@ -486,7 +486,9 @@
     (use-package smart-mode-line
       :init
       (progn
-        (setq sml/theme nil)
+        (setq sml/theme 'respectful)
+        (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox" ":Box:") t)
+        (add-to-list 'sml/replacer-regexp-list '("^~/Code" ":C:") t)
         (sml/setup)))
   #+end_src
 
