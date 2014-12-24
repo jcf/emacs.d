@@ -119,9 +119,12 @@
 
   #+begin_src emacs-lisp
     (use-package darcsum
+      :defer t
       :init
       (setq darcsum-whatsnew-switches "-l"))
+  #+end_src
 
+  #+begin_src emacs-lisp
     (use-package vc-darcs
       :commands vc-darcs-find-file-hook
       :config
