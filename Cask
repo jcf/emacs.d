@@ -125,6 +125,7 @@
 (depends-on "jump")
 (depends-on "key-chord")
 (depends-on "less-css-mode")
+(depends-on "let-alist")
 (depends-on "list-utils")
 (depends-on "lively")
 (depends-on "logito")
