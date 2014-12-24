@@ -46,6 +46,7 @@
 (depends-on "elisp-slime-nav")
 (depends-on "epl")
 (depends-on "erlang")
+(depends-on "evernote-mode" :git "https://github.com/pymander/evernote-mode")
 (depends-on "evil")
 (depends-on "evil-exchange")
 (depends-on "evil-indent-textobject")
