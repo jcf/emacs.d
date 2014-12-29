@@ -124,37 +124,37 @@
 
    #+begin_src emacs-lisp
      (evil-leader/set-key-for-mode 'clojure-mode
-       "rad" 'cljr-add-declaration
-       "rai" 'cljr-add-import-to-ns
-       "rap" 'cljr-add-project-dependency
-       "rar" 'cljr-add-require-to-ns
-       "rau" 'cljr-add-use-to-ns
-       "rcc" 'cljr-cycle-coll
-       "rci" 'cljr-cycle-if
-       "rcp" 'cljr-cycle-privacy
-       "rcs" 'cljr-cycle-stringlike
-       "rct" 'cljr-cycle-thread
-       "rdk" 'cljr-destructure-keys
-       "rel" 'cljr-expand-let
-       "rfu" 'cljr-find-usages
-       "ril" 'cljr-introduce-let
-       "rmf" 'cljr-move-form
-       "rml" 'cljr-move-to-let
-       "rpc" 'cljr-project-clean
-       "rpf" 'cljr-promote-function
-       "rrd" 'cljr-remove-debug-fns
-       "rrf" 'cljr-rename-file
-       "rrr" 'cljr-remove-unused-requires
-       "rrs" 'cljr-rename-symbol
-       "rru" 'cljr-replace-use
-       "rsn" 'cljr-sort-ns
-       "rsp" 'cljr-sort-project-dependencies
-       "rsr" 'cljr-stop-referring
-       "rtf" 'cljr-thread-first-all
-       "rth" 'cljr-thread
-       "rtl" 'cljr-thread-last-all
-       "rua" 'cljr-unwind-all
-       "ruw" 'cljr-unwind)
+       "mrad" 'cljr-add-declaration
+       "mrai" 'cljr-add-import-to-ns
+       "mrap" 'cljr-add-project-dependency
+       "mrar" 'cljr-add-require-to-ns
+       "mrau" 'cljr-add-use-to-ns
+       "mrcc" 'cljr-cycle-coll
+       "mrci" 'cljr-cycle-if
+       "mrcp" 'cljr-cycle-privacy
+       "mrcs" 'cljr-cycle-stringlike
+       "mrct" 'cljr-cycle-thread
+       "mrdk" 'cljr-destructure-keys
+       "mrel" 'cljr-expand-let
+       "mrfu" 'cljr-find-usages
+       "mril" 'cljr-introduce-let
+       "mrmf" 'cljr-move-form
+       "mrml" 'cljr-move-to-let
+       "mrpc" 'cljr-project-clean
+       "mrpf" 'cljr-promote-function
+       "mrrd" 'cljr-remove-debug-fns
+       "mrrf" 'cljr-rename-file
+       "mrrr" 'cljr-remove-unused-requires
+       "mrrs" 'cljr-rename-symbol
+       "mrru" 'cljr-replace-use
+       "mrsn" 'cljr-sort-ns
+       "mrsp" 'cljr-sort-project-dependencies
+       "mrsr" 'cljr-stop-referring
+       "mrtf" 'cljr-thread-first-all
+       "mrth" 'cljr-thread
+       "mrtl" 'cljr-thread-last-all
+       "mrua" 'cljr-unwind-all
+       "mruw" 'cljr-unwind)
    #+end_src
 
 ** Cider
