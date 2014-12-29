@@ -140,6 +140,7 @@
 (depends-on "move-dup")
 (depends-on "multiple-cursors")
 (depends-on "mwe-log-commands")
+(depends-on "o-blog" :git "https://github.com/renard/o-blog.git" :branch "o-blog-v2.5")
 (depends-on "org-fstree")
 (depends-on "org-jekyll")
 (depends-on "org-mac-iCal")
