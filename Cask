@@ -7,6 +7,7 @@
 (depends-on "ag")
 (depends-on "alert")
 (depends-on "anzu")
+(depends-on "applescript-mode")
 (depends-on "async")
 (depends-on "auto-compile")
 (depends-on "bind-key")
