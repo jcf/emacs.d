@@ -141,6 +141,7 @@
 (depends-on "multiple-cursors")
 (depends-on "mwe-log-commands")
 (depends-on "org-fstree")
+(depends-on "org-jekyll")
 (depends-on "org-mac-iCal")
 (depends-on "org-mac-link")
 (depends-on "org-plus-contrib")
