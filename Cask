@@ -4,6 +4,7 @@
 
 (depends-on "4clojure")
 (depends-on "ace-jump-mode")
+(depends-on "ace-link")
 (depends-on "ag")
 (depends-on "alert")
 (depends-on "anzu")
