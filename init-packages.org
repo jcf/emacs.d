@@ -60,6 +60,9 @@
 
 * Company
 
+  Company mode is a fast, configurable completion system that allows for
+  extension using a simple API.
+
   #+begin_src emacs-lisp
     (use-package company
       :diminish company-mode
@@ -78,6 +81,26 @@
         ;; Use Helm to complete suggestions
         (define-key company-mode-map (kbd "C-:") 'helm-company)
         (define-key company-active-map (kbd "C-:") 'helm-company)))
+  #+end_src
+
+  YouCompleteMe is an even faster, semantically-aware completion system that can
+  be used with Company mode. We can make use of YouCompleteMe via ~ycmd~, which
+  was extracted to make this possible.
+
+  https://github.com/Valloric/ycmd
+
+  #+begin_src emacs-lisp
+    (use-package ycmd
+      :init (ycmd-setup)
+      :config
+      (progn
+        (require 'company-ycmd)
+        (company-ycmd-setup)
+
+        ;; This has landed in master, but hasn't been released yet.
+        ;; (require 'flycheck-ycmd)
+        ;; (flycheck-ycmd-setup)
+        ))
   #+end_src
 
 * Dired
