@@ -418,3 +418,9 @@
         (after advice-for-evil-search-previous activate)
       (evil-scroll-line-to-center (line-number-at-pos)))
   #+end_src
+
+* evil-org
+
+  #+begin_src emacs-lisp
+    (use-package evil-org)
+  #+end_src
