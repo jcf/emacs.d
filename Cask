@@ -142,6 +142,7 @@
 (depends-on "move-dup")
 (depends-on "multiple-cursors")
 (depends-on "mwe-log-commands")
+(depends-on "notmuch")
 (depends-on "org-fstree")
 (depends-on "org-jekyll")
 (depends-on "org-mac-iCal")
