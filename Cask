@@ -57,7 +57,6 @@
 (depends-on "evil-matchit")
 (depends-on "evil-nerd-commenter")
 (depends-on "evil-numbers")
-(depends-on "evil-org")
 (depends-on "evil-surround")
 (depends-on "evil-visualstar")
 (depends-on "exec-path-from-shell")
