@@ -97,10 +97,21 @@
 ** Org
 
    #+begin_src emacs-lisp
+     (defun jcf-evil-org-insert-todo ()
+       "Insert a new TODO heading, and switch to insert mode."
+       (interactive)
+       (org-insert-todo-heading nil)
+       (evil-insert 0))
+   #+end_src
+
+   #+begin_src emacs-lisp
      (evil-leader/set-key-for-mode 'org-mode
+       "oh" 'org-insert-heading
        "ol" 'org-babel-load-file
        "os" 'org-sort-list
-       "ot" 'org-babel-tangle)
+       "ot" 'org-todo
+       "oT" 'jcf-evil-org-insert-todo
+       "obt" 'org-babel-tangle)
    #+end_src
 
 ** Clojure
@@ -406,6 +417,88 @@
       "l" 'magit-key-mode-popup-logging
       "h" 'magit-toggle-diff-refine-hunk)
   #+end_src
+* Org mode
+
+** Setup a minor mode to contain our own keybindings
+
+   #+begin_src emacs-lisp
+     (define-minor-mode evil-org-mode
+       "Buffer local minor mode for evil-org"
+       :init-value nil
+       :lighter " EvilOrg"
+       :keymap (make-sparse-keymap)
+       :group 'evil-org)
+
+     (add-hook 'org-mode-hook 'evil-org-mode)
+   #+end_src
+
+** Recompute clocks in visual selection
+
+   #+begin_src emacs-lisp
+     (evil-define-operator evil-org-recompute-clocks (beg end type register yank-handler)
+       :keep-visual t
+       :move-point nil
+       (interactive "<r>")
+       (progn
+         (save-excursion
+           (while (< (point) end)
+             (org-evaluate-time-range)
+             (next-line)))))
+   #+end_src
+
+** Open Org mode links in visual selection
+
+   #+begin_src emacs-lisp
+     (evil-define-operator evil-org-open-links (beg end type register yank-handler)
+       :keep-visual t
+       :move-point nil
+       (interactive "<r>")
+       (save-excursion
+         (goto-char beg)
+         (beginning-of-line)
+         (catch 'break
+           (while (< (point) end)
+             (org-next-link)
+             (when (not(< (point) end)) (throw 'break 0))
+             (org-open-at-point)))))
+   #+end_src
+
+** Keybindings for normal state
+
+   #+begin_src emacs-lisp
+     (evil-define-key 'normal evil-org-mode-map
+       "gh" 'outline-up-heading
+       "gj" 'org-forward-heading-same-level
+       "gk" 'org-backward-heading-same-level
+       "gl" 'outline-next-visible-heading
+       "H" 'org-beginning-of-line
+       "L" 'org-end-of-line
+       ;;"o" '(lambda () (interactive) (evil-org-eol-call 'clever-insert-item))
+       ;;"O" '(lambda () (interactive) (evil-org-eol-call 'org-insert-heading))
+       ;;"$" 'org-end-of-line
+       ;;"^" 'org-beginning-of-line
+       ;;"<" 'org-metaleft
+       ;;">" 'org-metaright
+       ;;"-" 'org-cycle-list-bullet
+       )
+   #+end_src
+
+** Keybindings for both normal and insert mode
+
+   #+begin_src emacs-lisp
+     (mapc
+      (lambda (state)
+        (evil-define-key state evil-org-mode-map
+          (kbd "M-l") 'org-metaright
+          (kbd "M-h") 'org-metaleft
+          (kbd "M-k") 'org-metaup
+          (kbd "M-j") 'org-metadown
+          (kbd "M-L") 'org-shiftmetaright
+          (kbd "M-H") 'org-shiftmetaleft
+          (kbd "M-K") 'org-shiftmetaup
+          (kbd "M-J") 'org-shiftmetadown))
+      '(normal insert))
+   #+end_src
 
 * Scroll when searching
 
