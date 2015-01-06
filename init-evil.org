@@ -417,7 +417,7 @@
           do (evil-set-initial-state mode state))
   #+end_src
 
-* Magit from avsej
+* Magit
 
   #+begin_src emacs-lisp
     (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
