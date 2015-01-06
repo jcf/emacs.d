@@ -121,6 +121,18 @@
           :init (global-dired-hide-details-mode -1))))
   #+end_src
 
+  Some interesting options available to GNU ls:
+
+  - ~a~: list all files
+  - ~h~, ~--human-readable~: with ~-l~, print sizes in human readable format
+    (e.g., 1K 234M 2G)
+  - ~l~: use a long listing format
+  - ~group-directories-first~: group directories before files
+  - ~X~: sort alphabetically by entry extension
+  - ~U~: do not sort; list entries in directory order
+  - ~t~: sort by modification time, newest first
+  - ~S~: sort by file size
+
 * Dizzee
 
   #+begin_src emacs-lisp
