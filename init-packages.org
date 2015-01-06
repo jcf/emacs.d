@@ -463,7 +463,7 @@
   #+END_QUOTE
 
   #+begin_src emacs-lisp
-    (use-package prodigy :command prodigy)
+    (use-package prodigy :commands prodigy)
   #+end_src
 
 ** Jekyll
