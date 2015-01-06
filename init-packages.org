@@ -484,7 +484,7 @@
      (prodigy-define-tag
        :name 'middleman-server
        :command "middleman"
-       :args "server"
+       :args '("server")
        :ready-message "== The Middleman is standing watch at http://0\\.0\\.0\\.0:[0-9]+")
    #+end_src
 
@@ -494,7 +494,7 @@
      (prodigy-define-service
        :name "offlineimap"
        :command "offlineimap"
-       :args ("-q")
+       :args '("-q")
        :kill-process-buffer-on-stop t)
    #+end_src
 
