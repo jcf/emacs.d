@@ -392,7 +392,7 @@
                (nrepl-mode . insert)
                (shell-mode . insert)
                (git-rebase-mode . emacs)
-               (term-mode . emacs)
+               (term-mode . insert)
                (help-mode . emacs)
                (helm-grep-mode . emacs)
                (grep-mode . emacs)
