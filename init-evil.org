@@ -398,6 +398,7 @@
                (ielm-mode . insert)
                (magit-branch-manager-mode . emacs)
                (nrepl-mode . insert)
+               (prodigy-mode . normal)
                (rdictcc-buffer-mode . emacs)
                (shell-mode . insert)
                (term-mode . insert)
