@@ -417,6 +417,19 @@
           do (evil-set-initial-state mode state))
   #+end_src
 
+* Dired
+
+  Use hjkl in Dired, with some of the more useful conflicting mappings
+  capitalised.
+
+  #+begin_src emacs-lisp
+    (evil-add-hjkl-bindings dired-mode-map 'emacs)
+    (evil-add-hjkl-bindings dired-mode-map 'emacs
+      "J" 'dired-goto-file
+      "K" 'dired-do-kill-lines
+      "L" 'dired-do-redisplay)
+  #+end_src
+
 * Magit
 
   #+begin_src emacs-lisp
