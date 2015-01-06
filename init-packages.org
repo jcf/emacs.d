@@ -108,15 +108,14 @@
   #+begin_src emacs-lisp
     (use-package dired
       :commands dired
-      :init (setq dired-recursive-deletes 'top)
-
-      :config
+      :init
       (progn
+        (setq dired-recursive-deletes 'top)
+
         (define-key dired-mode-map [mouse-2] 'dired-find-file)
         (guide-key/add-local-guide-key-sequence "%")
 
         (use-package dired+
-          :commands dired
           :init (setq diredp-hide-details-initially-flag nil)
           :config (global-dired-hide-details-mode -1))))
   #+end_src
