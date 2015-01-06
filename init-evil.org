@@ -389,7 +389,7 @@
   #+begin_src emacs-lisp
     (loop for (mode . state)
           in '((bc-menu-mode . emacs)
-               (dired-mode . normal)
+               (dired-mode . emacs)
                (eshell-mode . insert)
                (git-rebase-mode . emacs)
                (grep-mode . emacs)
