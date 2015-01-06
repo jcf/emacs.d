@@ -111,6 +111,7 @@
       :init
       (progn
         (setq dired-recursive-deletes 'top)
+        (setq dired-listing-switches "--group-directories-first -alh")
         (setq diredp-hide-details-initially-flag nil)
 
         (define-key dired-mode-map [mouse-2] 'dired-find-file)
