@@ -141,3 +141,12 @@
   #+begin_src emacs-lisp
     (use-package osx-location)
   #+end_src
+
+* Use GNU ls
+
+  To get setup we need both ~xz~ and ~coreutils~ installed, which is taken care
+  of in our ~dotfiles~.
+
+  #+begin_src emacs-lisp
+    (setq insert-directory-program "gls")
+  #+end_src
