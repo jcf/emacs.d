@@ -42,6 +42,17 @@
     (setq evil-leader/leader ",")
   #+end_src
 
+** Leader outside of normal mode
+
+   Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
+
+   #+begin_src emacs-lisp
+     (setq evil-leader/no-prefix-mode-rx '("dired-mode"
+                                           "gnus-.*-mode"
+                                           "magit-.*-mode"
+                                           "notmuch-.*-mode"))
+   #+end_src
+
 ** Global
 
    #+begin_src emacs-lisp
@@ -419,6 +430,7 @@
       "l" 'magit-key-mode-popup-logging
       "h" 'magit-toggle-diff-refine-hunk)
   #+end_src
+
 * Org mode
 
 ** Setup a minor mode to contain our own keybindings
