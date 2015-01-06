@@ -111,13 +111,13 @@
       :init
       (progn
         (setq dired-recursive-deletes 'top)
+        (setq diredp-hide-details-initially-flag nil)
 
         (define-key dired-mode-map [mouse-2] 'dired-find-file)
         (guide-key/add-local-guide-key-sequence "%")
 
         (use-package dired+
-          :init (setq diredp-hide-details-initially-flag nil)
-          :config (global-dired-hide-details-mode -1))))
+          :init (global-dired-hide-details-mode -1))))
   #+end_src
 
 * Dizzee
