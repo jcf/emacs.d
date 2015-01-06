@@ -390,6 +390,7 @@
     (loop for (mode . state)
           in '((bc-menu-mode . emacs)
                (dired-mode . normal)
+               (eshell-mode . insert)
                (git-rebase-mode . emacs)
                (grep-mode . emacs)
                (helm-grep-mode . emacs)
