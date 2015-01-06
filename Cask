@@ -145,6 +145,7 @@
 (depends-on "multiple-cursors")
 (depends-on "mwe-log-commands")
 (depends-on "notmuch")
+(depends-on "nyan-mode")
 (depends-on "org")
 (depends-on "org-fstree")
 (depends-on "org-jekyll")
