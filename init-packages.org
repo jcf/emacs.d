@@ -448,6 +448,56 @@
       (global-page-break-lines-mode))
   #+end_src
 
+* Prodigy (process manager)
+
+  https://github.com/rejeep/prodigy.el
+
+  #+BEGIN_QUOTE
+  Manage external services from within Emacs
+
+  I came up with the idea when I got to work one Monday morning and before I
+  could start working I had to manually start ten or so services.
+
+  To get rid of this tedious work, I started working on this Emacs plugin, which
+  provides a nice and simple GUI to manage services.
+  #+END_QUOTE
+
+  #+begin_src emacs-lisp
+    (use-package prodigy :command prodigy)
+  #+end_src
+
+** Jekyll
+
+   Jekyll needs UTF-8 support, which Ruby will pick up based on ~LANG~ and
+   ~LC_ALL~.
+
+   #+begin_src emacs-lisp
+     (prodigy-define-tag
+       :name 'jekyll
+       :env '(("LANG" "en_US.UTF-8")
+              ("LC_ALL" "en_US.UTF-8")))
+   #+end_src
+
+** Middleman
+
+   #+begin_src emacs-lisp
+     (prodigy-define-tag
+       :name 'middleman-server
+       :command "middleman"
+       :args "server"
+       :ready-message "== The Middleman is standing watch at http://0\\.0\\.0\\.0:[0-9]+")
+   #+end_src
+
+** Offlineimap
+
+   #+begin_src emacs-lisp
+     (prodigy-define-service
+       :name "offlineimap"
+       :command "offlineimap"
+       :args ("-q")
+       :kill-process-buffer-on-stop t)
+   #+end_src
+
 * project-local-variables
 
    The [[http://www.emacswiki.org/emacs/ProjectLocalVariables][~project-local-variables~]] package looks for a ~.emacs-project~
