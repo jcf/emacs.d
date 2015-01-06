@@ -44,12 +44,35 @@
      visible-bell t)
   #+end_src
 
+* Terminfo for ~term~
+
+  When we run ~/usr/local/bin/zsh~ inside ~term~ we get a lot of escape
+  sequences printed incorrectly.
+
+  http://stackoverflow.com/a/8920373/123142
+
+  #+begin_src emacs-lisp
+    (setq system-uses-terminfo nil)
+  #+end_src
+
+  We also need to compile terminfo for Emacs with the following ~tic~
+  invocation, which is taken care of in [[https://github.com/jcf/dotfiles][dotfiles]].
+
+  #+begin_src sh :tangle no
+    tic -o ~/.terminfo /Applications/Emacs.app/Contents/Resources/etc/e/eterm-color.ti
+  #+end_src
+
 * Keep backup files in one directory
+
+  Prevent files like ~#init-genesis.org#~ from being created all over the
+  place. Instead, keep them all nicely together inside ~~/.emacs~.
+
+  https://snarfed.org/gnu_emacs_backup_files
 
   #+begin_src emacs-lisp
     (let ((backups-dir (expand-file-name "backups" user-emacs-directory)))
       (f-mkdir backups-dir)
-      (setq backup-directory-alist `(("." . backups-dir))))
+      (setq backup-directory-alist '((".*" . backups-dir))))
   #+end_src
 
 * Fill column
