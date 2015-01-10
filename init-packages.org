@@ -209,6 +209,9 @@
       (setq
        eshell-buffer-shorthand t
        eshell-cmpl-ignore-case t
+       eshell-cmpl-cycle-completions nil
+       eshell-history-size 10000
+       eshell-hist-ignoredups t
        eshell-error-if-no-glob t
        eshell-glob-case-insensitive t
        eshell-scroll-to-bottom-on-input 'all)
