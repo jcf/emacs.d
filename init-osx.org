@@ -27,17 +27,6 @@
       (global-set-key (kbd "M-ƒ") 'toggle-frame-fullscreen))
   #+end_src
 
-* Set default font
-
-  Source Code Pro is a highly legible and pleasant font to work with.
-
-  It is installed automatically by my [[dotfiles]] and can be downloaded
-  for free from [[source-code-pro][Adobe]].
-
-  #+begin_src emacs-lisp
-    (set-frame-font "-*-Source Code Pro-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
-  #+end_src
-
 * Input
 
   Sets up a number of Mac-specific key bindings and mouse settings.

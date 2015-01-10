@@ -197,6 +197,26 @@
     (add-hook 'after-init-hook 'jcf-maybe-use-default-font-for-symbols)
   #+end_src
 
+* Set default font
+
+  Source Code Pro is a highly legible and pleasant font to work with.
+
+  It is installed automatically by my [[dotfiles]] and can be downloaded
+  for free from [[source-code-pro][Adobe]].
+
+  http://superuser.com/q/210555/76295
+  http://superuser.com/q/692173/76295
+  http://www.emacswiki.org/emacs/SetFonts
+
+  #+begin_src emacs-lisp
+    (defvar jcf-default-font
+      "Source Code Pro-13")
+
+    ;; (add-to-list 'default-frame-alist '(font jcf-default-font))
+    (set-face-attribute 'default nil :font jcf-default-font)
+    (set-frame-font jcf-default-font nil t)
+  #+end_src
+
 * Font sizes
 
   Provides a mechanism for changing font size gracefully while Emacs
