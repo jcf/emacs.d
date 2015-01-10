@@ -624,6 +624,7 @@
 ** Use message-mode
 
   #+begin_src emacs-lisp
+    (require 'message)
     (add-to-list 'auto-mode-alist '("/mutt" . message-mode))
   #+end_src
 
