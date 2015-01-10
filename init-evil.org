@@ -92,6 +92,7 @@
        "hm" 'describe-mode
        "hp" 'describe-package
        "hv" 'describe-variable
+       "i" 'ielm
        "oa" 'org-agenda
        "oc" 'org-capture
        "pl" 'package-list-packages
