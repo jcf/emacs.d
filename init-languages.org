@@ -619,6 +619,37 @@
                   (lambda () (guide-key/add-local-guide-key-sequence "C-c /")))))
   #+end_src
 
+* Mutt
+
+** Use message-mode
+
+  #+begin_src emacs-lisp
+    (add-to-list 'auto-mode-alist '("/mutt" . message-mode))
+  #+end_src
+
+** Empty mail-header-separator
+
+  #+begin_src emacs-lisp
+    (setq mail-header-separator "")
+  #+end_src
+
+** Make sure we wrap lines
+
+  #+begin_src emacs-lisp
+    (add-hook 'message-mode-hook 'auto-fill-mode)
+  #+end_src
+
+** Bind ~C-c C-c~ to finish composing a message
+
+  #+begin_src emacs-lisp
+    (defun jcf-finish-composing-message ()
+      (interactive)
+      (save-buffer)
+      (server-edit))
+
+    (define-key message-mode-map (kbd "C-c C-c") 'jcf-finish-composing-message)
+  #+end_src
+
 * NXML
 
   #+begin_src emacs-lisp
