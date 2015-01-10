@@ -144,6 +144,7 @@
 (depends-on "move-dup")
 (depends-on "multiple-cursors")
 (depends-on "mwe-log-commands")
+(depends-on "muttrc-mode")
 (depends-on "notmuch")
 (depends-on "nyan-mode")
 (depends-on "org")
