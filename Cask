@@ -224,4 +224,5 @@
 (depends-on "yaml-mode")
 (depends-on "yari")
 (depends-on "yasnippet")
+(depends-on "ycmd")
 (depends-on "zenburn-theme")
