@@ -10,6 +10,7 @@ alias ga gh add $*
 alias gbs git-branches $*
 alias gf gh fetch $*
 alias git gh $*
+alias gl gh pull
 alias glg (progn (magit-log) nil)
 alias gmt gh mergetool $*
 alias gp g push $*
