@@ -85,6 +85,7 @@
 (depends-on "github-browse-file")
 (depends-on "gitignore-mode")
 (depends-on "gntp")
+(depends-on "gnugo")
 (depends-on "gnuplot")
 (depends-on "go-mode")
 (depends-on "god-mode")
