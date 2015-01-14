@@ -48,6 +48,16 @@
     (setq org-outline-path-complete-in-steps t)
   #+end_src
 
+
+* org-indent-mode
+
+  Automatically add indentation to line up blobs of text with the level of the
+  current heading.
+
+  #+begin_src emacs-lisp
+    (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
+  #+end_src
+
 * fstree
 
  #+begin_src emacs-lisp
