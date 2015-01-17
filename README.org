@@ -15,175 +15,168 @@
 
 * Getting Started
 
-  #+name: emacs-d-version
-  #+begin_src sh :exports none
-    cd ~/.emacs.d && git rev-parse --short HEAD
-  #+end_src
+#+name: emacs-d-version
+#+begin_src sh :exports none
+  cd ~/.emacs.d && git rev-parse --short HEAD
+#+end_src
 
-  *Version call_emacs-d-version().*
+*Version call_emacs-d-version().*
 
-  First things first, we need to setup load paths and get any packages
-  that don't live in ELPA installed. For convenience, this is handled
-  by [[pallet][Pallet]] and [[cask][Cask]].
+First things first, we need to setup load paths and get any packages that don't
+live in ELPA installed. For convenience, this is handled by [[pallet][Pallet]] and [[cask][Cask]].
 
 ** Installing Cask
 
-   Installing [[cask][Cask]] can be done via a provided installation script, or
-   via Homebrew.
+Installing [[cask][Cask]] can be done via a provided installation script, or via Homebrew.
 
-   #+begin_src sh :tangle no
-     curl -fsSkL https://raw.github.com/cask/cask/master/go | python
-   #+end_src
+#+begin_src sh :tangle no
+  curl -fsSkL https://raw.github.com/cask/cask/master/go | python
+#+end_src
 
-   My preferred method is to clone the Cask repository and update my
-   ~$PATH~.
+My preferred method is to clone the Cask repository and update my ~$PATH~.
 
-   #+begin_src sh :tangle no
-     [[ -d ~/.cask ]] ||
-       git clone git://github.com/cask/cask.git ~/.cask
-   #+end_src
+#+begin_src sh :tangle no
+  [[ -d ~/.cask ]] ||
+    git clone git://github.com/cask/cask.git ~/.cask
+#+end_src
 
 ** Benchmarks
 
-   In order to keep track of how expensive each piece of our Emacs
-   configuration is, we measure ~require~.
+In order to keep track of how expensive each piece of our Emacs configuration
+is, we measure ~require~.
 
-   #+begin_src emacs-lisp :tangle init.el :comments link
-     (defun jcf-time-subtract-millis (b a)
-       (* 1000.0 (float-time (time-subtract b a))))
+#+begin_src emacs-lisp :tangle init.el :comments link
+  (defun jcf-time-subtract-millis (b a)
+    (* 1000.0 (float-time (time-subtract b a))))
 
-     (defvar jcf-require-times nil
-       "A list of (FEATURE . LOAD-DURATION). LOAD-DURATION is the time
-       taken in milliseconds to load FEATURE.")
+  (defvar jcf-require-times nil
+    "A list of (FEATURE . LOAD-DURATION). LOAD-DURATION is the time
+    taken in milliseconds to load FEATURE.")
 
-     (defadvice require
-       (around build-require-times (feature &optional filename noerror) activate)
-       "Note in `jcf-require-times' the time taken to require each feature."
-       (let* ((already-loaded (memq feature features))
-              (require-start-time (and (not already-loaded) (current-time))))
-         (prog1
-             ad-do-it
-           (when (and (not already-loaded) (memq feature features))
-             (add-to-list 'jcf-require-times
-                          (cons feature
-                                (jcf-time-subtract-millis (current-time)
-                                                                require-start-time))
-                          t)))))
-   #+end_src
+  (defadvice require
+    (around build-require-times (feature &optional filename noerror) activate)
+    "Note in `jcf-require-times' the time taken to require each feature."
+    (let* ((already-loaded (memq feature features))
+           (require-start-time (and (not already-loaded) (current-time))))
+      (prog1
+          ad-do-it
+        (when (and (not already-loaded) (memq feature features))
+          (add-to-list 'jcf-require-times
+                       (cons feature
+                             (jcf-time-subtract-millis (current-time)
+                                                             require-start-time))
+                       t)))))
+#+end_src
 
 ** Dependencies
 
-   Cask supports installing dependencies via the main package archives
-   and ~package.el~, and importantly will clone packages from
-   repository URLs.
+Cask supports installing dependencies via the main package archives and
+~package.el~, and importantly will clone packages from repository URLs.
 
-   When installing via a repository the format we need to use is as
-   follows:
+When installing via a repository the format we need to use is as follows:
 
-   #+begin_src emacs-lisp :tangle no
-     (depends-on name fetcher url)
-   #+end_src
+#+begin_src emacs-lisp :tangle no
+  (depends-on name fetcher url)
+#+end_src
 
-   To fetch an imaginary package called ~bicycle~ via Git you could
-   use the following incantation of ~depends-on~:
+To fetch an imaginary package called ~bicycle~ via Git you could use the
+following incantation of ~depends-on~:
 
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (depends-on "bicycle" :git "git://github.com/bicycle/bicycle.git")
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle no
+  (depends-on "bicycle" :git "git://github.com/bicycle/bicycle.git")
+#+end_src
 
-   ~fetcher~ must be one of the values in [[cask-fetchers][~cask-fetchers~]], which at
-   the time of writing consists of:
+~fetcher~ must be one of the values in [[cask-fetchers][~cask-fetchers~]], which at the time of
+writing consists of:
 
-   - :bzr
-   - :cvs
-   - :darcs
-   - :git
-   - :hg
-   - :svn
+- :bzr
+- :cvs
+- :darcs
+- :git
+- :hg
+- :svn
 
-   There are two open issues related to installing Org using Cask
-   related to the following issues.
+There are two open issues related to installing Org using Cask related to the
+following issues.
 
-   - https://github.com/cask/cask/issues/169
-   - https://github.com/cask/cask/issues/206
+- https://github.com/cask/cask/issues/169
+- https://github.com/cask/cask/issues/206
 
-   Essentially, the issue is that packages that are already installed
-   are ignored, regardless of where they came from. This means Org
-   mode, which comes shipped with Emacs won't be installed.
+Essentially, the issue is that packages that are already installed are ignored,
+regardless of where they came from. This means Org mode, which comes shipped
+with Emacs won't be installed.
 
-   The workaround according to #169 is to install ~org-plus-contrib~.
+The workaround according to #169 is to install ~org-plus-contrib~.
 
-   See the ~Cask~ file for a list of all packages.
+See the ~Cask~ file for a list of all packages.
 
 * init.el
 
-  Our ~init.el~ needs to pull in the packages installed by [[cask][Cask]] before
-  we kick things off.
+Our ~init.el~ needs to pull in the packages installed by [[cask][Cask]] before we kick
+things off.
 
-  #+begin_src emacs-lisp :tangle init.el :comments link
-    (require 'cask "~/.cask/cask.el")
-    (cask-initialize)
-    (require 'pallet)
-    (pallet-mode t)
-  #+end_src
+#+begin_src emacs-lisp :tangle init.el :comments link
+  (require 'cask "~/.cask/cask.el")
+  (cask-initialize)
+  (require 'pallet)
+  (pallet-mode t)
+#+end_src
 
-  With all of our packages available we can start configuration. To
-  keep things manageable configuration is split up into a number of
-  files.
+With all of our packages available we can start configuration. To keep things
+manageable configuration is split up into a number of files.
 
 ** cl
 
-   Require some common-lisp functions and macros straight away.
+Require some common-lisp functions and macros straight away.
 
-   #+begin_src emacs-lisp :tangle init.el :comments link
-     (require 'cl)
-   #+end_src
+#+begin_src emacs-lisp :tangle init.el :comments link
+  (require 'cl)
+#+end_src
 
 ** OS X
 
-   There are a number of packages and configurations that only make
-   sense on OS X. Although I don't use Emacs on Linux very often, and
-   never on Windows it makes sense to ensure Emacs will run in these
-   environments.
+There are a number of packages and configurations that only make sense on OS
+X. Although I don't use Emacs on Linux very often, and never on Windows it makes
+sense to ensure Emacs will run in these environments.
 
-   #+begin_src emacs-lisp :tangle init.el :comments link
-     (defconst *is-a-mac* (eq system-type 'darwin))
-   #+end_src
+#+begin_src emacs-lisp :tangle init.el :comments link
+  (defconst *is-a-mac* (eq system-type 'darwin))
+#+end_src
 
 ** Load Org files
 
-  To give you an idea of why, my original literate Emacs config racked
-  up over 3000 lines in a single Org file.
+To give you an idea of why, my original literate Emacs config racked up over
+3000 lines in a single Org file.
 
-  #+begin_src emacs-lisp :tangle init.el :comments link
-    (require 'org-install)
-    (require 'ob-tangle)
+#+begin_src emacs-lisp :tangle init.el :comments link
+  (require 'org-install)
+  (require 'ob-tangle)
 
-    (defvar jcf-config-dir
-      (file-name-directory (or load-file-name (buffer-file-name))))
+  (defvar jcf-config-dir
+    (file-name-directory (or load-file-name (buffer-file-name))))
 
-    (defun jcf-load-org (s)
-      (org-babel-load-file
-       (expand-file-name (format "init-%s.org" s) jcf-config-dir)))
+  (defun jcf-load-org (s)
+    (org-babel-load-file
+     (expand-file-name (format "init-%s.org" s) jcf-config-dir)))
 
-    (add-hook
-     'after-init-hook
-     (lambda ()
-       (jcf-load-org "defuns")
-       (jcf-load-org "ubiquitous")
-       (jcf-load-org "genesis")
-       (jcf-load-org "presentation")
-       (jcf-load-org "evil")
-       (jcf-load-org "helm")
-       (when *is-a-mac*
-         (jcf-load-org "osx"))
-       (jcf-load-org "org")
-       (jcf-load-org "packages")
-       (jcf-load-org "window-management")
-       (jcf-load-org "version-control")
-       (jcf-load-org "languages")
-       (jcf-load-org "sessions")
-       (jcf-load-org "locales")
+  (add-hook
+   'after-init-hook
+   (lambda ()
+     (jcf-load-org "defuns")
+     (jcf-load-org "ubiquitous")
+     (jcf-load-org "genesis")
+     (jcf-load-org "presentation")
+     (jcf-load-org "evil")
+     (jcf-load-org "helm")
+     (when *is-a-mac*
+       (jcf-load-org "osx"))
+     (jcf-load-org "org")
+     (jcf-load-org "packages")
+     (jcf-load-org "window-management")
+     (jcf-load-org "version-control")
+     (jcf-load-org "languages")
+     (jcf-load-org "sessions")
+     (jcf-load-org "locales")
 
-       (jcf-log-startup-time)))
-  #+end_src
+     (jcf-log-startup-time)))
+#+end_src

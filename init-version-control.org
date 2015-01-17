@@ -6,129 +6,131 @@
 
 * diff-hl
 
-  #+begin_src emacs-lisp
-    (use-package diff-hl
-      :init
-      (progn
-        (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
-        (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode)))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package diff-hl
+    :init
+    (progn
+      (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
+      (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode)))
+#+end_src
 
 * Magit
 
-  #+begin_src emacs-lisp
-    (use-package magit
-      :commands magit-get-top-dir
-      :diminish magit-auto-revert-mode
-      :init
-      (setq-default
-       magit-save-some-buffers nil
-       magit-process-popup-time 10
-       magit-diff-refine-hunk t
-       magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
-       magit-completing-read-function 'magit-ido-completing-read)
+#+begin_src emacs-lisp
+  (use-package magit
+    :commands magit-get-top-dir
+    :diminish magit-auto-revert-mode
+    :init
+    (setq-default
+     magit-save-some-buffers nil
+     magit-process-popup-time 10
+     magit-diff-refine-hunk t
+     magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
+     magit-completing-read-function 'magit-ido-completing-read)
 
-      :config
-      (progn
-        (when *is-a-mac*
-          (after-load 'magit
-            (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+    :config
+    (progn
+      (when *is-a-mac*
+        (after-load 'magit
+          (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
-        (use-package git-blame)
-        (use-package git-commit-mode
-          :config
-          (progn
-            (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
-            (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))))
-        (use-package git-rebase-mode)
-        (use-package gitignore-mode)
-        (use-package gitconfig-mode)
+      (use-package git-blame)
+      (use-package git-commit-mode
+        :config
+        (progn
+          (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
+          (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))))
+      (use-package git-rebase-mode)
+      (use-package gitignore-mode)
+      (use-package gitconfig-mode)
 
-        (use-package magit-gh-pulls
-          ;; :config
-          ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
-          ))
+      (use-package magit-gh-pulls
+        ;; :config
+        ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
+        ))
 
-      :idle
-      (progn
-        (use-package magit-svn
-          :diminish magit-svn-mode)
-        (add-hook 'magit-mode-hook 'turn-on-magit-svn)))
-  #+end_src
+    :idle
+    (progn
+      (use-package magit-svn
+        :diminish magit-svn-mode)
+      (add-hook 'magit-mode-hook 'turn-on-magit-svn)))
+#+end_src
 
-  Jump to the parent section with Command-Control-<up>.
+Jump to the parent section with Command-Control-<up>.
 
-  #+begin_src emacs-lisp
-    (after-load 'magit
-      (define-key magit-status-mode-map
-        (kbd "C-M-<up>") 'magit-goto-parent-section))
-  #+end_src
+#+begin_src emacs-lisp
+  (after-load 'magit
+    (define-key magit-status-mode-map
+      (kbd "C-M-<up>") 'magit-goto-parent-section))
+#+end_src
 
 * ~git-grep~ binding
 
-  #+begin_src emacs-lisp
-   (global-set-key (kbd "C-x v f") 'vc-git-grep)
-  #+end_src
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x v f") 'vc-git-grep)
+#+end_src
 
 * ~git-wip~
 
-  Disabled because I found it irritating.
+Disabled because I found it irritating.
 
-  #+begin_src emacs-lisp
-   ;; (after-load 'magit
-   ;;   (global-magit-wip-save-mode)
-   ;;   (diminish 'magit-wip-save-mode))
-  #+end_src
+#+begin_src emacs-lisp
+  ;; (after-load 'magit
+  ;;   (global-magit-wip-save-mode)
+  ;;   (diminish 'magit-wip-save-mode))
+#+end_src
 
 * TODO Git Messenger - explain what this is for
 
-   #+begin_src emacs-lisp
-     (use-package git-messenger)
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package git-messenger)
+#+end_src
 
 * GitHub
 
-  #+begin_src emacs-lisp
-    (use-package gh
-      :defer t)
-  #+end_src
+** Github client
 
-  Gist support.
+#+begin_src emacs-lisp
+  (use-package gh
+    :defer t)
+#+end_src
 
-  #+begin_src emacs-lisp
-    (use-package yagist)
-  #+end_src
+** Gists
 
-  Open buffers on GitHub.
+#+begin_src emacs-lisp
+  (use-package yagist)
+#+end_src
 
-  #+begin_src emacs-lisp
-    (use-package github-browse-file)
-  #+end_src
+** Open buffer in GitHub
 
-  Add GitHub issues support to bug-reference.
+#+begin_src emacs-lisp
+  (use-package github-browse-file)
+#+end_src
 
-  https://github.com/arnested/bug-reference-github
+** GitHub issues
 
-  #+begin_src emacs-lisp
-    (use-package bug-reference-github
-      :init
-      (add-hook 'prog-mode-hook 'bug-reference-prog-mode))
-  #+end_src
+https://github.com/arnested/bug-reference-github
+
+#+begin_src emacs-lisp
+  (use-package bug-reference-github
+    :init
+    (add-hook 'prog-mode-hook 'bug-reference-prog-mode))
+#+end_src
 
 * Darcs
 
-  #+begin_src emacs-lisp
-    (use-package darcsum
-      :defer t
-      :init
-      (setq darcsum-whatsnew-switches "-l"))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package darcsum
+    :defer t
+    :init
+    (setq darcsum-whatsnew-switches "-l"))
+#+end_src
 
-  #+begin_src emacs-lisp
-    (use-package vc-darcs
-      :commands vc-darcs-find-file-hook
-      :config
-      (progn
-        (add-to-list 'vc-handled-backends 'DARCS)
-        (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package vc-darcs
+    :commands vc-darcs-find-file-hook
+    :config
+    (progn
+      (add-to-list 'vc-handled-backends 'DARCS)
+      (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)))
+#+end_src

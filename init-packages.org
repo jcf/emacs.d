@@ -6,717 +6,715 @@
 
 * Abstract
 
-  The many packages we use are required and configured below.
+The many packages we use are required and configured below.
 
-  We can control the amount of output ~use-package~ generates by
-  setting ~use-package-verbose~ to true.
+We can control the amount of output ~use-package~ generates by setting
+~use-package-verbose~ to true.
 
-  #+begin_src emacs-lisp
-    (setq use-package-verbose t)
-  #+end_src
+#+begin_src emacs-lisp
+  (setq use-package-verbose t)
+#+end_src
 
 * Ace Jump
 
-  #+begin_src emacs-lisp
-    (use-package ace-jump-mode)
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package ace-jump-mode)
+#+end_src
 
 * Cider
 
-  #+begin_src emacs-lisp
-    (use-package cider
-      :commands (cider cider-connect cider-jack-in)
-      :init
-      (progn
-        (setq cider-auto-select-error-buffer nil
-              cider-repl-pop-to-buffer-on-connect nil
-              cider-repl-use-clojure-font-lock t
-              cider-repl-wrap-history t
-              cider-repl-history-size 1000
-              cider-repl-history-file (f-expand ".cider-history"
-                                                user-emacs-directory)
-              cider-show-error-buffer nil
-              nrepl-hide-special-buffers t
-              nrepl-popup-stacktraces nil)
-        (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-        (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-        (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-        (add-hook 'cider-repl-mode-hook 'subword-mode)
-        ;; nrepl isn't based on comint
-        (add-hook 'cider-repl-mode-hook
-                  (lambda () (setq show-trailing-whitespace nil))))
+#+begin_src emacs-lisp
+  (use-package cider
+    :commands (cider cider-connect cider-jack-in)
+    :init
+    (progn
+      (setq cider-auto-select-error-buffer nil
+            cider-repl-pop-to-buffer-on-connect nil
+            cider-repl-use-clojure-font-lock t
+            cider-repl-wrap-history t
+            cider-repl-history-size 1000
+            cider-repl-history-file (f-expand ".cider-history"
+                                              user-emacs-directory)
+            cider-show-error-buffer nil
+            nrepl-hide-special-buffers t
+            nrepl-popup-stacktraces nil)
+      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+      (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+      (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+      (add-hook 'cider-repl-mode-hook 'subword-mode)
+      ;; nrepl isn't based on comint
+      (add-hook 'cider-repl-mode-hook
+                (lambda () (setq show-trailing-whitespace nil))))
 
-      :config
-      (use-package slamhound))
-  #+end_src
+    :config
+    (use-package slamhound))
+#+end_src
 
 * Clojure Refactor
 
-  #+begin_src emacs-lisp
-    (use-package clj-refactor
-      :init
-      (add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package clj-refactor
+    :init
+    (add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache))
+#+end_src
 
 * Company
 
-  Company mode is a fast, configurable completion system that allows for
-  extension using a simple API.
+Company mode is a fast, configurable completion system that allows for extension
+using a simple API.
 
-  #+begin_src emacs-lisp
-    (use-package company
-      :diminish company-mode
-      :idle
-      (global-company-mode 1)
+#+begin_src emacs-lisp
+  (use-package company
+    :diminish company-mode
+    :idle
+    (global-company-mode 1)
 
-      :config
-      (progn
-        (dolist ((package '(company-ghc
-                            company-go
-                            company-inf-ruby
-                            company-tern)))
-          (use-package package :init
-            (add-to-list 'company-backends package)))
+    :config
+    (progn
+      (dolist ((package '(company-ghc
+                          company-go
+                          company-inf-ruby
+                          company-tern)))
+        (use-package package :init
+          (add-to-list 'company-backends package)))
 
-        ;; Use Helm to complete suggestions
-        (define-key company-mode-map (kbd "C-:") 'helm-company)
-        (define-key company-active-map (kbd "C-:") 'helm-company)))
-  #+end_src
+      ;; Use Helm to complete suggestions
+      (define-key company-mode-map (kbd "C-:") 'helm-company)
+      (define-key company-active-map (kbd "C-:") 'helm-company)))
+#+end_src
 
 ** YouCompleteMe and ycmd
 
-  YouCompleteMe is an even faster, semantically-aware completion system that can
-  be used with Company mode. We can make use of YouCompleteMe via ~ycmd~, which
-  was extracted to make this possible.
+YouCompleteMe is an even faster, semantically-aware completion system that can
+be used with Company mode. We can make use of YouCompleteMe via ~ycmd~, which
+was extracted to make this possible.
 
-  https://github.com/Valloric/ycmd
+https://github.com/Valloric/ycmd
 
-  #+begin_src emacs-lisp
-    (use-package ycmd
-      :init
-      (progn
-        (eval
-         `(setq ycmd-server-command '("python" ,(f-expand "~/.cache/ycmd/ycmd"))))
-        (ycmd-setup))
-      :config
-      (progn
-        (require 'company-ycmd)
-        (company-ycmd-setup)
+#+begin_src emacs-lisp
+  (use-package ycmd
+    :init
+    (progn
+      (eval
+       `(setq ycmd-server-command '("python" ,(f-expand "~/.cache/ycmd/ycmd"))))
+      (ycmd-setup))
+    :config
+    (progn
+      (require 'company-ycmd)
+      (company-ycmd-setup)
 
-        ;; This has landed in master, but hasn't been released yet.
-        ;; (require 'flycheck-ycmd)
-        ;; (flycheck-ycmd-setup)
-        ))
-  #+end_src
+      ;; This has landed in master, but hasn't been released yet.
+      ;; (require 'flycheck-ycmd)
+      ;; (flycheck-ycmd-setup)
+      ))
+#+end_src
 
 * Dired
 
-  #+begin_src emacs-lisp
-    (use-package dired
-      :commands dired
-      :init
-      (progn
-        (setq dired-recursive-deletes 'top)
-        (setq dired-listing-switches "--group-directories-first -alh")
-        (setq diredp-hide-details-initially-flag nil)
+#+begin_src emacs-lisp
+  (use-package dired
+    :commands dired
+    :init
+    (progn
+      (setq dired-recursive-deletes 'top)
+      (setq dired-listing-switches "--group-directories-first -alh")
+      (setq diredp-hide-details-initially-flag nil)
 
-        (define-key dired-mode-map [mouse-2] 'dired-find-file)
-        (guide-key/add-local-guide-key-sequence "%")
+      (define-key dired-mode-map [mouse-2] 'dired-find-file)
+      (guide-key/add-local-guide-key-sequence "%")
 
-        (use-package dired+
-          :init (global-dired-hide-details-mode -1))))
-  #+end_src
+      (use-package dired+
+        :init (global-dired-hide-details-mode -1))))
+#+end_src
 
-  Some interesting options available to GNU ls:
+Some interesting options available to GNU ls:
 
-  - ~a~: list all files
-  - ~h~, ~--human-readable~: with ~-l~, print sizes in human readable format
-    (e.g., 1K 234M 2G)
-  - ~l~: use a long listing format
-  - ~group-directories-first~: group directories before files
-  - ~X~: sort alphabetically by entry extension
-  - ~U~: do not sort; list entries in directory order
-  - ~t~: sort by modification time, newest first
-  - ~S~: sort by file size
+- ~a~: list all files
+- ~h~, ~--human-readable~: with ~-l~, print sizes in human readable format
+  (e.g., 1K 234M 2G)
+- ~l~: use a long listing format
+- ~group-directories-first~: group directories before files
+- ~X~: sort alphabetically by entry extension
+- ~U~: do not sort; list entries in directory order
+- ~t~: sort by modification time, newest first
+- ~S~: sort by file size
 
 * Dizzee
 
-  #+begin_src emacs-lisp
-    (use-package dizzee
-      :commands (jcf-lein-datomic-start jcf-lein-headless-start)
-      :config
-      (progn
-        (dz-defservice jcf-lein-headless
-                       "lein"
-                       :cd "~/"
-                       :args ("repl" ":headless"))
+#+begin_src emacs-lisp
+  (use-package dizzee
+    :commands (jcf-lein-datomic-start jcf-lein-headless-start)
+    :config
+    (progn
+      (dz-defservice jcf-lein-headless
+                     "lein"
+                     :cd "~/"
+                     :args ("repl" ":headless"))
 
-        (dz-defservice jcf-lein-datomic
-                       "lein"
-                       :args ("datomic"))))
-  #+end_src
+      (dz-defservice jcf-lein-datomic
+                     "lein"
+                     :args ("datomic"))))
+#+end_src
 * dsvn
 
-  #+begin_src emacs-lisp
-    (use-package dsvn
-      :commands svn-status)
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package dsvn
+    :commands svn-status)
+#+end_src
 
 * Editorconfig
 
-  #+begin_src emacs-lisp
-    (use-package editorconfig :mode
-      ("\\.editorconfig\\'" . conf-unix-mode))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package editorconfig :mode
+    ("\\.editorconfig\\'" . conf-unix-mode))
+#+end_src
 
 * erc
 
-  #+begin_src emacs-lisp
-    (use-package erc
-      :commands erc
-      :init
-      (setq
-       erc-hide-list '("JOIN" "PART" "QUIT")
-       erc-insert-timestamp-function 'erc-insert-timestamp-left
-       erc-timestamp-format "[%H:%M] "
-       erc-timestamp-only-if-changed-flag nil
-       erc-truncate-mode t)
-      :config
-      (add-hook
-       'window-configuration-change-hook
-       (lambda () (setq erc-fill-column (- (window-width) 2)))))
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package erc
+    :commands erc
+    :init
+    (setq
+     erc-hide-list '("JOIN" "PART" "QUIT")
+     erc-insert-timestamp-function 'erc-insert-timestamp-left
+     erc-timestamp-format "[%H:%M] "
+     erc-timestamp-only-if-changed-flag nil
+     erc-truncate-mode t)
+    :config
+    (add-hook
+     'window-configuration-change-hook
+     (lambda () (setq erc-fill-column (- (window-width) 2)))))
+#+end_src
 
 * eshell
 
-  Eshell provides an Emacs Lisp enabled shell.
+Eshell provides an Emacs Lisp enabled shell.
 
-  - Always insert text at the prompt.
-  - Allow symbol names to be used for redirection targets.
-  - This makes it possible to redirect output like so:
-  - Ignore case when completing filenames.
-  - Error when a glob matches nothing. This mirrors the default
-    behaviour of zsh.
-  - Make globs case-insensitive.
+- Always insert text at the prompt.
+- Allow symbol names to be used for redirection targets.
+- This makes it possible to redirect output like so:
+- Ignore case when completing filenames.
+- Error when a glob matches nothing. This mirrors the default
+  behaviour of zsh.
+- Make globs case-insensitive.
 
-  ~NODE_NO_READLINE=1~ tells Node.js, and hence ~npm~ to avoid use of
-  escape codes because they don't print well.
+~NODE_NO_READLINE=1~ tells Node.js, and hence ~npm~ to avoid use of escape codes
+because they don't print well.
 
-  #+begin_src emacs-lisp
-    (use-package eshell
-      :commands eshell
-      :init
-      (setq
-       eshell-buffer-shorthand t
-       eshell-cmpl-ignore-case t
-       eshell-cmpl-cycle-completions nil
-       eshell-history-size 10000
-       eshell-hist-ignoredups t
-       eshell-error-if-no-glob t
-       eshell-glob-case-insensitive t
-       eshell-scroll-to-bottom-on-input 'all)
-      :config
-      (progn
-        (defun jcf-eshell-here ()
-          (interactive)
-          (eshell "here"))
+#+begin_src emacs-lisp
+  (use-package eshell
+    :commands eshell
+    :init
+    (setq
+     eshell-buffer-shorthand t
+     eshell-cmpl-ignore-case t
+     eshell-cmpl-cycle-completions nil
+     eshell-history-size 10000
+     eshell-hist-ignoredups t
+     eshell-error-if-no-glob t
+     eshell-glob-case-insensitive t
+     eshell-scroll-to-bottom-on-input 'all)
+    :config
+    (progn
+      (defun jcf-eshell-here ()
+        (interactive)
+        (eshell "here"))
 
-        (add-hook 'eshell-mode-hook
-                  (lambda ()
-                    (eshell/export "NODE_NO_READLINE=1")))))
+      (add-hook 'eshell-mode-hook
+                (lambda ()
+                  (eshell/export "NODE_NO_READLINE=1")))))
   #+end_src
 
 * Expand region
 
-  #+begin_src emacs-lisp
-    (use-package expand-region :bind
-      ("C-=" . er/expand-region))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package expand-region :bind
+    ("C-=" . er/expand-region))
+#+end_src
 
 * Fill column indicator
 
-  #+begin_src emacs-lisp
-    (use-package fill-column-indicator
-      :init
-      (turn-on-fci-mode)
+#+begin_src emacs-lisp
+  (use-package fill-column-indicator
+    :init
+    (turn-on-fci-mode)
 
-      :config
-      (progn
-        (defun jcf-fci-enabled-p ()
-          (and (boundp 'fci-mode) fci-mode))
+    :config
+    (progn
+      (defun jcf-fci-enabled-p ()
+        (and (boundp 'fci-mode) fci-mode))
 
-        (defvar jcf-fci-mode-suppressed nil)
+      (defvar jcf-fci-mode-suppressed nil)
 
-        (defadvice popup-create (before suppress-fci-mode activate)
-          "Suspend fci-mode while popups are visible"
-          (let ((fci-enabled (jcf-fci-enabled-p)))
-            (when fci-enabled
-              (set (make-local-variable 'jcf-fci-mode-suppressed) fci-enabled)
-              (turn-off-fci-mode))))
+      (defadvice popup-create (before suppress-fci-mode activate)
+        "Suspend fci-mode while popups are visible"
+        (let ((fci-enabled (jcf-fci-enabled-p)))
+          (when fci-enabled
+            (set (make-local-variable 'jcf-fci-mode-suppressed) fci-enabled)
+            (turn-off-fci-mode))))
 
-        (defadvice popup-delete (after restore-fci-mode activate)
-          "Restore fci-mode when all popups have closed"
-          (when (and jcf-fci-mode-suppressed
-                     (null popup-instances))
-            (setq jcf-fci-mode-suppressed nil)
-            (turn-on-fci-mode))
+      (defadvice popup-delete (after restore-fci-mode activate)
+        "Restore fci-mode when all popups have closed"
+        (when (and jcf-fci-mode-suppressed
+                   (null popup-instances))
+          (setq jcf-fci-mode-suppressed nil)
+          (turn-on-fci-mode))
 
-          (defadvice enable-theme (after recompute-fci-face activate)
-            "Regenerate fci-mode line images after switching themes"
-            (dolist (buffer (buffer-list))
-              (with-current-buffer buffer
-                (turn-on-fci-mode)))))))
-  #+end_src
+        (defadvice enable-theme (after recompute-fci-face activate)
+          "Regenerate fci-mode line images after switching themes"
+          (dolist (buffer (buffer-list))
+            (with-current-buffer buffer
+              (turn-on-fci-mode)))))))
+#+end_src
 
 * Global Tags
 
-  Powered by [[http://www.gnu.org/software/global/][GNU Global]].
+Powered by [[http://www.gnu.org/software/global/][GNU Global]].
 
-  #+begin_src emacs-lisp
-    (use-package ggtags :init
-      (ggtags-mode 1))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package ggtags :init
+    (ggtags-mode 1))
+#+end_src
 
 * gnuplot
 
-  #+begin_src emacs-lisp
-    (use-package gnuplot
-      :commands gnuplot-mode
-      :mode "\\.gp$")
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package gnuplot
+    :commands gnuplot-mode
+    :mode "\\.gp$")
+#+end_src
 
 * google-this
 
-  #+begin_src emacs-lisp
-    (use-package google-this)
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package google-this)
+#+end_src
 
 * Highlight escape sequences
 
-  #+begin_src emacs-lisp
-    (use-package highlight-escape-sequences :init
-      (hes-mode))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package highlight-escape-sequences :init
+    (hes-mode))
+#+end_src
 
 * Highlight symbols
 
-  #+begin_src emacs-lisp
-    (use-package highlight-symbol
-      :diminish highlight-symbol-mode
-      :config
-      (dolist (hook '(prog-mode-hook html-mode-hook))
-        (add-hook hook 'highlight-symbol-mode)
-        (add-hook hook 'highlight-symbol-nav-mode)))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package highlight-symbol
+    :diminish highlight-symbol-mode
+    :config
+    (dolist (hook '(prog-mode-hook html-mode-hook))
+      (add-hook hook 'highlight-symbol-mode)
+      (add-hook hook 'highlight-symbol-nav-mode)))
+#+end_src
 
 * Hippie
 
-  #+begin_src emacs-lisp
-    (use-package hippie-expand
-      :init
-      (setq hippie-expand-try-functions-list
-            '(try-complete-file-name-partially
-              try-complete-file-name
-              try-expand-dabbrev
-              try-expand-dabbrev-all-buffers
-              try-expand-dabbrev-from-kill))
-      :bind
-      ("M-/" . hippie-expand))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package hippie-expand
+    :init
+    (setq hippie-expand-try-functions-list
+          '(try-complete-file-name-partially
+            try-complete-file-name
+            try-expand-dabbrev
+            try-expand-dabbrev-all-buffers
+            try-expand-dabbrev-from-kill))
+    :bind
+    ("M-/" . hippie-expand))
+#+end_src
 
 * htmlize
 
-  #+begin_src emacs-lisp
-    (use-package htmlize)
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package htmlize)
+#+end_src
 
 * ibuffer
 
-   - Version-control support
-   - Setup filters
-   - Use human readable file sizes
-   - Customise formats (toggle with ~`~)
-   - Bind to "C-x C-b"
+- Version-control support
+- Setup filters
+- Use human readable file sizes
+- Customise formats (toggle with ~`~)
+- Bind to "C-x C-b"
 
-   #+begin_src emacs-lisp
-     (use-package ibuffer
-       :init
-       (use-package ibuffer-vc
-         :init
-         (progn
-           (setq
-            ibuffer-filter-group-name-face 'font-lock-doc-face
-            ibuffer-formats
-            '((mark modified read-only vc-status-mini " "
-                    (name 18 18 :left :elide)
-                    " "
-                    (size-h 9 -1 :right)
-                    " "
-                    (mode 16 16 :left :elide)
-                    " "
-                    filename-and-process)
-              (mark modified read-only vc-status-mini " "
-                    (name 18 18 :left :elide)
-                    " "
-                    (size-h 9 -1 :right)
-                    " "
-                    (mode 16 16 :left :elide)
-                    " "
-                    (vc-status 16 16 :left)
-                    " "
-                    filename-and-process)))
+#+begin_src emacs-lisp
+  (use-package ibuffer
+    :init
+    (use-package ibuffer-vc
+      :init
+      (progn
+        (setq
+         ibuffer-filter-group-name-face 'font-lock-doc-face
+         ibuffer-formats
+         '((mark modified read-only vc-status-mini " "
+                 (name 18 18 :left :elide)
+                 " "
+                 (size-h 9 -1 :right)
+                 " "
+                 (mode 16 16 :left :elide)
+                 " "
+                 filename-and-process)
+           (mark modified read-only vc-status-mini " "
+                 (name 18 18 :left :elide)
+                 " "
+                 (size-h 9 -1 :right)
+                 " "
+                 (mode 16 16 :left :elide)
+                 " "
+                 (vc-status 16 16 :left)
+                 " "
+                 filename-and-process)))
 
-           (after-load 'ibuffer
-             (define-ibuffer-column size-h
-               (:name "Size" :inline t)
-               (cond
-                ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
-                ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
-                (t (format "%8d" (buffer-size))))))
+        (after-load 'ibuffer
+          (define-ibuffer-column size-h
+            (:name "Size" :inline t)
+            (cond
+             ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+             ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
+             (t (format "%8d" (buffer-size))))))
 
-           (defun ibuffer-set-up-preferred-filters ()
-             (ibuffer-vc-set-filter-groups-by-vc-root)
-             (unless (eq ibuffer-sorting-mode 'filename/process)
-               (ibuffer-do-sort-by-filename/process)))
+        (defun ibuffer-set-up-preferred-filters ()
+          (ibuffer-vc-set-filter-groups-by-vc-root)
+          (unless (eq ibuffer-sorting-mode 'filename/process)
+            (ibuffer-do-sort-by-filename/process)))
 
-           (add-hook 'ibuffer-hook 'ibuffer-set-up-preferred-filters)))
+        (add-hook 'ibuffer-hook 'ibuffer-set-up-preferred-filters)))
 
-       :bind
-       ("C-x C-b" . ibuffer))
-   #+end_src
+    :bind
+    ("C-x C-b" . ibuffer))
+#+end_src
 
 * ido
 
-  #+begin_src emacs-lisp
-    (use-package ido
-      :idle
-      (progn
-        (setq
-         ido-auto-merge-work-directories-length 0
-         ido-default-buffer-method 'selected-window
-         ido-enable-flex-matching t
-         ido-use-filename-at-point nil
-         ido-use-virtual-buffers t)
+#+begin_src emacs-lisp
+  (use-package ido
+    :idle
+    (progn
+      (setq
+       ido-auto-merge-work-directories-length 0
+       ido-default-buffer-method 'selected-window
+       ido-enable-flex-matching t
+       ido-use-filename-at-point nil
+       ido-use-virtual-buffers t)
 
-        (ido-mode t)
-        (ido-everywhere t)
-        (use-package ido-vertical-mode :init (ido-vertical-mode 1))
-        (use-package ido-ubiquitous :init (ido-ubiquitous-mode t))
-        (use-package idomenu))
+      (ido-mode t)
+      (ido-everywhere t)
+      (use-package ido-vertical-mode :init (ido-vertical-mode 1))
+      (use-package ido-ubiquitous :init (ido-ubiquitous-mode t))
+      (use-package idomenu))
 
-      :config
-      (progn
-        ;; Allow the same buffer to be open in different frames.
-        ;;
-        ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
-        (add-hook
-         'ido-setup-hook
-         (lambda ()
-           (define-key ido-completion-map [up] 'previous-history-element)))))
-  #+end_src
+    :config
+    (progn
+      ;; Allow the same buffer to be open in different frames.
+      ;;
+      ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
+      (add-hook
+       'ido-setup-hook
+       (lambda ()
+         (define-key ido-completion-map [up] 'previous-history-element)))))
+#+end_src
 
 * Key Chord
 
-  #+BEGIN_QUOTE
-  Key-chord lets you bind commands to combination of key-strokes. Here
-  a "key chord" means two keys pressed simultaneously, or a single key
-  quickly pressed twice.
-  #+END_QUOTE
+#+BEGIN_QUOTE
+Key-chord lets you bind commands to combination of key-strokes. Here a "key
+chord" means two keys pressed simultaneously, or a single key quickly pressed
+twice.
+#+END_QUOTE
 
-  http://www.emacswiki.org/emacs/KeyChord
+http://www.emacswiki.org/emacs/KeyChord
 
-  #+begin_src emacs-lisp
-    (use-package key-chord
-      :init
-      (progn
-        (setq key-chord-two-keys-delay 0.05)
-        (key-chord-mode 1))
+#+begin_src emacs-lisp
+  (use-package key-chord
+    :init
+    (progn
+      (setq key-chord-two-keys-delay 0.05)
+      (key-chord-mode 1))
 
-      :config
-      (key-chord-define evil-insert-state-map "jj" 'evil-normal-state))
-  #+end_src
+    :config
+    (key-chord-define evil-insert-state-map "jj" 'evil-normal-state))
+#+end_src
 
 * Multiple major modes
 
-  #+begin_src emacs-lisp
-    (use-package mmm-mode
-      :commands mmm-mode
-      :config
-      (progn
-        (setq
-         mmm-global-mode 'buffers-with-submode-classes
-         mmm-submode-decoration-level 0)
+#+begin_src emacs-lisp
+  (use-package mmm-mode
+    :commands mmm-mode
+    :config
+    (progn
+      (setq
+       mmm-global-mode 'buffers-with-submode-classes
+       mmm-submode-decoration-level 0)
 
-        (use-package mmm-auto)))
-  #+end_src
+      (use-package mmm-auto)))
+#+end_src
 
 * mwe-log-commands
 
-  [[http://www.foldr.org/~michaelw/emacs/mwe-log-commands.el][~mwe-log-commands~]] is logs is designed for use during demos, logging
-  keystrokes into a designated buffer, along with the command bound to
-  them.
+[[http://www.foldr.org/~michaelw/emacs/mwe-log-commands.el][~mwe-log-commands~]] is logs is designed for use during demos, logging keystrokes
+into a designated buffer, along with the command bound to them.
 
-  #+begin_src emacs-lisp
-    (use-package mwe-log-commands)
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package mwe-log-commands)
+#+end_src
 
 * Page break lines
 
-  #+begin_src emacs-lisp
-    (use-package page-break-lines
-      :diminish page-break-lines-mode
-      :init
-      (global-page-break-lines-mode))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package page-break-lines
+    :diminish page-break-lines-mode
+    :init
+    (global-page-break-lines-mode))
+#+end_src
 
 * Prodigy (process manager)
 
-  https://github.com/rejeep/prodigy.el
+https://github.com/rejeep/prodigy.el
 
-  #+BEGIN_QUOTE
-  Manage external services from within Emacs
+#+BEGIN_QUOTE
+Manage external services from within Emacs.
 
-  I came up with the idea when I got to work one Monday morning and before I
-  could start working I had to manually start ten or so services.
+I came up with the idea when I got to work one Monday morning and before I could
+start working I had to manually start ten or so services.
 
-  To get rid of this tedious work, I started working on this Emacs plugin, which
-  provides a nice and simple GUI to manage services.
-  #+END_QUOTE
+To get rid of this tedious work, I started working on this Emacs plugin, which
+provides a nice and simple GUI to manage services.
+#+END_QUOTE
 
-  #+begin_src emacs-lisp
-    (use-package prodigy :commands prodigy)
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package prodigy :commands prodigy)
+#+end_src
 
 ** Jekyll
 
-   Jekyll needs UTF-8 support, which Ruby will pick up based on ~LANG~ and
-   ~LC_ALL~.
+Jekyll needs UTF-8 support, which Ruby will pick up based on ~LANG~ and
+~LC_ALL~.
 
-   #+begin_src emacs-lisp
-     (prodigy-define-tag
-       :name 'jekyll
-       :env '(("LANG" "en_US.UTF-8")
-              ("LC_ALL" "en_US.UTF-8")))
-   #+end_src
+#+begin_src emacs-lisp
+  (prodigy-define-tag
+    :name 'jekyll
+    :env '(("LANG" "en_US.UTF-8")
+           ("LC_ALL" "en_US.UTF-8")))
+#+end_src
 
 ** Middleman
 
-   #+begin_src emacs-lisp
-     (prodigy-define-tag
-       :name 'middleman-server
-       :command "middleman"
-       :args '("server")
-       :ready-message "== The Middleman is standing watch at http://0\\.0\\.0\\.0:[0-9]+")
-   #+end_src
+#+begin_src emacs-lisp
+  (prodigy-define-tag
+    :name 'middleman-server
+    :command "middleman"
+    :args '("server")
+    :ready-message "== The Middleman is standing watch at http://0\\.0\\.0\\.0:[0-9]+")
+#+end_src
 
 ** Offlineimap
 
-   #+begin_src emacs-lisp
-     (prodigy-define-service
-       :name "offlineimap"
-       :command "offlineimap"
-       :args '("-q")
-       :kill-process-buffer-on-stop t)
-   #+end_src
+#+begin_src emacs-lisp
+  (prodigy-define-service
+    :name "offlineimap"
+    :command "offlineimap"
+    :args '("-q")
+    :kill-process-buffer-on-stop t)
+#+end_src
 
 * project-local-variables
 
-   The [[http://www.emacswiki.org/emacs/ProjectLocalVariables][~project-local-variables~]] package looks for a ~.emacs-project~
-   file in your current directory, and evaluates its contents.
+The [[http://www.emacswiki.org/emacs/ProjectLocalVariables][~project-local-variables~]] package looks for a ~.emacs-project~ file in your
+current directory, and evaluates its contents.
 
-   This poses an obvious security risk as any arbitrary Lisp code will
-   be evaluated when found.
+This poses an obvious security risk as any arbitrary Lisp code will be evaluated
+when found.
 
-   Consider replacing with the built-in [[http://www.emacswiki.org/emacs/DirectoryVariables][~directory-variables~]].
+Consider replacing with the built-in [[http://www.emacswiki.org/emacs/DirectoryVariables][~directory-variables~]].
 
-   #+begin_src emacs-lisp
-     (use-package project-local-variables)
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package project-local-variables)
+#+end_src
 
 * Projectile
 
-   #+begin_src emacs-lisp
-     (use-package projectile
-       :commands (projectile-global-mode
-                  projectile-mode)
-       :init
-       (projectile-global-mode))
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package projectile
+    :commands (projectile-global-mode
+               projectile-mode)
+    :init
+    (projectile-global-mode))
+#+end_src
 
 * recentf
 
-  #+begin_src emacs-lisp
-    (use-package recentf
-      :init
-      (recentf-mode 1)
+#+begin_src emacs-lisp
+  (use-package recentf
+    :init
+    (recentf-mode 1)
 
-      :config
-      (setq
-       recentf-max-saved-items 1000
-       recentf-exclude '("/tmp/" "/ssh:")))
-   #+end_src
+    :config
+    (setq
+     recentf-max-saved-items 1000
+     recentf-exclude '("/tmp/" "/ssh:")))
+#+end_src
 
 * regex-tool
 
-  #+begin_src emacs-lisp
-    (use-package regex-tool)
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package regex-tool)
+#+end_src
 
 * Scratch
 
-  When Emacs starts up, it contains a buffer named *scratch*, which
-  is provided for evaluating Emacs Lisp expressions
-  interactively. Its major mode is Lisp Interaction mode. You can
-  also enable Lisp Interaction mode by typing ~M-x
-  lisp-interaction-mode~.
+When Emacs starts up, it contains a buffer named *scratch*, which is provided
+for evaluating Emacs Lisp expressions interactively. Its major mode is Lisp
+Interaction mode. You can also enable Lisp Interaction mode by typing ~M-x
+lisp-interaction-mode~.
 
-  #+begin_src emacs-lisp
-    (use-package scratch)
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package scratch)
+#+end_src
 
 * Smart mode line
 
-  #+begin_src emacs-lisp
-    (use-package smart-mode-line
-      :init
-      (progn
-        (setq sml/theme 'respectful)
-        (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox" ":Box:") t)
-        (add-to-list 'sml/replacer-regexp-list '("^~/Code" ":C:") t)
-        (sml/setup)))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package smart-mode-line
+    :init
+    (progn
+      (setq sml/theme 'respectful)
+      (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox" ":Box:") t)
+      (add-to-list 'sml/replacer-regexp-list '("^~/Code" ":C:") t)
+      (sml/setup)))
+#+end_src
 
 * SmartParens
 
-  #+begin_src emacs-lisp
-    (use-package smartparens
-      :init
-      (progn
-        (smartparens-global-mode 1)
-        (show-smartparens-global-mode +1))
+#+begin_src emacs-lisp
+  (use-package smartparens
+    :init
+    (progn
+      (smartparens-global-mode 1)
+      (show-smartparens-global-mode +1))
 
-      :config
-      (progn
-        ;; Enable smartparens everywhere
-        (use-package smartparens-config)
+    :config
+    (progn
+      ;; Enable smartparens everywhere
+      (use-package smartparens-config)
 
-        ;; Require and disable paredit because some packages rely on it.
-        (use-package paredit)
-        (disable-paredit-mode)
+      ;; Require and disable paredit because some packages rely on it.
+      (use-package paredit)
+      (disable-paredit-mode)
 
-        (setq
-         smartparens-strict-mode t
-         sp-autoinsert-if-followed-by-word t
-         sp-autoskip-closing-pair 'always
-         sp-base-key-bindings 'paredit
-         sp-hybrid-kill-entire-symbol nil)
+      (setq
+       smartparens-strict-mode t
+       sp-autoinsert-if-followed-by-word t
+       sp-autoskip-closing-pair 'always
+       sp-base-key-bindings 'paredit
+       sp-hybrid-kill-entire-symbol nil)
 
-        (sp-use-paredit-bindings))
+      (sp-use-paredit-bindings))
 
-        (sp-with-modes '(markdown-mode gfm-mode rst-mode)
-          (sp-local-pair "*" "*" :bind "C-*")
-          (sp-local-tag "2" "**" "**")
-          (sp-local-tag "s" "```scheme" "```")
-          (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+      (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+        (sp-local-pair "*" "*" :bind "C-*")
+        (sp-local-tag "2" "**" "**")
+        (sp-local-tag "s" "```scheme" "```")
+        (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
 
-        (sp-with-modes '(html-mode sgml-mode)
-          (sp-local-pair "<" ">"))
+      (sp-with-modes '(html-mode sgml-mode)
+        (sp-local-pair "<" ">"))
 
-        ;; Close a backtick with another backtick in clojure-mode
-        (sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
+      ;; Close a backtick with another backtick in clojure-mode
+      (sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
 
-        (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p)))
-  #+end_src
+      (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p)))
+#+end_src
 
 * smex
 
-  #+begin_src emacs-lisp
-    (use-package smex :init
-      (setq smex-save-file
-            (expand-file-name ".smex-items" user-emacs-directory)))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package smex :init
+    (setq smex-save-file
+          (expand-file-name ".smex-items" user-emacs-directory)))
+#+end_src
 
 * The Silver Surfer (~ag~)
 
-  A [[https://github.com/ggreer/the_silver_searcher][code searching tool]] similar to ack, with a focus on speed.
+A [[https://github.com/ggreer/the_silver_searcher][code searching tool]] similar to ack, with a focus on speed.
 
-  Can be [[https://github.com/ggreer/the_silver_searcher#installation][installed]] via Homebrew on OS X.
+Can be [[https://github.com/ggreer/the_silver_searcher#installation][installed]] via Homebrew on OS X.
 
-  #+begin_src emacs-lisp
-    (defvar executable-ag-available?
-      (executable-find "ag"))
+#+begin_src emacs-lisp
+  (defvar executable-ag-available?
+    (executable-find "ag"))
 
-    (use-package ag
-      :if executable-ag-available?
-      :init
-      (progn
-        (use-package wgrep-ag)
-        (setq-default ag-highlight-search t))
-      :bind
-      ("M-?" . ag-project))
-  #+end_src
+  (use-package ag
+    :if executable-ag-available?
+    :init
+    (progn
+      (use-package wgrep-ag)
+      (setq-default ag-highlight-search t))
+    :bind
+    ("M-?" . ag-project))
+#+end_src
 
 * Undo tree
 
-  #+begin_src emacs-lisp
-    (use-package undo-tree
-      :diminish undo-tree
-      :init
-      (global-undo-tree-mode))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package undo-tree
+    :diminish undo-tree
+    :init
+    (global-undo-tree-mode))
+#+end_src
 
 * Unfill
 
- #+begin_src emacs-lisp
-   (use-package unfill)
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package unfill)
+#+end_src
 
 * Vagrant
 
-  vagrant.el allows us to more easily manage Vagrant boxes.
+vagrant.el allows us to more easily manage Vagrant boxes.
 
-  #+begin_src emacs-lisp
-    (use-package vagrant
-      :commands (vagrant-destroy
-                 vagrant-edit
-                 vagrant-halt
-                 vagrant-provision
-                 vagrant-reload
-                 vagrant-resume
-                 vagrant-ssh
-                 vagrant-status
-                 vagrant-suspend
-                 vagrant-up))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package vagrant
+    :commands (vagrant-destroy
+               vagrant-edit
+               vagrant-halt
+               vagrant-provision
+               vagrant-reload
+               vagrant-resume
+               vagrant-ssh
+               vagrant-status
+               vagrant-suspend
+               vagrant-up))
+#+end_src
 
 * wgrep
 
-   [[https://github.com/mhayashi1120/Emacs-wgrep][~wgrep~]] makes the ~grep~, and ~ag~ buffers writable so you can make
-   changes to your search results.
+[[https://github.com/mhayashi1120/Emacs-wgrep][~wgrep~]] makes the ~grep~, and ~ag~ buffers writable so you can make changes to
+your search results.
 
-   #+begin_src emacs-lisp
-     (use-package wgrep)
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package wgrep)
+#+end_src
 
 * Whitespace cleanup
 
-  #+begin_src emacs-lisp
-    (use-package whitespace-cleanup-mode :init
-      (global-whitespace-cleanup-mode t))
-  #+end_src
+#+begin_src emacs-lisp
+  (use-package whitespace-cleanup-mode :init
+    (global-whitespace-cleanup-mode t))
+#+end_src
 
 * Yasnippet
 
-  #+begin_src emacs-lisp
-    (use-package yasnippet
-      :idle
-      (yas-global-mode 1)
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :idle
+    (yas-global-mode 1)
 
-      :config
-      (progn
-        (use-package string-utils)
+    :config
+    (progn
+      (use-package string-utils)
 
-        (let ((snippets-dir (expand-file-name "snippets" user-emacs-directory)))
-          (if (f-directory? snippets-dir)
-              (setq yas-snippet-dirs snippets-dir)))))
-  #+end_src
+      (let ((snippets-dir (expand-file-name "snippets" user-emacs-directory)))
+        (if (f-directory? snippets-dir)
+            (setq yas-snippet-dirs snippets-dir)))))
+#+end_src
