@@ -135,7 +135,7 @@ As we always wrap to 80 columns I'd prefer vertical splits in almost all cases.
   (setq-default
    ediff-split-window-function 'split-window-horizontally
    ediff-window-setup-function 'ediff-setup-windows-plain)
-#+END_SRC
+#+end_src
 
 * Blink cursor
 
@@ -143,14 +143,14 @@ As we always wrap to 80 columns I'd prefer vertical splits in almost all cases.
   (setq-default
    blink-cursor-delay 0
    blink-cursor-interval 0.4)
-#+END_SRC
+#+end_src
 
 * Bookmark file
 
 #+begin_src emacs-lisp
   (setq-default
    bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory))
-#+END_SRC
+#+end_src
 
 * Auto revert
 
@@ -158,13 +158,13 @@ As we always wrap to 80 columns I'd prefer vertical splits in almost all cases.
   (global-auto-revert-mode)
   (setq global-auto-revert-non-file-buffers t
         auto-revert-verbose nil)
-#+END_SRC
+#+end_src
 
 * Transient mark
 
 #+begin_src emacs-lisp
   (transient-mark-mode t)
-#+END_SRC
+#+end_src
 
 * Highlight trailing whitespace
 
@@ -183,7 +183,7 @@ As we always wrap to 80 columns I'd prefer vertical splits in almost all cases.
                   twittering-mode-hook
                   minibuffer-setup-hook))
     (add-hook hook #'jcf-no-trailing-whitespace))
-#+END_SRC
+#+end_src
 
 * Newline behaviour
 
@@ -196,7 +196,7 @@ As we always wrap to 80 columns I'd prefer vertical splits in almost all cases.
     (newline-and-indent))
 
   (global-set-key (kbd "S-<return>") 'jcf-newline-at-end-of-line)
-#+END_SRC
+#+end_src
 
 * Workaround for subword not being available
 
@@ -206,21 +206,21 @@ See https://github.com/purcell/emacs.d/issues/138 for more information.
   (when (eval-when-compile (string< "24.3.1" emacs-version))
     (after-load 'subword
       (diminish 'subword-mode)))
-#+END_SRC
+#+end_src
 
 * Prettify symbols
 
 #+begin_src emacs-lisp
   (when (fboundp 'global-prettify-symbols-mode)
     (global-prettify-symbols-mode))
-#+END_SRC
+#+end_src
 
 * Zap up to char
 
 #+begin_src emacs-lisp
   (autoload 'zap-up-to-char "misc" "Kill up to, but not including ARGth occurrence of CHAR.")
   (global-set-key (kbd "M-Z") 'zap-up-to-char)
-#+END_SRC
+#+end_src
 
 * Don't disable narrowing commands
 
@@ -228,26 +228,26 @@ See https://github.com/purcell/emacs.d/issues/138 for more information.
   (put 'narrow-to-region 'disabled nil)
   (put 'narrow-to-page 'disabled nil)
   (put 'narrow-to-defun 'disabled nil)
-#+END_SRC
+#+end_src
 
 * Show matching parens
 
 #+begin_src emacs-lisp
   (show-paren-mode 1)
-#+END_SRC
+#+end_src
 
 * Don't disable case-change functions
 
 #+begin_src emacs-lisp
   (put 'upcase-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
-#+END_SRC
+#+end_src
 
 * CUA selection mode for rectangles
 
 #+begin_src emacs-lisp
   (cua-selection-mode t)
-#+END_SRC
+#+end_src
 
 * Semantic mode
 
@@ -261,7 +261,7 @@ See https://github.com/purcell/emacs.d/issues/138 for more information.
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-m") 'execute-extended-command)
-#+END_SRC
+#+end_src
 
 ** Vim-like alternatives to M-^ and C-u M-^.
 
@@ -271,7 +271,7 @@ See https://github.com/purcell/emacs.d/issues/138 for more information.
 
   (global-set-key (kbd "C-.") 'set-mark-command)
   (global-set-key (kbd "C-x C-.") 'pop-global-mark)
-#+END_SRC
+#+end_src
 
 * Multiple cursors
 
@@ -279,7 +279,7 @@ See https://github.com/purcell/emacs.d/issues/138 for more information.
 
 #+begin_src emacs-lisp
   (require 'multiple-cursors)
-#+END_SRC
+#+end_src
 
 ** Mark bindings
 
@@ -288,7 +288,7 @@ See https://github.com/purcell/emacs.d/issues/138 for more information.
   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
   (global-set-key (kbd "C-+") 'mc/mark-next-like-this)
   (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-#+END_SRC
+#+end_src
 
 ** From active region to multiple cursors
 
@@ -297,14 +297,14 @@ See https://github.com/purcell/emacs.d/issues/138 for more information.
   (global-set-key (kbd "C-c c c") 'mc/edit-lines)
   (global-set-key (kbd "C-c c e") 'mc/edit-ends-of-lines)
   (global-set-key (kbd "C-c c a") 'mc/edit-beginnings-of-lines)
-#+END_SRC
+#+end_src
 
 * Disable left and right arrow key bindings
 
 #+begin_src emacs-lisp
   (global-unset-key [M-left])
   (global-unset-key [M-right])
-#+END_SRC
+#+end_src
 
 * Delete to beginning of line
 
@@ -318,7 +318,7 @@ See https://github.com/purcell/emacs.d/issues/138 for more information.
       (kill-region (point) prev-pos)))
 
   (global-set-key (kbd "C-M-<backspace>") 'kill-back-to-indentation)
-#+END_SRC
+#+end_src
 
 * Move lines
 
@@ -334,7 +334,7 @@ M-S-down, which will work even in lisp modes.
   (global-set-key [M-S-down] 'md/move-lines-down)
 
   (global-set-key (kbd "C-c p") 'md/duplicate-down)
-#+END_SRC
+#+end_src
 
 * Fix backward-up-list to understand quotes, see http://bit.ly/h7mdIL
 
@@ -349,7 +349,7 @@ M-S-down, which will work even in lisp modes.
             ((backward-up-list arg)))))
 
   (global-set-key [remap backward-up-list] 'backward-up-sexp) ; C-M-u, C-M-up
-#+END_SRC
+#+end_src
 
 * Cut/copy current line if no region active
 
@@ -377,7 +377,7 @@ M-S-down, which will work even in lisp modes.
                (,mode-name 1)))))))
 
   (suspend-mode-during-cua-rect-selection 'whole-line-or-region-mode)
-#+END_SRC
+#+end_src
 
 * Indentation-aware open line
 
@@ -412,7 +412,7 @@ M-S-down, which will work even in lisp modes.
       (indent-according-to-mode)))
 
   (global-set-key (kbd "C-o") 'jcf-open-line-with-reindent)
-#+END_SRC
+#+end_src
 
 * Randomise lines
 
@@ -428,7 +428,7 @@ M-S-down, which will work even in lisp modes.
             ((inhibit-field-text-motion t))
           (sort-subr nil 'forward-line 'end-of-line nil nil
                      (lambda (s1 s2) (eq (random 2) 0)))))))
-#+END_SRC
+#+end_src
 
 * isearch improvements
 
@@ -445,13 +445,13 @@ kept around for posterity sake and in case we're stuck in Emacs mode.
     (diminish 'anzu-mode)
     (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
     (global-set-key [remap query-replace] 'anzu-query-replace))
-#+END_SRC
+#+end_src
 
 ** Use ~occur~ inside ~isearch~
 
 #+begin_src emacs-lisp
   (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
-#+END_SRC
+#+end_src
 
 ** Search back/forth for symbol at point
 
@@ -470,7 +470,7 @@ kept around for posterity sake and in case we're stuck in Emacs mode.
     (isearch-search-and-update))
 
   (define-key isearch-mode-map "\C-\M-w" 'isearch-yank-symbol)
-#+END_SRC
+#+end_src
 
 ** Zap to isearch
 
@@ -516,7 +516,7 @@ http://www.emacswiki.org/emacs/ZapToISearch
     (goto-char isearch-other-end))
 
   (define-key isearch-mode-map [(control return)] 'isearch-exit-other-end)
-#+END_SRC
+#+end_src
 
 * flycheck
 
@@ -527,7 +527,7 @@ http://www.emacswiki.org/emacs/ZapToISearch
     (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
           flycheck-idle-change-delay 0.8
           flycheck-mode-line nil))
-#+END_SRC
+#+end_src
 
 * Spelling
 
@@ -558,7 +558,7 @@ http://www.emacswiki.org/emacs/ZapToISearch
 
     (after-load 'flyspell
       (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)))
-#+END_SRC
+#+end_src
 
 * goto-address
 
@@ -571,19 +571,19 @@ Convert URLs in comments into clickable links.
                     '(prog-mode-hook ruby-mode-hook)
                   '(find-file-hooks)))
     (add-hook hook 'goto-address-prog-mode))
-#+END_SRC
+#+end_src
 
 * Make scripts executable
 
 #+begin_src emacs-lisp
   (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-#+END_SRC
+#+end_src
 
 * Perl-style regular expressions
 
 #+begin_src emacs-lisp
   (setq-default regex-tool-backend 'perl)
-#+END_SRC
+#+end_src
 
 * Automatically wrap long lines
 

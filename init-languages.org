@@ -220,7 +220,7 @@ Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
 It is assumed your ~GOPATH~, and ~PATH~ are already setup. If this is not the
 case you can set the relevant environment variables using something like:
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
   (setenv "GOPATH" (expand-file-name "Go" (getenv "HOME")))
   (setenv "PATH" (concat (getenv "PATH") ":"
   (expand-file-name "bin" (getenv "GOPATH"))))

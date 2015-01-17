@@ -24,7 +24,7 @@ packages we use on a daily basis. [[zenburn][Zenburn]] is its name.
 These hooks make it easy to update interface customisations when
 Emacs redraws.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defvar after-make-console-frame-hooks '()
     "Hooks to run after creating a new TTY frame")
   (defvar after-make-window-system-frame-hooks '()
@@ -40,7 +40,7 @@ Emacs redraws.
                    'after-make-console-frame-hooks))))
 
   (add-hook 'after-make-frame-functions 'run-after-make-frame-hooks)
-#+END_SRC
+#+end_src
 
 * Disable GUI features
 
@@ -92,7 +92,7 @@ more information.
               (with-selected-frame frame
                 (unless window-system
                   (set-frame-parameter nil 'menu-bar-lines 0)))))
-#+END_SRC
+#+end_src
 
 * Highlight empty lines
 
@@ -262,7 +262,7 @@ respectively.
 
   (global-set-key (kbd "C-M-=") 'jcf-increase-default-font-height)
   (global-set-key (kbd "C-M--") 'jcf-decrease-default-font-height)
-#+END_SRC
+#+end_src
 
 * Fullframe
 

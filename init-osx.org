@@ -13,10 +13,10 @@ Mac.
 
 * Setup PATH
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize))
-#+END_SRC
+#+end_src
 
 * Fullscreen via the keyboard
 

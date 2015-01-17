@@ -59,7 +59,7 @@ run a shell during the login. Obviously this will lead to unexpected results
 when calling external utilities like make from Emacs.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (require 'exec-path-from-shell)
 
   (after-load 'exec-path-from-shell
@@ -72,7 +72,7 @@ when calling external utilities like make from Emacs.
 
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize))
-#+END_SRC
+#+end_src
 
 * guide-key
 
