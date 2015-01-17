@@ -73,6 +73,7 @@
    (jcf-load-org "window-management")
    (jcf-load-org "version-control")
    (jcf-load-org "languages")
+   (jcf-load-org "sessions")
    (jcf-load-org "locales")
 
    (jcf-log-startup-time)))
