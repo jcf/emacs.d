@@ -156,6 +156,7 @@
 (depends-on "org-mac-link")
 (depends-on "org-plus-contrib")
 (depends-on "org-pomodoro")
+(depends-on "org-trello")
 (depends-on "osx-location")
 (depends-on "package-build")
 (depends-on "packed")
