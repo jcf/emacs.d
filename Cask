@@ -36,6 +36,7 @@
 (depends-on "dash")
 (depends-on "dash-at-point")
 (depends-on "dash-functional")
+(depends-on "deferred")
 (depends-on "diff-hl")
 (depends-on "diminish")
 (depends-on "dired+")
