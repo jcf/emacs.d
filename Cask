@@ -172,7 +172,6 @@
 (depends-on "pkg-info")
 (depends-on "popup")
 (depends-on "popwin")
-(depends-on "prodigy")
 (depends-on "project-local-variables")
 (depends-on "projectile")
 (depends-on "queue")
