@@ -574,11 +574,24 @@ lisp-interaction-mode~.
 
 * Smart mode line
 
+Diminish isn't supported, so we have to use the slightly less powerful
+[[https://github.com/Bruce-Connor/rich-minority][rich-minority]] library by the author of smart mode line.
+
 #+begin_src emacs-lisp
   (use-package smart-mode-line
     :init
     (progn
-      (setq sml/theme 'respectful)
+      (setq
+       sml/theme 'respectful
+       sml/shorten-modes t
+       sml/hidden-modes '(" EvilOrg"
+                          " Fill"
+                          " Ind"
+                          " Projectile"
+                          " SP"
+                          " Undo-Tree"
+                          " yas"
+                          " WSC"))
       (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox" ":Box:") t)
       (add-to-list 'sml/replacer-regexp-list '("^~/Code" ":C:") t)
       (sml/setup)))
