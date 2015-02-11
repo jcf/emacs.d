@@ -109,6 +109,7 @@
 (depends-on "helm-ls-git")
 (depends-on "helm-package")
 (depends-on "helm-projectile")
+(depends-on "helm-swoop")
 (depends-on "heroku")
 (depends-on "hi2")
 (depends-on "highlight-escape-sequences")
