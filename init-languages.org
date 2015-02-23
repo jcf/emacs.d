@@ -832,8 +832,6 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
     :commands sql-mode
     :config
     (progn
-      (use-package sql-indent)
-
       (defun jcf-pop-to-sqli-buffer ()
         "Switch to the corresponding sqli buffer."
         (interactive)
@@ -847,7 +845,7 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
 
       (after-load 'sql
         (define-key sql-mode-map (kbd "C-c C-z") 'jcf-pop-to-sqli-buffer)
-        (add-hook 'sql-interactive-mode-hook 'jcf-never-indent)
+
         (when (package-installed-p 'dash-at-point)
           (defun jcf-maybe-set-dash-db-docset ()
             (when (eq sql-product 'postgres)
