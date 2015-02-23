@@ -171,6 +171,7 @@
 (depends-on "pcache")
 (depends-on "php-mode")
 (depends-on "pkg-info")
+(depends-on "plsql")
 (depends-on "popup")
 (depends-on "popwin")
 (depends-on "project-local-variables")
