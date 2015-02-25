@@ -210,8 +210,20 @@ Disabled for now.
 #+begin_src emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((ditaa . t)
+   '((awk . t)
+     (clojure . t)
+     (ditaa . t)
+     (dot . t)
+     (gnuplot . t)
+     (haskell . t)
+     (js . t)
+     (latex . t)
+     (lisp . t)
+     (ruby . t)
+     (python . t)
      (R . t)
+     (sass . t)
+     (scala . t)
      (sh . t)))
 #+end_src
 
