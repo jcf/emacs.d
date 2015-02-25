@@ -93,6 +93,7 @@
 (depends-on "god-mode")
 (depends-on "google-this")
 (depends-on "goto-chg")
+(depends-on "graphviz-dot-mode")
 (depends-on "guide-key")
 (depends-on "haml-mode")
 (depends-on "haskell-mode")
