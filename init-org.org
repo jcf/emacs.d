@@ -251,6 +251,14 @@ Trust benign languages when evaluating code blocks.
 See http://orgmode.org/manual/Code-evaluation-security.html for more
 information.
 
+* Custom modes for src blocks
+
+Use ~graphviz-dot-mode~ for ~dot~ src blocks.
+
+#+begin_src emacs-lisp
+  (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
+#+end_src
+
 * Keybindings
 
 #+begin_src emacs-lisp
