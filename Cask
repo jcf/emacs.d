@@ -222,6 +222,7 @@
 (depends-on "vagrant")
 (depends-on "vagrant-tramp")
 (depends-on "vc-darcs")
+(depends-on "vcl-mode")
 (depends-on "web-mode")
 (depends-on "wgrep")
 (depends-on "wgrep-ag")
