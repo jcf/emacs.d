@@ -171,6 +171,16 @@ Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
     :commands feature-mode)
 #+end_src
 
+* Graphviz Dot
+
+Better support for Dot diagrams.
+
+#+begin_src emacs-lisp
+  (use-package graphviz-dot
+    :init
+    (setq graphviz-dot-indent-width 2))
+#+end_src
+
 * ERB
 
 #+begin_src emacs-lisp
