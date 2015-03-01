@@ -822,7 +822,7 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
                  "\\.zsh\\'"
                  "zlogin\\'"
                  "zlogout\\'"
-                 "zpretzorc\\'"
+                 "zpreztorc\\'"
                  "zprofile\\'"
                  "zshenv\\'"
                  "zshrc\\'")
