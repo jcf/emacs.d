@@ -166,6 +166,7 @@
 (depends-on "mustache-mode")
 (depends-on "muttrc-mode")
 (depends-on "mwe-log-commands")
+(depends-on "nix-mode")
 (depends-on "notmuch")
 (depends-on "nyan-mode")
 (depends-on "org")
