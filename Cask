@@ -148,6 +148,7 @@
 (depends-on "markdown-mode")
 (depends-on "mmm-mode")
 (depends-on "move-dup")
+(depends-on "multi-term")
 (depends-on "multiple-cursors")
 (depends-on "mustache-mode")
 (depends-on "muttrc-mode")
