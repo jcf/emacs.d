@@ -436,6 +436,16 @@ http://www.emacswiki.org/emacs/KeyChord
     (key-chord-define evil-insert-state-map "jj" 'evil-normal-state))
 #+end_src
 
+* Multi Term
+
+#+begin_src emacs-lisp
+  (use-package multi-term
+    :commands multi-term
+    :init
+    (add-hook 'term-mode-hook
+              (lambda () (yas-minor-mode -1))))
+#+end_src
+
 * Multiple major modes
 
 #+begin_src emacs-lisp
