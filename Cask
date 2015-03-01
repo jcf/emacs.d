@@ -69,6 +69,7 @@
 (depends-on "feature-mode")
 (depends-on "fill-column-indicator")
 (depends-on "findr")
+(depends-on "fish-mode")
 (depends-on "flycheck")
 (depends-on "flycheck-cask")
 (depends-on "flycheck-haskell")
