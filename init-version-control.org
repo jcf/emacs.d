@@ -98,7 +98,9 @@ Disabled because I found it irritating.
 ** Gists
 
 #+begin_src emacs-lisp
-  (use-package yagist)
+  (use-package yagist
+    :init
+    (setq yagist-github-token (getenv "YAGIST_TOKEN")))
 #+end_src
 
 ** Open buffer in GitHub
