@@ -28,6 +28,7 @@ want. Each variable has corresponding documentation accessible via
    column-number-mode t
    compilation-scroll-output t
    delete-selection-mode t
+   default-tab-width 2
    indent-tabs-mode nil
    line-spacing 0.2
    make-backup-files nil
