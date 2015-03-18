@@ -145,43 +145,6 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
     "er" 'cider-eval-region)
 #+end_src
 
-Use the default [[https://github.com/cider-emacs/clj-refactor.el][clj-refactor]] bindings, via ~<leader>r~.
-
-#+begin_src emacs-lisp
-  (evil-leader/set-key-for-mode 'clojure-mode
-    "mrad" 'cljr-add-declaration
-    "mrai" 'cljr-add-import-to-ns
-    "mrap" 'cljr-add-project-dependency
-    "mrar" 'cljr-add-require-to-ns
-    "mrau" 'cljr-add-use-to-ns
-    "mrcc" 'cljr-cycle-coll
-    "mrci" 'cljr-cycle-if
-    "mrcp" 'cljr-cycle-privacy
-    "mrcs" 'cljr-cycle-stringlike
-    "mrct" 'cljr-cycle-thread
-    "mrdk" 'cljr-destructure-keys
-    "mrel" 'cljr-expand-let
-    "mrfu" 'cljr-find-usages
-    "mril" 'cljr-introduce-let
-    "mrmf" 'cljr-move-form
-    "mrml" 'cljr-move-to-let
-    "mrpc" 'cljr-project-clean
-    "mrpf" 'cljr-promote-function
-    "mrrd" 'cljr-remove-debug-fns
-    "mrrf" 'cljr-rename-file
-    "mrrr" 'cljr-remove-unused-requires
-    "mrrs" 'cljr-rename-symbol
-    "mrru" 'cljr-replace-use
-    "mrsn" 'cljr-sort-ns
-    "mrsp" 'cljr-sort-project-dependencies
-    "mrsr" 'cljr-stop-referring
-    "mrtf" 'cljr-thread-first-all
-    "mrth" 'cljr-thread
-    "mrtl" 'cljr-thread-last-all
-    "mrua" 'cljr-unwind-all
-    "mruw" 'cljr-unwind)
-#+end_src
-
 ** Cider
 
 #+begin_src emacs-lisp
