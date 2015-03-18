@@ -28,14 +28,14 @@ We can control the amount of output ~use-package~ generates by setting
     :commands (cider cider-connect cider-jack-in)
     :init
     (progn
-      (setq cider-auto-select-error-buffer nil
-            cider-repl-pop-to-buffer-on-connect nil
+      (setq cider-auto-select-error-buffer t
+            cider-repl-pop-to-buffer-on-connect t
             cider-repl-use-clojure-font-lock t
             cider-repl-wrap-history t
             cider-repl-history-size 1000
             cider-repl-history-file (f-expand ".cider-history"
                                               user-emacs-directory)
-            cider-show-error-buffer nil
+            cider-show-error-buffer t
             nrepl-hide-special-buffers t
             nrepl-popup-stacktraces nil)
       (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
