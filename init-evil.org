@@ -33,6 +33,7 @@ regions.
 #+end_src
 
 * Leader
+** Setup
 
 [[https://github.com/cofi/evil-leader][evil-leader]] adds support for Vim's venerable ~<leader>~ key, which any Vim user
 will be very accustomed to.
@@ -95,9 +96,14 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
     "i" 'ielm
     "oa" 'org-agenda
     "oc" 'org-capture
-    "pl" 'package-list-packages
     "pL" 'package-list-packages-no-fetch
+    "pa" 'helm-projectile-ag
+    "pb" 'helm-projectile-switch-to-buffer
+    "pe" 'helm-projectile-switch-to-eshell
+    "pf" 'helm-projectile-find-file-dwim
     "pi" 'package-install
+    "pl" 'package-list-packages
+    "pp" 'helm-projectile-switch-project
     "rf" 'rename-buffer-and-file
     "sd" 'jcf-delete-window
     "sf" 'delete-other-windows
