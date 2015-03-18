@@ -92,3 +92,13 @@ when calling external utilities like make from Emacs.
   (guide-key-mode 1)
   (diminish 'guide-key-mode)
 #+end_src
+* async
+
+[[https://github.com/jwiegley/emacs-async][async]] is a module for doing asynchronous processing in Emacs.
+
+#+begin_src emacs-lisp
+  (use-package async
+    :init
+    (when (require 'dired-aux)
+      (require 'dired-async)))
+#+end_src
