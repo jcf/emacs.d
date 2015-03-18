@@ -595,6 +595,13 @@ the work in all modes that derive from text mode.
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
 #+end_src
 
+* Comint & Shell-like modes
+** Interpret escape sequences and show me the rainbow
+
+#+begin_src emacs-lisp
+  (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+#+end_src
+
 * Start a server
 
 By running an Emacs server we can have new Emacs instances start instantly.
