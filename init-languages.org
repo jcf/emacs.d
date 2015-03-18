@@ -41,6 +41,11 @@ encounter, and configures them for effective use.
         (DELETE 2)
         (HEAD 2)
         (ANY 2)
+        (After 1)
+        (Before 1)
+        (Given 2)
+        (Then 2)
+        (When 2)
         (context 2))))
 #+end_src
 
