@@ -566,6 +566,11 @@ Diminish isn't supported, so we have to use the slightly less powerful
       (smartparens-global-mode 1)
       (show-smartparens-global-mode +1))
 
+    :bind (("M-n" . sp-next-sexp)
+           ("M-p" . sp-previous-sexp)
+           ("M-f" . sp-forward-sexp)
+           ("M-b" . sp-backward-sexp))
+
     :config
     (progn
       ;; Enable smartparens everywhere
