@@ -154,11 +154,18 @@ As we always wrap to 80 columns I'd prefer vertical splits in almost all cases.
 #+end_src
 
 * Auto revert
+** Reload files when they change on disk
 
 #+begin_src emacs-lisp
   (global-auto-revert-mode)
   (setq global-auto-revert-non-file-buffers t
         auto-revert-verbose nil)
+#+end_src
+
+** Imitate the behaviour of ~tail -f~ when opening log files.
+
+#+begin_src emacs-lisp
+  (add-auto-mode 'auto-revert-tail-mode "\\.log\\'" )
 #+end_src
 
 * Transient mark
