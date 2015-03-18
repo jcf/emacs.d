@@ -209,6 +209,19 @@ Use the default [[https://github.com/cider-emacs/clj-refactor.el][clj-refactor]]
     "V" 'feature-verify-all-scenarios-in-buffer)
 #+end_src
 
+* Keybindings
+** Clojure
+
+#+begin_src emacs-lisp
+  (evil-define-key 'normal clojure-mode-map
+    (kbd "gd") 'cider-jump
+    (kbd "K") 'cider-doc
+    (kbd "gK") 'cider-javadoc)
+
+  (evil-define-key 'normal cider-repl-mode-map (kbd "gK") 'cider-javadoc)
+  (evil-define-key 'normal cider-mode-map (kbd "gK") 'cider-javadoc)
+#+end_src
+
 * Extended ~%~ matches
 
 [[https://github.com/redguardtoo/evil-matchit][evil-matchit]] is a port of [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] by Benji Fisher. Matchit enhances ~%~ to
