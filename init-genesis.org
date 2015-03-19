@@ -540,32 +540,40 @@ http://www.emacswiki.org/emacs/ZapToISearch
 * Spelling
 
 #+begin_src emacs-lisp
-  (require 'ispell)
+  (use-package ispell
+    :init
+    (setq ispell-program-name "/usr/local/bin/aspell"))
 
-  (when (executable-find ispell-program-name)
-    (if (fboundp 'prog-mode)
-        (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-      (dolist (hook '(lisp-mode-hook
-                      emacs-lisp-mode-hook
-                      scheme-mode-hook
-                      clojure-mode-hook
-                      ruby-mode-hook
-                      yaml-mode
-                      python-mode-hook
-                      shell-mode-hook
-                      php-mode-hook
-                      css-mode-hook
-                      haskell-mode-hook
-                      caml-mode-hook
-                      nxml-mode-hook
-                      crontab-mode-hook
-                      perl-mode-hook
-                      tcl-mode-hook
-                      javascript-mode-hook))
-        (add-hook hook 'flyspell-prog-mode)))
-
-    (after-load 'flyspell
-      (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)))
+  (use-package flyspell
+    :if (executable-find ispell-program-name)
+    :config
+    (progn
+      (setq ispell-extra-args '("--sug-mode=ultra"
+                                "--lang=uk"
+                                "--run-together"
+                                "--run-together-limit=5"
+                                "--run-together-min=2"))
+      (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)
+      (if (fboundp 'prog-mode)
+          (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+        (dolist (hook '(lisp-mode-hook
+                        emacs-lisp-mode-hook
+                        scheme-mode-hook
+                        clojure-mode-hook
+                        ruby-mode-hook
+                        yaml-mode
+                        python-mode-hook
+                        shell-mode-hook
+                        php-mode-hook
+                        css-mode-hook
+                        haskell-mode-hook
+                        caml-mode-hook
+                        nxml-mode-hook
+                        crontab-mode-hook
+                        perl-mode-hook
+                        tcl-mode-hook
+                        javascript-mode-hook))
+          (add-hook hook 'flyspell-prog-mode)))))
 #+end_src
 
 * goto-address

@@ -66,8 +66,7 @@ using a simple API.
 #+begin_src emacs-lisp
   (use-package company
     :diminish company-mode
-    :idle
-    (global-company-mode 1)
+    :init (global-company-mode 1)
 
     :config
     (progn
@@ -124,7 +123,7 @@ https://github.com/Valloric/ycmd
       (guide-key/add-local-guide-key-sequence "%")
 
       (use-package dired+
-        :init (global-dired-hide-details-mode -1))))
+        :config (global-dired-hide-details-mode -1))))
 #+end_src
 
 Some interesting options available to GNU ls:
@@ -389,7 +388,7 @@ Powered by [[http://www.gnu.org/software/global/][GNU Global]].
 
 #+begin_src emacs-lisp
   (use-package ido
-    :idle
+    :init
     (progn
       (setq
        ido-auto-merge-work-directories-length 0
@@ -542,6 +541,7 @@ Diminish isn't supported, so we have to use the slightly less powerful
     :init
     (progn
       (setq
+       sml/no-confirm-load-theme t
        sml/theme 'respectful
        sml/shorten-modes t
        sml/hidden-modes '(" EvilOrg"
@@ -552,9 +552,11 @@ Diminish isn't supported, so we have to use the slightly less powerful
                           " Undo-Tree"
                           " yas"
                           " WSC"))
+      (sml/setup))
+    :config
+    (progn
       (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox" ":Box:") t)
-      (add-to-list 'sml/replacer-regexp-list '("^~/Code" ":C:") t)
-      (sml/setup)))
+      (add-to-list 'sml/replacer-regexp-list '("^~/Code" ":C:") t)))
 #+end_src
 
 * SmartParens
@@ -636,7 +638,6 @@ Can be [[https://github.com/ggreer/the_silver_searcher#installation][installed]]
 
 #+begin_src emacs-lisp
   (use-package undo-tree
-    :diminish undo-tree
     :init
     (global-undo-tree-mode))
 #+end_src
@@ -685,7 +686,7 @@ your search results.
 
 #+begin_src emacs-lisp
   (use-package yasnippet
-    :idle
+    :init
     (yas-global-mode 1)
 
     :config

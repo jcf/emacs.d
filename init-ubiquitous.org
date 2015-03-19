@@ -34,7 +34,8 @@ pretend they're built into Emacs.
 per package.
 
 #+begin_src emacs-lisp
-  (require 'use-package)
+  (eval-when-compile
+    (require 'use-package))
 #+end_src
 
 * diminish
@@ -44,6 +45,11 @@ minor mode indicators.
 
 #+begin_src emacs-lisp
   (require 'diminish)
+#+end_src
+* bind-key
+
+#+begin_src emacs-lisp
+  (require 'bind-key)
 #+end_src
 
 * exec-path-from-shell

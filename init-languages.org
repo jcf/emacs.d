@@ -30,7 +30,7 @@ encounter, and configures them for effective use.
     (progn
       (use-package cljsbuild-mode)
       (use-package elein)
-      (use-package typed-clojure-mode :diminish typed-clojure)
+      (use-package typed-clojure-mode)
 
       (define-clojure-indent
         (defroutes 'defun)
@@ -181,7 +181,7 @@ Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
 Better support for Dot diagrams.
 
 #+begin_src emacs-lisp
-  (use-package graphviz-dot
+  (use-package graphviz-dot-mode
     :init
     (setq graphviz-dot-indent-width 2))
 #+end_src

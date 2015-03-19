@@ -43,16 +43,7 @@
       (use-package git-rebase-mode)
       (use-package gitignore-mode)
       (use-package gitconfig-mode)
-
-      (use-package magit-gh-pulls
-        ;; :config
-        ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
-        ))
-
-    :idle
-    (progn
-      (use-package magit-svn
-        :diminish magit-svn-mode)
+      (use-package magit-svn :diminish magit-svn-mode)
       (add-hook 'magit-mode-hook 'turn-on-magit-svn)))
 #+end_src
 
