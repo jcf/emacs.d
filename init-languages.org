@@ -32,6 +32,10 @@ encounter, and configures them for effective use.
       (use-package elein)
       (use-package typed-clojure-mode)
 
+      (after-load 'flycheck
+        (use-package flycheck-clojure
+          :init (flycheck-clojure-setup)))
+
       (define-clojure-indent
         (defroutes 'defun)
         (for-all 'defun)

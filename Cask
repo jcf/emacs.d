@@ -72,6 +72,7 @@
 (depends-on "fish-mode")
 (depends-on "flycheck")
 (depends-on "flycheck-cask")
+(depends-on "flycheck-clojure")
 (depends-on "flycheck-haskell")
 (depends-on "flycheck-hdevtools")
 (depends-on "frame-restore")
