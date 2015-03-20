@@ -101,11 +101,8 @@ https://github.com/Valloric/ycmd
     (progn
       (require 'company-ycmd)
       (company-ycmd-setup)
-
-      ;; This has landed in master, but hasn't been released yet.
-      ;; (require 'flycheck-ycmd)
-      ;; (flycheck-ycmd-setup)
-      ))
+      (use-package flycheck-ycmd
+        :init (flycheck-ycmd-setup))))
 #+end_src
 
 * Dired
