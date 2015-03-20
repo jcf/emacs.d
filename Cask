@@ -75,6 +75,7 @@
 (depends-on "flycheck-haskell")
 (depends-on "flycheck-hdevtools")
 (depends-on "frame-restore")
+(depends-on "flycheck-pos-tip")
 (depends-on "fullframe")
 (depends-on "ggtags")
 (depends-on "gh")
