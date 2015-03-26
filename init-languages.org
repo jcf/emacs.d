@@ -192,16 +192,6 @@ Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
     :commands feature-mode)
 #+end_src
 
-* Graphviz Dot
-
-Better support for Dot diagrams.
-
-#+begin_src emacs-lisp
-  (use-package graphviz-dot-mode
-    :init
-    (setq graphviz-dot-indent-width 2))
-#+end_src
-
 * ERB
 
 #+begin_src emacs-lisp
@@ -271,6 +261,16 @@ case you can set the relevant environment variables using something like:
         (when (file-exists-p flymake-path)
           (add-to-list 'load-path flymake-path)
           (use-package go-flymake)))))
+#+end_src
+
+* Graphviz Dot
+
+Better support for Dot diagrams.
+
+#+begin_src emacs-lisp
+  (use-package graphviz-dot-mode
+    :init
+    (setq graphviz-dot-indent-width 2))
 #+end_src
 
 * Haml
@@ -847,24 +847,6 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
     :commands slim-mode)
 #+end_src
 
-* systemd
-
-#+begin_src emacs-lisp
-  (add-auto-mode 'conf-unix-mode
-                 "\\.automount\\'"
-                 "\\.automount\\'"
-                 "\\.link\\'"
-                 "\\.mount\\'"
-                 "\\.netdev\\'"
-                 "\\.network\\'"
-                 "\\.path\\'"
-                 "\\.service\\'"
-                 "\\.slice\\'"
-                 "\\.socket\\'"
-                 "\\.target\\'"
-                 "\\.timer\\'")
-#+end_src
-
 * SQL
 
 #+begin_src emacs-lisp
@@ -901,6 +883,24 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
 
       (after-load 'page-break-lines
         (push 'sql-mode page-break-lines-modes))))
+#+end_src
+
+* systemd
+
+#+begin_src emacs-lisp
+  (add-auto-mode 'conf-unix-mode
+                 "\\.automount\\'"
+                 "\\.automount\\'"
+                 "\\.link\\'"
+                 "\\.mount\\'"
+                 "\\.netdev\\'"
+                 "\\.network\\'"
+                 "\\.path\\'"
+                 "\\.service\\'"
+                 "\\.slice\\'"
+                 "\\.socket\\'"
+                 "\\.target\\'"
+                 "\\.timer\\'")
 #+end_src
 
 * TCL
