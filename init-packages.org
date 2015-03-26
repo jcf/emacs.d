@@ -82,29 +82,6 @@ using a simple API.
       (define-key company-active-map (kbd "C-:") 'helm-company)))
 #+end_src
 
-** YouCompleteMe and ycmd
-
-YouCompleteMe is an even faster, semantically-aware completion system that can
-be used with Company mode. We can make use of YouCompleteMe via ~ycmd~, which
-was extracted to make this possible.
-
-https://github.com/Valloric/ycmd
-
-#+begin_src emacs-lisp
-  (use-package ycmd
-    :init
-    (progn
-      (eval
-       `(setq ycmd-server-command '("python" ,(f-expand "~/.cache/ycmd/ycmd"))))
-      (ycmd-setup))
-    :config
-    (progn
-      (require 'company-ycmd)
-      (company-ycmd-setup)
-      (use-package flycheck-ycmd
-        :init (flycheck-ycmd-setup))))
-#+end_src
-
 * Dired
 
 #+begin_src emacs-lisp
