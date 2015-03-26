@@ -73,6 +73,18 @@ Use ~clojurescript-mode~ for files with a ~cljs~ extension.
   (add-auto-mode 'clojurescript-mode "\\.cljs\\'")
 #+end_src
 
+* Coffescript
+
+#+begin_src emacs-lisp
+  (use-package coffee-mode
+    :commands coffee-mode
+    :mode "\\.coffee\\.erb\\'"
+    :init
+    (setq
+     coffee-js-mode 'js2-mode
+     coffee-tab-width 2))
+#+end_src
+
 * Common-Lisp
 
 #+begin_src emacs-lisp
@@ -344,46 +356,37 @@ See [[Ruby]] configuration for ERB setup.
 * Javascript
 
 #+begin_src emacs-lisp
-  (use-package coffee-mode
-    :commands coffee-mode
-    :mode "\\.coffee\\.erb\\'"
-    :init
-    (setq
-     coffee-js-mode 'js2-mode
-     coffee-tab-width 2))
-
   (use-package js2-mode
-    :diminish ((js2-mode . "JS2"))
-    :mode "\\.js\\(\\.erb\\)?\\'"
-    :commands js2-mode
     :init
+    (setq-default
+     js2-basic-offset 2
+     js2-bounce-indent-p nil)
+
+    :config
     (progn
-      (setq-default
-       js2-basic-offset 2
-       js2-bounce-indent-p nil)
-
-      (add-hook 'json-mode-hook 'rainbow-delimiters-mode)
-      (after-load 'js2-mode (js2-imenu-extras-mode))
-
+      (js2-imenu-extras-mode)
       (use-package skewer-mode
         :commands skewer-mode)))
+#+end_src
 
+#+begin_src emacs-lisp
+  (use-package jsx-mode
+    :commands jsx-mode
+    :mode "\\.jsx\\'")
+#+end_src
+
+* JSON
+
+#+begin_src emacs-lisp
   (use-package json-mode
-    :mode (("\\.bowerrc\\'" . json-mode)
-           ("\\.csslintrc\\'" . json-mode)
-           ("\\.jshintrc\\'" . json-mode))
-    :commands json-mode
-    :init
+    :config
     (progn
       (defun jcf-json-mode-hook ()
+        (interactive)
         (setq js-indent-level 2)
         (rainbow-delimiters-mode))
 
       (add-hook 'json-mode-hook 'jcf-json-mode-hook)))
-
-  (use-package jsx-mode
-    :commands jsx-mode
-    :mode "\\.jsx\\'")
 #+end_src
 
 * LESS
