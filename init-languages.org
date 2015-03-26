@@ -844,6 +844,24 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
     :commands slim-mode)
 #+end_src
 
+* systemd
+
+#+begin_src emacs-lisp
+  (add-auto-mode 'conf-unix-mode
+                 "\\.automount\\'"
+                 "\\.automount\\'"
+                 "\\.link\\'"
+                 "\\.mount\\'"
+                 "\\.netdev\\'"
+                 "\\.network\\'"
+                 "\\.path\\'"
+                 "\\.service\\'"
+                 "\\.slice\\'"
+                 "\\.socket\\'"
+                 "\\.target\\'"
+                 "\\.timer\\'")
+#+end_src
+
 * SQL
 
 #+begin_src emacs-lisp
