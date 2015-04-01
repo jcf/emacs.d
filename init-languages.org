@@ -791,7 +791,6 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
         :init (defalias 'ri 'yari))
 
       (use-package rinari
-        :diminish ((rinari . "Rin"))
         :init
         (global-rinari-mode))
 
