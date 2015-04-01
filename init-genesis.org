@@ -73,7 +73,8 @@ https://snarfed.org/gnu_emacs_backup_files
 #+begin_src emacs-lisp
   (let ((backups-dir (expand-file-name "backups" user-emacs-directory)))
     (f-mkdir backups-dir)
-    (setq backup-directory-alist '((".*" . backups-dir))))
+    (eval
+     `(setq backup-directory-alist '((".*" . ,backups-dir)))))
 #+end_src
 
 * Fill column
