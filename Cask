@@ -28,6 +28,7 @@
 (depends-on "company-inf-ruby")
 (depends-on "company-restclient")
 (depends-on "company-tern")
+(depends-on "company-ycmd")
 (depends-on "crontab-mode")
 (depends-on "css-eldoc")
 (depends-on "csv-mode")
@@ -253,4 +254,5 @@
 (depends-on "yaml-mode")
 (depends-on "yari")
 (depends-on "yasnippet")
+(depends-on "ycmd")
 (depends-on "zenburn-theme")
