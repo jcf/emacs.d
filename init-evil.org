@@ -75,6 +75,7 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
     "fd" 'projectile-dired
     "ff" 'helm-find-files
     "fg" 'helm-ls-git-ls
+    "fh" 'helm-resume
     "fi" 'helm-semantic-or-imenu
     "fj" 'dired-jump
     "fl" 'helm-occur
