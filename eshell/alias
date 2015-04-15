@@ -1,6 +1,7 @@
 alias cdot cd /Users/jcf/.dotfiles
 alias clear recenter 0
 alias d (progn (magit-status ".") nil)
+alias dk docker $*
 alias du du -kh
 alias e find-file $1
 alias edot dired /Users/jcf/.dotfiles
