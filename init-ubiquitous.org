@@ -44,7 +44,7 @@ per package.
 minor mode indicators.
 
 #+begin_src emacs-lisp
-  (use-package 'diminish)
+  (use-package diminish)
 #+end_src
 
 * bind-key
