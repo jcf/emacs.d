@@ -523,3 +523,15 @@ capitalised.
       (after advice-for-evil-search-previous activate)
     (evil-scroll-line-to-center (line-number-at-pos)))
 #+end_src
+* Term modes
+
+Evil is completely and utterly broken within ansi-term and multi-term. Changing
+words, deleting the line updates the contents of the buffer but does nothing to
+actually change the state of the term.
+
+This completely disables evil in term modes.
+
+#+begin_src emacs-lisp
+  (delete 'term-mode evil-insert-state-modes)
+  (add-to-list 'evil-emacs-state-modes 'term-mode)
+#+end_src

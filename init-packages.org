@@ -82,6 +82,50 @@ using a simple API.
       (define-key company-active-map (kbd "C-:") 'helm-company)))
 #+end_src
 
+* Comint
+
+https://snarfed.org/why_i_run_shells_inside_emacs
+
+#+begin_src emacs-lisp
+  (use-package comint
+    :init
+    (setq
+     comint-buffer-maximum-size 20000
+     comint-completion-addsuffix t
+     comint-get-old-input (lambda () "")
+     comint-input-ignoredups t
+     comint-input-ring-size 5000
+     comint-prompt-read-only nil
+     comint-scroll-show-maximum-output t
+     comint-scroll-to-bottom-on-input t
+     comint-scroll-to-bottom-on-output nil
+     protect-buffer-bury-p nil
+     tramp-default-method "ssh")
+    :config
+    (progn
+      (defun jcf-shell-output-read-only (text)
+        "Add to comint-output-filter-functions to make stdout read only in my
+  shells."
+        (if (member (buffer-name) my-shells)
+            (let ((inhibit-read-only t)
+                  (output-end (process-mark (get-buffer-process (current-buffer)))))
+              (put-text-property comint-last-output-start output-end 'read-only t))))
+
+      (add-hook 'comint-output-filter-functions 'jcf-shell-output-read-only)
+
+      (defun jcf-dirtrack-mode ()
+        "Add to shell-mode-hook to use dirtrack mode in my shell buffers."
+        (when (member (buffer-name) my-shells)
+          (shell-dirtrack-mode 0)
+          (set-variable 'dirtrack-list '("^.*[^ ]+:\\(.*\\)>" 1 nil))
+          (dirtrack-mode 1)))
+
+      (add-hook 'shell-mode-hook 'jcf-dirtrack-mode)
+
+      (add-hook 'comint-output-filter-functions 'comint-truncate-buffer)
+      (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)))
+#+end_src
+
 * Dired
 
 #+begin_src emacs-lisp
