@@ -397,7 +397,7 @@ Used in some ~<leader>~ bindings below.
              (prodigy-mode . normal)
              (rdictcc-buffer-mode . emacs)
              (shell-mode . insert)
-             (term-mode . insert)
+             (term-mode . emacs)
              (wdired-mode . normal))
         do (evil-set-initial-state mode state))
 #+end_src
