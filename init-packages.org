@@ -27,24 +27,23 @@ We can control the amount of output ~use-package~ generates by setting
   (use-package cider
     :commands (cider cider-connect cider-jack-in)
     :init
-    (progn
-      (setq cider-auto-select-error-buffer t
-            cider-repl-pop-to-buffer-on-connect t
-            cider-repl-use-clojure-font-lock t
-            cider-repl-wrap-history t
-            cider-repl-history-size 1000
-            cider-repl-history-file (f-expand ".cider-history"
-                                              user-emacs-directory)
-            cider-show-error-buffer t
-            nrepl-hide-special-buffers t
-            nrepl-popup-stacktraces nil)
-      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-      (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-      (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-      (add-hook 'cider-repl-mode-hook 'subword-mode)
-      ;; nrepl isn't based on comint
-      (add-hook 'cider-repl-mode-hook
-                (lambda () (setq show-trailing-whitespace nil))))
+    (setq cider-auto-select-error-buffer t
+          cider-repl-pop-to-buffer-on-connect t
+          cider-repl-use-clojure-font-lock t
+          cider-repl-wrap-history t
+          cider-repl-history-size 1000
+          cider-repl-history-file (f-expand ".cider-history"
+                                            user-emacs-directory)
+          cider-show-error-buffer t
+          nrepl-hide-special-buffers t
+          nrepl-popup-stacktraces nil)
+    (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+    (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+    (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+    (add-hook 'cider-repl-mode-hook 'subword-mode)
+    ;; nrepl isn't based on comint
+    (add-hook 'cider-repl-mode-hook
+              (lambda () (setq show-trailing-whitespace nil)))
 
     :config
     (use-package slamhound))
@@ -61,17 +60,16 @@ using a simple API.
     :init (global-company-mode 1)
 
     :config
-    (progn
-      (dolist ((package '(company-ghc
-                          company-go
-                          company-inf-ruby
-                          company-tern)))
-        (use-package package :init
-          (add-to-list 'company-backends package)))
+    (dolist ((package '(company-ghc
+                        company-go
+                        company-inf-ruby
+                        company-tern)))
+      (use-package package :init
+        (add-to-list 'company-backends package)))
 
-      ;; Use Helm to complete suggestions
-      (define-key company-mode-map (kbd "C-:") 'helm-company)
-      (define-key company-active-map (kbd "C-:") 'helm-company)))
+    ;; Use Helm to complete suggestions
+    (define-key company-mode-map (kbd "C-:") 'helm-company)
+    (define-key company-active-map (kbd "C-:") 'helm-company))
 #+end_src
 
 * Dired
@@ -80,16 +78,15 @@ using a simple API.
   (use-package dired
     :commands dired
     :init
-    (progn
-      (setq dired-recursive-deletes 'top)
-      (setq dired-listing-switches "--group-directories-first -alh")
-      (setq diredp-hide-details-initially-flag nil)
+    (setq dired-recursive-deletes 'top)
+    (setq dired-listing-switches "--group-directories-first -alh")
+    (setq diredp-hide-details-initially-flag nil)
 
-      (define-key dired-mode-map [mouse-2] 'dired-find-file)
-      (guide-key/add-local-guide-key-sequence "%")
+    (define-key dired-mode-map [mouse-2] 'dired-find-file)
+    (guide-key/add-local-guide-key-sequence "%")
 
-      (use-package dired+
-        :config (global-dired-hide-details-mode -1))))
+    (use-package dired+
+      :config (global-dired-hide-details-mode -1)))
 #+end_src
 
 Some interesting options available to GNU ls:
@@ -110,15 +107,14 @@ Some interesting options available to GNU ls:
   (use-package dizzee
     :commands (jcf-lein-datomic-start jcf-lein-headless-start)
     :config
-    (progn
-      (dz-defservice jcf-lein-headless
-                     "lein"
-                     :cd "~/"
-                     :args ("repl" ":headless"))
+    (dz-defservice jcf-lein-headless
+                   "lein"
+                   :cd "~/"
+                   :args ("repl" ":headless"))
 
-      (dz-defservice jcf-lein-datomic
-                     "lein"
-                     :args ("datomic"))))
+    (dz-defservice jcf-lein-datomic
+                   "lein"
+                   :args ("datomic")))
 #+end_src
 * dsvn
 
@@ -181,14 +177,13 @@ because they don't print well.
      eshell-glob-case-insensitive t
      eshell-scroll-to-bottom-on-input 'all)
     :config
-    (progn
-      (defun jcf-eshell-here ()
-        (interactive)
-        (eshell "here"))
+    (defun jcf-eshell-here ()
+      (interactive)
+      (eshell "here"))
 
-      (add-hook 'eshell-mode-hook
-                (lambda ()
-                  (eshell/export "NODE_NO_READLINE=1")))))
+    (add-hook 'eshell-mode-hook
+              (lambda ()
+                (eshell/export "NODE_NO_READLINE=1"))))
   #+end_src
 
 * Expand region
@@ -206,31 +201,30 @@ because they don't print well.
     (turn-on-fci-mode)
 
     :config
-    (progn
-      (defun jcf-fci-enabled-p ()
-        (and (boundp 'fci-mode) fci-mode))
+    (defun jcf-fci-enabled-p ()
+      (and (boundp 'fci-mode) fci-mode))
 
-      (defvar jcf-fci-mode-suppressed nil)
+    (defvar jcf-fci-mode-suppressed nil)
 
-      (defadvice popup-create (before suppress-fci-mode activate)
-        "Suspend fci-mode while popups are visible"
-        (let ((fci-enabled (jcf-fci-enabled-p)))
-          (when fci-enabled
-            (set (make-local-variable 'jcf-fci-mode-suppressed) fci-enabled)
-            (turn-off-fci-mode))))
+    (defadvice popup-create (before suppress-fci-mode activate)
+      "Suspend fci-mode while popups are visible"
+      (let ((fci-enabled (jcf-fci-enabled-p)))
+        (when fci-enabled
+          (set (make-local-variable 'jcf-fci-mode-suppressed) fci-enabled)
+          (turn-off-fci-mode))))
 
-      (defadvice popup-delete (after restore-fci-mode activate)
-        "Restore fci-mode when all popups have closed"
-        (when (and jcf-fci-mode-suppressed
-                   (null popup-instances))
-          (setq jcf-fci-mode-suppressed nil)
-          (turn-on-fci-mode))
+    (defadvice popup-delete (after restore-fci-mode activate)
+      "Restore fci-mode when all popups have closed"
+      (when (and jcf-fci-mode-suppressed
+                 (null popup-instances))
+        (setq jcf-fci-mode-suppressed nil)
+        (turn-on-fci-mode))
 
-        (defadvice enable-theme (after recompute-fci-face activate)
-          "Regenerate fci-mode line images after switching themes"
-          (dolist (buffer (buffer-list))
-            (with-current-buffer buffer
-              (turn-on-fci-mode)))))))
+      (defadvice enable-theme (after recompute-fci-face activate)
+        "Regenerate fci-mode line images after switching themes"
+        (dolist (buffer (buffer-list))
+          (with-current-buffer buffer
+            (turn-on-fci-mode))))))
 #+end_src
 
 * Global Tags
@@ -308,43 +302,42 @@ Powered by [[http://www.gnu.org/software/global/][GNU Global]].
     :init
     (use-package ibuffer-vc
       :init
-      (progn
-        (setq
-         ibuffer-filter-group-name-face 'font-lock-doc-face
-         ibuffer-formats
-         '((mark modified read-only vc-status-mini " "
-                 (name 18 18 :left :elide)
-                 " "
-                 (size-h 9 -1 :right)
-                 " "
-                 (mode 16 16 :left :elide)
-                 " "
-                 filename-and-process)
-           (mark modified read-only vc-status-mini " "
-                 (name 18 18 :left :elide)
-                 " "
-                 (size-h 9 -1 :right)
-                 " "
-                 (mode 16 16 :left :elide)
-                 " "
-                 (vc-status 16 16 :left)
-                 " "
-                 filename-and-process)))
+      (setq
+       ibuffer-filter-group-name-face 'font-lock-doc-face
+       ibuffer-formats
+       '((mark modified read-only vc-status-mini " "
+               (name 18 18 :left :elide)
+               " "
+               (size-h 9 -1 :right)
+               " "
+               (mode 16 16 :left :elide)
+               " "
+               filename-and-process)
+         (mark modified read-only vc-status-mini " "
+               (name 18 18 :left :elide)
+               " "
+               (size-h 9 -1 :right)
+               " "
+               (mode 16 16 :left :elide)
+               " "
+               (vc-status 16 16 :left)
+               " "
+               filename-and-process)))
 
-        (after-load 'ibuffer
-          (define-ibuffer-column size-h
-            (:name "Size" :inline t)
-            (cond
-             ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
-             ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
-             (t (format "%8d" (buffer-size))))))
+      (after-load 'ibuffer
+        (define-ibuffer-column size-h
+          (:name "Size" :inline t)
+          (cond
+           ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+           ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
+           (t (format "%8d" (buffer-size))))))
 
-        (defun ibuffer-set-up-preferred-filters ()
-          (ibuffer-vc-set-filter-groups-by-vc-root)
-          (unless (eq ibuffer-sorting-mode 'filename/process)
-            (ibuffer-do-sort-by-filename/process)))
+      (defun ibuffer-set-up-preferred-filters ()
+        (ibuffer-vc-set-filter-groups-by-vc-root)
+        (unless (eq ibuffer-sorting-mode 'filename/process)
+          (ibuffer-do-sort-by-filename/process)))
 
-        (add-hook 'ibuffer-hook 'ibuffer-set-up-preferred-filters)))
+      (add-hook 'ibuffer-hook 'ibuffer-set-up-preferred-filters))
 
     :bind
     ("C-x C-b" . ibuffer))
@@ -355,29 +348,27 @@ Powered by [[http://www.gnu.org/software/global/][GNU Global]].
 #+begin_src emacs-lisp
   (use-package ido
     :init
-    (progn
-      (setq
-       ido-auto-merge-work-directories-length 0
-       ido-default-buffer-method 'selected-window
-       ido-enable-flex-matching t
-       ido-use-filename-at-point nil
-       ido-use-virtual-buffers t)
+    (setq
+     ido-auto-merge-work-directories-length 0
+     ido-default-buffer-method 'selected-window
+     ido-enable-flex-matching t
+     ido-use-filename-at-point nil
+     ido-use-virtual-buffers t)
 
-      (ido-mode t)
-      (ido-everywhere t)
-      (use-package ido-vertical-mode :init (ido-vertical-mode 1))
-      (use-package ido-ubiquitous :init (ido-ubiquitous-mode t))
-      (use-package idomenu))
+    (ido-mode t)
+    (ido-everywhere t)
+    (use-package ido-vertical-mode :init (ido-vertical-mode 1))
+    (use-package ido-ubiquitous :init (ido-ubiquitous-mode t))
+    (use-package idomenu)
 
     :config
-    (progn
-      ;; Allow the same buffer to be open in different frames.
-      ;;
-      ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
-      (add-hook
-       'ido-setup-hook
-       (lambda ()
-         (define-key ido-completion-map [up] 'previous-history-element)))))
+    ;; Allow the same buffer to be open in different frames.
+    ;;
+    ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
+    (add-hook
+     'ido-setup-hook
+     (lambda ()
+       (define-key ido-completion-map [up] 'previous-history-element))))
 #+end_src
 
 * Key Chord
@@ -393,9 +384,8 @@ http://www.emacswiki.org/emacs/KeyChord
 #+begin_src emacs-lisp
   (use-package key-chord
     :init
-    (progn
-      (setq key-chord-two-keys-delay 0.05)
-      (key-chord-mode 1))
+    (setq key-chord-two-keys-delay 0.05)
+    (key-chord-mode 1)
 
     :config
     (key-chord-define evil-insert-state-map "jj" 'evil-normal-state))
@@ -417,12 +407,11 @@ http://www.emacswiki.org/emacs/KeyChord
   (use-package mmm-mode
     :commands mmm-mode
     :config
-    (progn
-      (setq
-       mmm-global-mode 'buffers-with-submode-classes
-       mmm-submode-decoration-level 0)
+    (setq
+     mmm-global-mode 'buffers-with-submode-classes
+     mmm-submode-decoration-level 0)
 
-      (use-package mmm-auto)))
+    (use-package mmm-auto))
 #+end_src
 
 * mwe-log-commands
@@ -506,24 +495,22 @@ Diminish isn't supported, so we have to use the slightly less powerful
   (use-package smart-mode-line
     :disabled t
     :init
-    (progn
-      (setq
-       sml/no-confirm-load-theme t
-       sml/theme 'respectful
-       sml/shorten-modes t
-       sml/hidden-modes '(" EvilOrg"
-                          " Fill"
-                          " Ind"
-                          " Projectile"
-                          " SP"
-                          " Undo-Tree"
-                          " yas"
-                          " WSC"))
-      (sml/setup))
+    (setq
+     sml/no-confirm-load-theme t
+     sml/theme 'respectful
+     sml/shorten-modes t
+     sml/hidden-modes '(" EvilOrg"
+                        " Fill"
+                        " Ind"
+                        " Projectile"
+                        " SP"
+                        " Undo-Tree"
+                        " yas"
+                        " WSC"))
+    (sml/setup)
     :config
-    (progn
-      (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox" ":Box:") t)
-      (add-to-list 'sml/replacer-regexp-list '("^~/Code" ":C:") t)))
+    (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox" ":Box:") t)
+    (add-to-list 'sml/replacer-regexp-list '("^~/Code" ":C:") t))
 #+end_src
 
 * SmartParens
@@ -531,9 +518,8 @@ Diminish isn't supported, so we have to use the slightly less powerful
 #+begin_src emacs-lisp
   (use-package smartparens
     :init
-    (progn
-      (smartparens-global-mode 1)
-      (show-smartparens-global-mode +1))
+    (smartparens-global-mode 1)
+    (show-smartparens-global-mode +1)
 
     :bind (("M-n" . sp-next-sexp)
            ("M-p" . sp-previous-sexp)
@@ -541,36 +527,35 @@ Diminish isn't supported, so we have to use the slightly less powerful
            ("M-b" . sp-backward-sexp))
 
     :config
-    (progn
-      ;; Enable smartparens everywhere
-      (use-package smartparens-config)
+    ;; Enable smartparens everywhere
+    (use-package smartparens-config)
 
-      ;; Require and disable paredit because some packages rely on it.
-      (use-package paredit)
-      (disable-paredit-mode)
+    ;; Require and disable paredit because some packages rely on it.
+    (use-package paredit)
+    (disable-paredit-mode)
 
-      (setq
-       smartparens-strict-mode t
-       sp-autoinsert-if-followed-by-word t
-       sp-autoskip-closing-pair 'always
-       sp-base-key-bindings 'paredit
-       sp-hybrid-kill-entire-symbol nil)
+    (setq
+     smartparens-strict-mode t
+     sp-autoinsert-if-followed-by-word t
+     sp-autoskip-closing-pair 'always
+     sp-base-key-bindings 'paredit
+     sp-hybrid-kill-entire-symbol nil)
 
-      (sp-use-paredit-bindings))
+    (sp-use-paredit-bindings)
 
-      (sp-with-modes '(markdown-mode gfm-mode rst-mode)
-        (sp-local-pair "*" "*" :bind "C-*")
-        (sp-local-tag "2" "**" "**")
-        (sp-local-tag "s" "```scheme" "```")
-        (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+    (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+      (sp-local-pair "*" "*" :bind "C-*")
+      (sp-local-tag "2" "**" "**")
+      (sp-local-tag "s" "```scheme" "```")
+      (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
 
-      (sp-with-modes '(html-mode sgml-mode)
-        (sp-local-pair "<" ">"))
+    (sp-with-modes '(html-mode sgml-mode)
+      (sp-local-pair "<" ">"))
 
-      ;; Close a backtick with another backtick in clojure-mode
-      (sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
+    ;; Close a backtick with another backtick in clojure-mode
+    (sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
 
-      (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p)))
+    (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p)))
 #+end_src
 
 * smex
@@ -594,9 +579,8 @@ Can be [[https://github.com/ggreer/the_silver_searcher#installation][installed]]
   (use-package ag
     :if executable-ag-available?
     :init
-    (progn
-      (use-package wgrep-ag)
-      (setq-default ag-highlight-search t))
+    (use-package wgrep-ag)
+    (setq-default ag-highlight-search t)
     :bind
     ("M-?" . ag-project))
 #+end_src
@@ -657,10 +641,9 @@ your search results.
     (yas-global-mode 1)
 
     :config
-    (progn
-      (use-package string-utils)
+    (use-package string-utils)
 
-      (let ((snippets-dir (expand-file-name "snippets" user-emacs-directory)))
-        (if (f-directory? snippets-dir)
-            (setq yas-snippet-dirs snippets-dir)))))
+    (let ((snippets-dir (expand-file-name "snippets" user-emacs-directory)))
+      (if (f-directory? snippets-dir)
+          (setq yas-snippet-dirs snippets-dir))))
 #+end_src

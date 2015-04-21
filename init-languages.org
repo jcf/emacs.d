@@ -18,40 +18,38 @@ encounter, and configures them for effective use.
   (use-package clojure-mode
     :commands (clojure-mode)
     :init
-    (progn
-      (add-hook 'clojure-mode-hook 'jcf-lisp-setup)
-      ;; Undo activation of Paredit by clojure-mode
-      (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
-      (add-hook 'clojure-mode-hook 'subword-mode))
+    (add-hook 'clojure-mode-hook 'jcf-lisp-setup)
+    ;; Undo activation of Paredit by clojure-mode
+    (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
+    (add-hook 'clojure-mode-hook 'subword-mode)
 
     :config
-    (progn
-      (use-package cljsbuild-mode)
-      (use-package elein)
-      (use-package typed-clojure-mode
-        :init (typed-clojure-mode))
-      (use-package clj-refactor
-        :init (clj-refactor-mode 1))
+    (use-package cljsbuild-mode)
+    (use-package elein)
+    (use-package typed-clojure-mode
+      :init (typed-clojure-mode))
+    (use-package clj-refactor
+      :init (clj-refactor-mode 1))
 
-      (after-load 'flycheck
-        (use-package flycheck-clojure
-          :init (flycheck-clojure-setup)))
+    (after-load 'flycheck
+      (use-package flycheck-clojure
+        :init (flycheck-clojure-setup)))
 
-      (define-clojure-indent
-        (defroutes 'defun)
-        (for-all 'defun)
-        (GET 2)
-        (POST 2)
-        (PUT 2)
-        (DELETE 2)
-        (HEAD 2)
-        (ANY 2)
-        (After 1)
-        (Before 1)
-        (Given 2)
-        (Then 2)
-        (When 2)
-        (context 2))))
+    (define-clojure-indent
+      (defroutes 'defun)
+      (for-all 'defun)
+      (GET 2)
+      (POST 2)
+      (PUT 2)
+      (DELETE 2)
+      (HEAD 2)
+      (ANY 2)
+      (After 1)
+      (Before 1)
+      (Given 2)
+      (Then 2)
+      (When 2)
+      (context 2)))
 #+end_src
 
 * Clojurescript
@@ -92,33 +90,32 @@ Use ~clojurescript-mode~ for files with a ~cljs~ extension.
   (use-package lisp-mode
     :mode (("\\.cl\\'" . lisp-mode))
     :config
-    (progn
-      (defun lispdoc ()
-        "Searches lispdoc.com for SYMBOL, which is by default the symbol currently
+    (defun lispdoc ()
+      "Searches lispdoc.com for SYMBOL, which is by default the symbol currently
   under the cursor."
-        (interactive)
-        (let* ((word-at-point (word-at-point))
-               (symbol-at-point (symbol-at-point))
-               (default (symbol-name symbol-at-point))
-               (inp (read-from-minibuffer
-                     (if (or word-at-point symbol-at-point)
-                         (concat "Symbol (default " default "): ")
-                       "Symbol (no default): "))))
-          (if (and (string= inp "") (not word-at-point) (not
-                                                         symbol-at-point))
-              (message "you didn't enter a symbol!")
-            (let ((search-type (read-from-minibuffer
-                                "full-text (f) or basic (b) search (default b)? ")))
-              (browse-url (concat "http://lispdoc.com?q="
-                                  (if (string= inp "")
-                                      default
-                                    inp)
-                                  "&search="
-                                  (if (string-equal search-type "f")
-                                      "full+text+search"
-                                    "basic+search")))))))
+      (interactive)
+      (let* ((word-at-point (word-at-point))
+             (symbol-at-point (symbol-at-point))
+             (default (symbol-name symbol-at-point))
+             (inp (read-from-minibuffer
+                   (if (or word-at-point symbol-at-point)
+                       (concat "Symbol (default " default "): ")
+                     "Symbol (no default): "))))
+        (if (and (string= inp "") (not word-at-point) (not
+                                                       symbol-at-point))
+            (message "you didn't enter a symbol!")
+          (let ((search-type (read-from-minibuffer
+                              "full-text (f) or basic (b) search (default b)? ")))
+            (browse-url (concat "http://lispdoc.com?q="
+                                (if (string= inp "")
+                                    default
+                                  inp)
+                                "&search="
+                                (if (string-equal search-type "f")
+                                    "full+text+search"
+                                  "basic+search")))))))
 
-      (define-key lisp-mode-map (kbd "C-c l") 'lispdoc)))
+    (define-key lisp-mode-map (kbd "C-c l") 'lispdoc))
 #+end_src
 
 * Configuration
@@ -144,37 +141,36 @@ Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
     :init
     (setq css-indent-offset 2)
     :config
-    (progn
-      (use-package rainbow-mode
-        :init
-        (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
-          (add-hook hook 'rainbow-mode)))
+    (use-package rainbow-mode
+      :init
+      (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
+        (add-hook hook 'rainbow-mode)))
 
-      (use-package css-eldoc)
+    (use-package css-eldoc)
 
-      (use-package mmm-vars
-        :config
-        (mmm-add-group
-         'html-css
-         '((css-cdata
-            :submode css-mode
-            :face mmm-code-submode-face
-            :front "<style[^>]*>[ \t\n]*\\(//\\)?<!\\[CDATA\\[[ \t]*\n?"
-            :back "[ \t]*\\(//\\)?]]>[ \t\n]*</style>"
-            :insert ((?j js-tag nil @ "<style type=\"text/css\">"
-                         @ "\n" _ "\n" @ "</script>" @)))
-           (css
-            :submode css-mode
-            :face mmm-code-submode-face
-            :front "<style[^>]*>[ \t]*\n?"
-            :back "[ \t]*</style>"
-            :insert ((?j js-tag nil @ "<style type=\"text/css\">"
-                         @ "\n" _ "\n" @ "</style>" @)))
-           (css-inline
-            :submode css-mode
-            :face mmm-code-submode-face
-            :front "style=\""
-            :back "\""))))))
+    (use-package mmm-vars
+      :config
+      (mmm-add-group
+       'html-css
+       '((css-cdata
+          :submode css-mode
+          :face mmm-code-submode-face
+          :front "<style[^>]*>[ \t\n]*\\(//\\)?<!\\[CDATA\\[[ \t]*\n?"
+          :back "[ \t]*\\(//\\)?]]>[ \t\n]*</style>"
+          :insert ((?j js-tag nil @ "<style type=\"text/css\">"
+                       @ "\n" _ "\n" @ "</script>" @)))
+         (css
+          :submode css-mode
+          :face mmm-code-submode-face
+          :front "<style[^>]*>[ \t]*\n?"
+          :back "[ \t]*</style>"
+          :insert ((?j js-tag nil @ "<style type=\"text/css\">"
+                       @ "\n" _ "\n" @ "</style>" @)))
+         (css-inline
+          :submode css-mode
+          :face mmm-code-submode-face
+          :front "style=\""
+          :back "\"")))))
 #+end_src
 
 * CSV
@@ -203,29 +199,28 @@ Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
            ("\\.jst\\.ejs\\'" . html-erb-mode))
 
     :config
-    (progn
-      (use-package mmm-mode)
+    (use-package mmm-mode)
 
-      (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
-      (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
+    (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\'" 'erb)
+    (mmm-add-mode-ext-class 'html-erb-mode "\\.jst\\.ejs\\'" 'ejs)
 
-      (defun jcf-set-up-mode-for-erb (mode)
-        (add-hook (derived-mode-hook-name mode) 'jcf-ensure-mmm-erb-loaded)
-        (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
+    (defun jcf-set-up-mode-for-erb (mode)
+      (add-hook (derived-mode-hook-name mode) 'jcf-ensure-mmm-erb-loaded)
+      (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
 
-      (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
-        (dolist (mode html-erb-modes)
-          (jcf-set-up-mode-for-erb mode)
-          (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
-          (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
+    (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
+      (dolist (mode html-erb-modes)
+        (jcf-set-up-mode-for-erb mode)
+        (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
+        (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
 
-      (use-package derived)
+    (use-package derived)
 
-      (mapc 'jcf-set-up-mode-for-erb
-            '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
+    (mapc 'jcf-set-up-mode-for-erb
+          '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
 
-      (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
-        (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))))
+    (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
+      (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb)))
 #+end_src
 
 * Erlang
@@ -252,16 +247,15 @@ case you can set the relevant environment variables using something like:
   (use-package go-mode
     :commands go-mode
     :config
-    (progn
-      (add-hook 'before-save-hook #'gofmt-before-save)
+    (add-hook 'before-save-hook #'gofmt-before-save)
 
-      ;; Flymake for Go requires a Go dependency. If it's in our
-      ;; `GOPATH` we can load it up.
-      (let ((flymake-path (expand-file-name "src/github.com/dougm/goflymake"
-                                            (getenv "GOPATH"))))
-        (when (file-exists-p flymake-path)
-          (add-to-list 'load-path flymake-path)
-          (use-package go-flymake)))))
+    ;; Flymake for Go requires a Go dependency. If it's in our
+    ;; `GOPATH` we can load it up.
+    (let ((flymake-path (expand-file-name "src/github.com/dougm/goflymake"
+                                          (getenv "GOPATH"))))
+      (when (file-exists-p flymake-path)
+        (add-to-list 'load-path flymake-path)
+        (use-package go-flymake))))
 #+end_src
 
 * Graphviz Dot
@@ -280,10 +274,9 @@ Better support for Dot diagrams.
   (use-package haml-mode
     :commands haml-mode
     :config
-    (progn
-      (define-key haml-mode-map (kbd "C-o") 'open-line)
-      (when (fboundp 'electric-indent-mode)
-        (add-hook 'haml-mode-hook (lambda () (electric-indent-mode -1))))))
+    (define-key haml-mode-map (kbd "C-o") 'open-line)
+    (when (fboundp 'electric-indent-mode)
+      (add-hook 'haml-mode-hook (lambda () (electric-indent-mode -1)))))
 #+end_src
 
 * Haskell
@@ -293,44 +286,43 @@ Better support for Dot diagrams.
     :commands haskell-mode
     :mode "\\.ghci\\'"
     :config
-    (progn
-      (setq-default haskell-stylish-on-save t
-                    hs-config-use-cabal-dev t)
+    (setq-default haskell-stylish-on-save t
+                  hs-config-use-cabal-dev t)
 
-      (use-package flycheck-hdevtools)
-      (use-package flycheck-haskell)
+    (use-package flycheck-hdevtools)
+    (use-package flycheck-haskell)
 
-      (after-load 'flycheck
-        (use-package flycheck-hdevtools))
+    (after-load 'flycheck
+      (use-package flycheck-hdevtools))
 
-      (dolist (hook '(haskell-mode-hook inferior-haskell-mode-hook))
-        (add-hook hook 'turn-on-haskell-doc-mode))
+    (dolist (hook '(haskell-mode-hook inferior-haskell-mode-hook))
+      (add-hook hook 'turn-on-haskell-doc-mode))
 
-      (use-package hi2)
+    (use-package hi2)
 
-      (add-hook 'haskell-mode-hook 'turn-on-hi2)
-      (add-hook 'haskell-mode-hook (lambda () (subword-mode +1)))
+    (add-hook 'haskell-mode-hook 'turn-on-hi2)
+    (add-hook 'haskell-mode-hook (lambda () (subword-mode +1)))
 
-      (after-load 'haskell-mode
-        (define-key haskell-mode-map (kbd "C-c h") 'hoogle)
-        (define-key haskell-mode-map (kbd "C-o") 'open-line))
+    (after-load 'haskell-mode
+      (define-key haskell-mode-map (kbd "C-c h") 'hoogle)
+      (define-key haskell-mode-map (kbd "C-o") 'open-line))
 
-      (use-package ghci-completion
-        :init
-        (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion))
+    (use-package ghci-completion
+      :init
+      (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion))
 
-      (eval-after-load 'page-break-lines
-        '(push 'haskell-mode page-break-lines-modes))
+    (eval-after-load 'page-break-lines
+      '(push 'haskell-mode page-break-lines-modes))
 
-      ;; Make compilation-mode understand "at blah.hs:11:34-50" lines output by GHC
-      (after-load 'compile
-        (let ((alias 'ghc-at-regexp))
-          (add-to-list
-           'compilation-error-regexp-alist-alist
-           (list alias
-                 " at \\(.*\\.\\(?:l?[gh]hs\\|hi\\)\\):\\([0-9]+\\):\\([0-9]+\\)-[0-9]+$" 1 2 3 0 1))
-          (add-to-list
-           'compilation-error-regexp-alist alias)))))
+    ;; Make compilation-mode understand "at blah.hs:11:34-50" lines output by GHC
+    (after-load 'compile
+      (let ((alias 'ghc-at-regexp))
+        (add-to-list
+         'compilation-error-regexp-alist-alist
+         (list alias
+               " at \\(.*\\.\\(?:l?[gh]hs\\|hi\\)\\):\\([0-9]+\\):\\([0-9]+\\)-[0-9]+$" 1 2 3 0 1))
+        (add-to-list
+         'compilation-error-regexp-alist alias))))
 #+end_src
 
 * HTML
@@ -364,10 +356,9 @@ See [[Ruby]] configuration for ERB setup.
      js2-bounce-indent-p nil)
 
     :config
-    (progn
-      (js2-imenu-extras-mode)
-      (use-package skewer-mode
-        :commands skewer-mode)))
+    (js2-imenu-extras-mode)
+    (use-package skewer-mode
+      :commands skewer-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -381,13 +372,12 @@ See [[Ruby]] configuration for ERB setup.
 #+begin_src emacs-lisp
   (use-package json-mode
     :config
-    (progn
-      (defun jcf-json-mode-hook ()
-        (interactive)
-        (setq js-indent-level 2)
-        (rainbow-delimiters-mode))
+    (defun jcf-json-mode-hook ()
+      (interactive)
+      (setq js-indent-level 2)
+      (rainbow-delimiters-mode))
 
-      (add-hook 'json-mode-hook 'jcf-json-mode-hook)))
+    (add-hook 'json-mode-hook 'jcf-json-mode-hook))
 #+end_src
 
 * LESS
@@ -396,9 +386,8 @@ See [[Ruby]] configuration for ERB setup.
   (use-package less-css-mode
     :commands less-css-mode
     :config
-    (progn
-      (use-package js2-mode)
-      (use-package skewer-less)))
+    (use-package js2-mode)
+    (use-package skewer-less))
 #+end_src
 
 * Lisp
@@ -413,63 +402,62 @@ Treat Cask file like elisp.
            ("archive-contents\\'" . emacs-lisp-mode))
 
     :config
-    (progn
-      (use-package elisp-slime-nav)
-      (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-        (add-hook hook 'elisp-slime-nav-mode))
+    (use-package elisp-slime-nav)
+    (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+      (add-hook hook 'elisp-slime-nav-mode))
 
-      (use-package lively)
+    (use-package lively)
 
-      (defun jcf-eval-last-sexp-or-region (beg end prefix)
-        "Eval region from BEG to END if active, otherwise the last sexp."
-        (interactive "r\nP")
-        (if (use-region-p)
-            (eval-region beg end)
-          (pp-eval-last-sexp prefix)))
+    (defun jcf-eval-last-sexp-or-region (beg end prefix)
+      "Eval region from BEG to END if active, otherwise the last sexp."
+      (interactive "r\nP")
+      (if (use-region-p)
+          (eval-region beg end)
+        (pp-eval-last-sexp prefix)))
 
-      (global-set-key (kbd "M-:") 'pp-eval-expression)
+    (global-set-key (kbd "M-:") 'pp-eval-expression)
 
-      (after-load 'lisp-mode
-        (define-key emacs-lisp-mode-map (kbd "C-x C-e")
-          'jcf-eval-last-sexp-or-region))
+    (after-load 'lisp-mode
+      (define-key emacs-lisp-mode-map (kbd "C-x C-e")
+        'jcf-eval-last-sexp-or-region))
 
-      (defun jcf-emacs-lisp-module-name ()
-        "Search the buffer for `provide' declaration."
-        (save-excursion
-          (goto-char (point-min))
-          (when (search-forward-regexp "^(provide '" nil t)
-            (symbol-name (symbol-at-point)))))
+    (defun jcf-emacs-lisp-module-name ()
+      "Search the buffer for `provide' declaration."
+      (save-excursion
+        (goto-char (point-min))
+        (when (search-forward-regexp "^(provide '" nil t)
+          (symbol-name (symbol-at-point)))))
 
-      ;; Credit to Chris Done for this one.
-      (defun jcf-try-complete-lisp-symbol-without-namespace (old)
-        "Hippie expand \"try\" function which expands \"-foo\" to
+    ;; Credit to Chris Done for this one.
+    (defun jcf-try-complete-lisp-symbol-without-namespace (old)
+      "Hippie expand \"try\" function which expands \"-foo\" to
         \"modname-foo\" in elisp."
-        (unless old
-          (he-init-string (he-lisp-symbol-beg) (point))
-          (when (string-prefix-p "-" he-search-string)
-            (let ((mod-name (jcf-emacs-lisp-module-name)))
-              (when mod-name
-                (setq he-expand-list (list (concat mod-name he-search-string)))))))
-        (when he-expand-list
-          (he-substitute-string (car he-expand-list))
-          (setq he-expand-list nil)
-          t))
+      (unless old
+        (he-init-string (he-lisp-symbol-beg) (point))
+        (when (string-prefix-p "-" he-search-string)
+          (let ((mod-name (jcf-emacs-lisp-module-name)))
+            (when mod-name
+              (setq he-expand-list (list (concat mod-name he-search-string)))))))
+      (when he-expand-list
+        (he-substitute-string (car he-expand-list))
+        (setq he-expand-list nil)
+        t))
 
-      (defun set-up-hippie-expand-for-elisp ()
-        "Locally set `hippie-expand' completion functions for use with Emacs Lisp."
-        (make-local-variable 'hippie-expand-try-functions-list)
+    (defun set-up-hippie-expand-for-elisp ()
+      "Locally set `hippie-expand' completion functions for use with Emacs Lisp."
+      (make-local-variable 'hippie-expand-try-functions-list)
 
-        (add-to-list 'hippie-expand-try-functions-list
-                     'try-complete-lisp-symbol
-                     t)
+      (add-to-list 'hippie-expand-try-functions-list
+                   'try-complete-lisp-symbol
+                   t)
 
-        (add-to-list 'hippie-expand-try-functions-list
-                     'try-complete-lisp-symbol-partially
-                     t)
+      (add-to-list 'hippie-expand-try-functions-list
+                   'try-complete-lisp-symbol-partially
+                   t)
 
-        (add-to-list 'hippie-expand-try-functions-list
-                     'jcf-try-complete-lisp-symbol-without-namespace
-                     t)))
+      (add-to-list 'hippie-expand-try-functions-list
+                   'jcf-try-complete-lisp-symbol-without-namespace
+                   t))
 
     :bind
     ("C-h K" . find-function-on-key))
@@ -482,9 +470,8 @@ Auto-compile on save and load.
 
 #+begin_src emacs-lisp
   (use-package auto-compile :init
-    (progn
-      (auto-compile-on-save-mode 1)
-      (auto-compile-on-load-mode 1)))
+    (auto-compile-on-save-mode 1)
+    (auto-compile-on-load-mode 1))
 #+end_src
 
 Highlight current sexp.
@@ -631,12 +618,11 @@ Macrostep.
     :mode "\\.\\(md\\|markdown\\)\\'"
     :commands markdown-mode
     :config
-    (progn
-      (use-package pandoc-mode :init
-        (add-hook 'markdown-mode-hook 'turn-on-pandoc))
+    (use-package pandoc-mode :init
+      (add-hook 'markdown-mode-hook 'turn-on-pandoc))
 
-      (add-hook 'markdown-mode-hook
-                (lambda () (guide-key/add-local-guide-key-sequence "C-c /")))))
+    (add-hook 'markdown-mode-hook
+              (lambda () (guide-key/add-local-guide-key-sequence "C-c /"))))
 #+end_src
 
 * Mutt
@@ -687,16 +673,15 @@ Macrostep.
            ("\\.xslt\\'" . nxml-mode))
 
     :init
-    (progn
-      (setq
-       magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist)
-       nxml-slash-auto-complete-flag t)
+    (setq
+     magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist)
+     nxml-slash-auto-complete-flag t)
 
-      (add-hook
-       'nxml-mode-hook
-       (lambda () (set (make-local-variable 'ido-use-filename-at-point) nil)))
+    (add-hook
+     'nxml-mode-hook
+     (lambda () (set (make-local-variable 'ido-use-filename-at-point) nil)))
 
-      (fset 'xml-mode 'nxml-mode)))
+    (fset 'xml-mode 'nxml-mode))
 
   (use-package tidy
     :commands (tidy-buffer tidy-current-line)
@@ -742,9 +727,8 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
     :config
     (use-package elpy
       :init
-      (progn
-        (elpy-enable)
-        (elpy-use-ipython))))
+      (elpy-enable)
+      (elpy-use-ipython)))
 #+end_src
 
 * Ruby
@@ -768,44 +752,43 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
     (setq ruby-use-encoding-map nil)
 
     :config
-    (progn
-      (use-package inf-ruby)
-      (use-package ruby-hash-syntax)
+    (use-package inf-ruby)
+    (use-package ruby-hash-syntax)
 
-      (after-load 'ruby-mode
-        (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
-        (define-key ruby-mode-map (kbd "TAB") 'indent-for-tab-command))
+    (after-load 'ruby-mode
+      (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
+      (define-key ruby-mode-map (kbd "TAB") 'indent-for-tab-command))
 
-      (add-hook 'ruby-mode-hook 'subword-mode)
+    (add-hook 'ruby-mode-hook 'subword-mode)
 
-      (use-package robe
-        :config (add-hook 'ruby-mode-hook 'robe-mode))
+    (use-package robe
+      :config (add-hook 'ruby-mode-hook 'robe-mode))
 
-      (use-package ruby-compilation
-        :config
-        (let ((m ruby-mode-map))
-          (define-key m [S-f7] 'ruby-compilation-this-buffer)
-          (define-key m [f7] 'ruby-compilation-this-test)
-          (define-key m [f6] 'recompile)))
+    (use-package ruby-compilation
+      :config
+      (let ((m ruby-mode-map))
+        (define-key m [S-f7] 'ruby-compilation-this-buffer)
+        (define-key m [f7] 'ruby-compilation-this-test)
+        (define-key m [f6] 'recompile)))
 
-      (use-package yari
-        :init (defalias 'ri 'yari))
+    (use-package yari
+      :init (defalias 'ri 'yari))
 
-      (use-package rinari
-        :init
-        (global-rinari-mode))
+    (use-package rinari
+      :init
+      (global-rinari-mode))
 
-      (use-package rspec-mode
-        :config (rspec-mode 1))
+    (use-package rspec-mode
+      :config (rspec-mode 1))
 
-      (use-package bundler)
+    (use-package bundler)
 
-      ;; Stupidly the non-bundled ruby-mode isn't a derived mode of
-      ;; prog-mode: we run the latter's hooks anyway in that case.
-      (add-hook 'ruby-mode-hook
-                (lambda ()
-                  (unless (derived-mode-p 'prog-mode)
-                    (run-hooks 'prog-mode-hook))))))
+    ;; Stupidly the non-bundled ruby-mode isn't a derived mode of
+    ;; prog-mode: we run the latter's hooks anyway in that case.
+    (add-hook 'ruby-mode-hook
+              (lambda ()
+                (unless (derived-mode-p 'prog-mode)
+                  (run-hooks 'prog-mode-hook)))))
 #+end_src
 
 * SASS
@@ -853,36 +836,35 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
   (use-package sql
     :commands sql-mode
     :config
-    (progn
-      (defun jcf-pop-to-sqli-buffer ()
-        "Switch to the corresponding sqli buffer."
-        (interactive)
-        (if sql-buffer
-            (progn
-              (pop-to-buffer sql-buffer)
-              (goto-char (point-max)))
-          (sql-set-sqli-buffer)
-          (when sql-buffer
-            (jcf-pop-to-sqli-buffer))))
+    (defun jcf-pop-to-sqli-buffer ()
+      "Switch to the corresponding sqli buffer."
+      (interactive)
+      (if sql-buffer
+          (progn
+            (pop-to-buffer sql-buffer)
+            (goto-char (point-max)))
+        (sql-set-sqli-buffer)
+        (when sql-buffer
+          (jcf-pop-to-sqli-buffer))))
 
-      (after-load 'sql
-        (define-key sql-mode-map (kbd "C-c C-z") 'jcf-pop-to-sqli-buffer)
+    (after-load 'sql
+      (define-key sql-mode-map (kbd "C-c C-z") 'jcf-pop-to-sqli-buffer)
 
-        (when (package-installed-p 'dash-at-point)
-          (defun jcf-maybe-set-dash-db-docset ()
-            (when (eq sql-product 'postgres)
-              (setq dash-at-point-docset "psql")))
+      (when (package-installed-p 'dash-at-point)
+        (defun jcf-maybe-set-dash-db-docset ()
+          (when (eq sql-product 'postgres)
+            (setq dash-at-point-docset "psql")))
 
-          (add-hook 'sql-mode-hook 'jcf-maybe-set-dash-db-docset)
-          (add-hook 'sql-interactive-mode-hook 'jcf-maybe-set-dash-db-docset)
-          (defadvice sql-set-product (after set-dash-docset activate)
-            (jcf-maybe-set-dash-db-docset))))
+        (add-hook 'sql-mode-hook 'jcf-maybe-set-dash-db-docset)
+        (add-hook 'sql-interactive-mode-hook 'jcf-maybe-set-dash-db-docset)
+        (defadvice sql-set-product (after set-dash-docset activate)
+          (jcf-maybe-set-dash-db-docset))))
 
-      (setq-default sql-input-ring-file-name
-                    (expand-file-name ".sqli_history" user-emacs-directory))
+    (setq-default sql-input-ring-file-name
+                  (expand-file-name ".sqli_history" user-emacs-directory))
 
-      (after-load 'page-break-lines
-        (push 'sql-mode page-break-lines-modes))))
+    (after-load 'page-break-lines
+      (push 'sql-mode page-break-lines-modes)))
 #+end_src
 
 * systemd
