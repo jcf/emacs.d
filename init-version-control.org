@@ -9,9 +9,8 @@
 #+begin_src emacs-lisp
   (use-package diff-hl
     :init
-    (progn
-      (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
-      (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode)))
+    (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
+    (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode))
 #+end_src
 
 * Magit
@@ -21,32 +20,29 @@
     :commands magit-get-top-dir
     :diminish magit-auto-revert-mode
     :init
-    (progn
-      (setq magit-last-seen-setup-instructions "1.4.0")
-      (setq-default
-       magit-completing-read-function 'magit-ido-completing-read
-       magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
-       magit-diff-refine-hunk t
-       magit-process-popup-time 10
-       magit-save-some-buffers nil))
+    (setq magit-last-seen-setup-instructions "1.4.0")
+    (setq-default
+     magit-completing-read-function 'magit-ido-completing-read
+     magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
+     magit-diff-refine-hunk t
+     magit-process-popup-time 10
+     magit-save-some-buffers nil)
 
     :config
-    (progn
-      (when *is-a-mac*
-        (after-load 'magit
-          (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+    (when *is-a-mac*
+      (after-load 'magit
+        (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
-      (use-package git-blame)
-      (use-package git-commit-mode
-        :config
-        (progn
-          (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
-          (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0)))))
-      (use-package git-rebase-mode)
-      (use-package gitignore-mode)
-      (use-package gitconfig-mode)
-      (use-package magit-svn :diminish magit-svn-mode)
-      (add-hook 'magit-mode-hook 'turn-on-magit-svn)))
+    (use-package git-blame)
+    (use-package git-commit-mode
+      :config
+      (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
+      (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0))))
+    (use-package git-rebase-mode)
+    (use-package gitignore-mode)
+    (use-package gitconfig-mode)
+    (use-package magit-svn :diminish magit-svn-mode)
+    (add-hook 'magit-mode-hook 'turn-on-magit-svn))
 #+end_src
 
 Jump to the parent section with Command-Control-<up>.
@@ -125,7 +121,6 @@ https://github.com/arnested/bug-reference-github
   (use-package vc-darcs
     :commands vc-darcs-find-file-hook
     :config
-    (progn
-      (add-to-list 'vc-handled-backends 'DARCS)
-      (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)))
+    (add-to-list 'vc-handled-backends 'DARCS)
+    (add-hook 'find-file-hooks 'vc-darcs-find-file-hook))
 #+end_src

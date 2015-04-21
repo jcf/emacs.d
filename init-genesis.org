@@ -533,14 +533,13 @@ http://www.emacswiki.org/emacs/ZapToISearch
   (use-package flycheck
     :init (global-flycheck-mode)
     :config
-    (progn
-      (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
-            flycheck-idle-change-delay 0.8
-            flycheck-mode-line nil)
-      (use-package flycheck-pos-tip
-        :init
-        (setq flycheck-display-errors-function
-              #'flycheck-pos-tip-error-messages))))
+    (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
+          flycheck-idle-change-delay 0.8
+          flycheck-mode-line nil)
+    (use-package flycheck-pos-tip
+      :init
+      (setq flycheck-display-errors-function
+            #'flycheck-pos-tip-error-messages)))
 #+end_src
 
 * Spelling
@@ -553,33 +552,32 @@ http://www.emacswiki.org/emacs/ZapToISearch
   (use-package flyspell
     :if (executable-find ispell-program-name)
     :config
-    (progn
-      (setq ispell-extra-args '("--sug-mode=ultra"
-                                "--lang=uk"
-                                "--run-together"
-                                "--run-together-limit=5"
-                                "--run-together-min=2"))
-      (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)
-      (if (fboundp 'prog-mode)
-          (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-        (dolist (hook '(lisp-mode-hook
-                        emacs-lisp-mode-hook
-                        scheme-mode-hook
-                        clojure-mode-hook
-                        ruby-mode-hook
-                        yaml-mode
-                        python-mode-hook
-                        shell-mode-hook
-                        php-mode-hook
-                        css-mode-hook
-                        haskell-mode-hook
-                        caml-mode-hook
-                        nxml-mode-hook
-                        crontab-mode-hook
-                        perl-mode-hook
-                        tcl-mode-hook
-                        javascript-mode-hook))
-          (add-hook hook 'flyspell-prog-mode)))))
+    (setq ispell-extra-args '("--sug-mode=ultra"
+                              "--lang=uk"
+                              "--run-together"
+                              "--run-together-limit=5"
+                              "--run-together-min=2"))
+    (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)
+    (if (fboundp 'prog-mode)
+        (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+      (dolist (hook '(lisp-mode-hook
+                      emacs-lisp-mode-hook
+                      scheme-mode-hook
+                      clojure-mode-hook
+                      ruby-mode-hook
+                      yaml-mode
+                      python-mode-hook
+                      shell-mode-hook
+                      php-mode-hook
+                      css-mode-hook
+                      haskell-mode-hook
+                      caml-mode-hook
+                      nxml-mode-hook
+                      crontab-mode-hook
+                      perl-mode-hook
+                      tcl-mode-hook
+                      javascript-mode-hook))
+        (add-hook hook 'flyspell-prog-mode))))
 #+end_src
 
 * goto-address

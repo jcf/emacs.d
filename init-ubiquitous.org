@@ -71,13 +71,12 @@ when calling external utilities like make from Emacs.
     :if (memq window-system '(mac ns))
     :init (exec-path-from-shell-initialize)
     :config
-    (progn
-      (dolist (var '("GPG_AGENT_INFO"
-                     "LANG"
-                     "LC_CTYPE"
-                     "SSH_AGENT_PID"
-                     "SSH_AUTH_SOCK"))
-        (add-to-list 'exec-path-from-shell-variables var))))
+    (dolist (var '("GPG_AGENT_INFO"
+                   "LANG"
+                   "LC_CTYPE"
+                   "SSH_AGENT_PID"
+                   "SSH_AUTH_SOCK"))
+      (add-to-list 'exec-path-from-shell-variables var)))
 #+end_src
 
 * guide-key
@@ -87,18 +86,17 @@ when calling external utilities like make from Emacs.
 #+begin_src emacs-lisp
   (use-package guide-key
     :init
-    (progn
-      (setq guide-key/guide-key-sequence
-            '("C-x r"
-              "C-x 4"
-              "C-x 5"
-              "C-x v"
-              "C-c ;"
-              "C-c ; f"
-              "C-c ' f"
-              "C-c h"
-              "C-x n"))
-      (guide-key-mode 1)))
+    (setq guide-key/guide-key-sequence
+          '("C-x r"
+            "C-x 4"
+            "C-x 5"
+            "C-x v"
+            "C-c ;"
+            "C-c ; f"
+            "C-c ' f"
+            "C-c h"
+            "C-x n"))
+    (guide-key-mode 1))
 #+end_src
 * async
 
