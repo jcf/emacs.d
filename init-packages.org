@@ -504,6 +504,7 @@ Diminish isn't supported, so we have to use the slightly less powerful
 
 #+begin_src emacs-lisp
   (use-package smart-mode-line
+    :disabled t
     :init
     (progn
       (setq
