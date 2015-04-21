@@ -22,15 +22,16 @@ encounter, and configures them for effective use.
       (add-hook 'clojure-mode-hook 'jcf-lisp-setup)
       ;; Undo activation of Paredit by clojure-mode
       (add-hook 'clojure-mode-hook (lambda () (disable-paredit-mode)))
-      (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
-      (add-hook 'clojure-mode-hook 'typed-clojure-mode)
       (add-hook 'clojure-mode-hook 'subword-mode))
 
     :config
     (progn
       (use-package cljsbuild-mode)
       (use-package elein)
-      (use-package typed-clojure-mode)
+      (use-package typed-clojure-mode
+        :init (typed-clojure-mode))
+      (use-package clj-refactor
+        :init (clj-refactor-mode 1))
 
       (after-load 'flycheck
         (use-package flycheck-clojure

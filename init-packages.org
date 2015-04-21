@@ -50,14 +50,6 @@ We can control the amount of output ~use-package~ generates by setting
     (use-package slamhound))
 #+end_src
 
-* Clojure Refactor
-
-#+begin_src emacs-lisp
-  (use-package clj-refactor
-    :init
-    (add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache))
-#+end_src
-
 * Company
 
 Company mode is a fast, configurable completion system that allows for extension
