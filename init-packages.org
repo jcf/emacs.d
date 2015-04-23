@@ -21,6 +21,12 @@ We can control the amount of output ~use-package~ generates by setting
   (use-package ace-jump-mode)
 #+end_src
 
+* Alchemist
+
+#+begin_src emacs-lisp
+  (use-package alchemist)
+#+end_src
+
 * Cider
 
 #+begin_src emacs-lisp
@@ -200,7 +206,6 @@ because they don't print well.
     :init
     (turn-on-fci-mode)
 
-    :config
     (defun jcf-fci-enabled-p ()
       (and (boundp 'fci-mode) fci-mode))
 

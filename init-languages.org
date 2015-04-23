@@ -223,6 +223,12 @@ Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
       (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb)))
 #+end_src
 
+* Elixir
+
+#+begin_src emacs-lisp
+  (use-package elixir)
+#+end_src
+
 * Erlang
 
 #+begin_src emacs-lisp

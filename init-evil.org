@@ -115,6 +115,14 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
     "x"  'execute-extended-command)
 #+end_src
 
+** Alchemist
+
+#+begin_src emacs-lisp
+  (evil-leader/set-key-for-mode 'elixir-mode
+    "v" 'alchemist-mix-test-at-point
+    "V" 'alchemist-mix-test-this-buffer)
+#+end_src
+
 ** Org
 
 #+begin_src emacs-lisp
