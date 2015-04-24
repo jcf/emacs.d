@@ -21,12 +21,6 @@ We can control the amount of output ~use-package~ generates by setting
   (use-package ace-jump-mode)
 #+end_src
 
-* Alchemist
-
-#+begin_src emacs-lisp
-  (use-package alchemist)
-#+end_src
-
 * Cider
 
 #+begin_src emacs-lisp
@@ -91,8 +85,9 @@ using a simple API.
     (define-key dired-mode-map [mouse-2] 'dired-find-file)
     (guide-key/add-local-guide-key-sequence "%")
 
+    :config
     (use-package dired+
-      :config (global-dired-hide-details-mode -1)))
+      :init (global-dired-hide-details-mode -1)))
 #+end_src
 
 Some interesting options available to GNU ls:
@@ -187,8 +182,21 @@ because they don't print well.
       (interactive)
       (eshell "here"))
 
+    (defun pcomplete/sudo ()
+      (let ((prec (pcomplete-arg 'last -1)))
+        (cond ((string= "sudo" prec)
+               (while (pcomplete-here*
+                       (funcall pcomplete-command-completion-function)
+                       (pcomplete-arg 'last) t))))))
+
     (add-hook 'eshell-mode-hook
               (lambda ()
+                (define-key eshell-mode-map
+                  [remap eshell-pcomplete]
+                  'helm-esh-pcomplete)
+                (define-key eshell-mode-map
+                  (kbd "M-p")
+                  'helm-eshell-history)
                 (eshell/export "NODE_NO_READLINE=1"))))
   #+end_src
 
@@ -291,7 +299,12 @@ Powered by [[http://www.gnu.org/software/global/][GNU Global]].
 * htmlize
 
 #+begin_src emacs-lisp
-  (use-package htmlize)
+  (use-package htmlize
+    :commands (htmlize-buffer
+               htmlize-file
+               htmlize-many-files
+               htmlize-many-files-dired
+               htmlize-region))
 #+end_src
 
 * ibuffer
@@ -304,8 +317,17 @@ Powered by [[http://www.gnu.org/software/global/][GNU Global]].
 
 #+begin_src emacs-lisp
   (use-package ibuffer
-    :init
+    :commands ibuffer
+    :config
+    (define-ibuffer-column size-h
+      (:name "Size" :inline t)
+      (cond
+       ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+       ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
+       (t (format "%8d" (buffer-size)))))
+
     (use-package ibuffer-vc
+      :commands ibuffer
       :init
       (setq
        ibuffer-filter-group-name-face 'font-lock-doc-face
@@ -329,14 +351,6 @@ Powered by [[http://www.gnu.org/software/global/][GNU Global]].
                " "
                filename-and-process)))
 
-      (after-load 'ibuffer
-        (define-ibuffer-column size-h
-          (:name "Size" :inline t)
-          (cond
-           ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
-           ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
-           (t (format "%8d" (buffer-size))))))
-
       (defun ibuffer-set-up-preferred-filters ()
         (ibuffer-vc-set-filter-groups-by-vc-root)
         (unless (eq ibuffer-sorting-mode 'filename/process)
@@ -352,6 +366,7 @@ Powered by [[http://www.gnu.org/software/global/][GNU Global]].
 
 #+begin_src emacs-lisp
   (use-package ido
+    :disabled t
     :init
     (setq
      ido-auto-merge-work-directories-length 0

@@ -226,7 +226,9 @@ Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
 * Elixir
 
 #+begin_src emacs-lisp
-  (use-package elixir)
+  (use-package elixir
+    :config
+    (use-package alchemist))
 #+end_src
 
 * Erlang
@@ -270,6 +272,7 @@ Better support for Dot diagrams.
 
 #+begin_src emacs-lisp
   (use-package graphviz-dot-mode
+    :mode "\\.dot\\'"
     :init
     (setq graphviz-dot-indent-width 2))
 #+end_src
@@ -356,6 +359,7 @@ See [[Ruby]] configuration for ERB setup.
 
 #+begin_src emacs-lisp
   (use-package js2-mode
+    :mode "\\.js\\'"
     :init
     (setq-default
      js2-basic-offset 2
@@ -378,6 +382,7 @@ See [[Ruby]] configuration for ERB setup.
 
 #+begin_src emacs-lisp
   (use-package json-mode
+    :mode "\\.json\\'"
     :config
     (defun jcf-json-mode-hook ()
       (interactive)

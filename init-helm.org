@@ -7,7 +7,8 @@
 * Abstract
 
 #+begin_src emacs-lisp
-  (use-package helm)
+  (use-package helm
+    :init (helm-mode 1))
 #+end_src
 
 * Prefix
