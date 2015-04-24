@@ -363,6 +363,7 @@ See [[Ruby]] configuration for ERB setup.
 
     :config
     (js2-imenu-extras-mode)
+    (use-package js2-refactor)
     (use-package skewer-mode
       :commands skewer-mode))
 #+end_src
