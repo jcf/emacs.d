@@ -8,9 +8,12 @@ alias edot dired /Users/jcf/.dotfiles
 alias ff find-file $1
 alias g gh -c color.ui=always $*
 alias ga gh add $*
+alias gb gh branch $*
 alias gbs git-branches $*
-alias gf gh fetch $*
+alias gc gh commit $*
+alias gca gh commit -a $*
 alias gco gh checkout $*
+alias gf gh fetch $*
 alias gl gh pull
 alias glg (progn (magit-log) nil)
 alias gmt gh mergetool $*
@@ -25,6 +28,7 @@ alias lt ll -tr $*
 alias lu lt -u $*
 alias lx lt -XB $*
 alias o open $*
+alias ports sudo lsof -iTCP -sTCP:LISTEN -P
 alias rb ruby $*
 alias s g status -sb $*
 alias v vagrant $*
