@@ -73,6 +73,20 @@ Someone needs this, but it's been renamed in a recent version of
    helm-buffers-fuzzy-matching t)
 #+end_src
 
+* Positioning
+
+I prefer Helm sits at the bottom of my screen, full-width.
+
+http://www.reddit.com/r/emacs/comments/345vtl/make_helm_window_at_the_bottom_without_using_any/
+
+#+begin_src emacs-lisp
+  (add-to-list 'display-buffer-alist
+               `(,(rx bos "*helm" (* not-newline) "*" eos)
+                 (display-buffer-in-side-window)
+                 (inhibit-same-window . t)
+                 (window-height . 0.381)))
+#+end_src
+
 * Use Helm to power M-x
 
 #+begin_src emacs-lisp
