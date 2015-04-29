@@ -55,7 +55,7 @@
 (depends-on "elixir-mode")
 (depends-on "epl")
 (depends-on "erlang")
-(depends-on "evernote-mode")
+(depends-on "evernote-mode" :git "git://github.com/pymander/evernote-mode")
 (depends-on "evil")
 (depends-on "evil-exchange")
 (depends-on "evil-indent-textobject")
