@@ -86,6 +86,7 @@
 (depends-on "gh")
 (depends-on "ghc")
 (depends-on "ghci-completion")
+(depends-on "gist")
 (depends-on "git-blame")
 (depends-on "git-commit-mode")
 (depends-on "git-messenger")
