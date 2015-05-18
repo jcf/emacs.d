@@ -86,8 +86,7 @@ using a simple API.
     (guide-key/add-local-guide-key-sequence "%")
 
     :config
-    (use-package dired+
-      :init (global-dired-hide-details-mode -1)))
+    (use-package dired+))
 #+end_src
 
 Some interesting options available to GNU ls:
