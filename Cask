@@ -13,6 +13,7 @@
 (depends-on "applescript-mode")
 (depends-on "async")
 (depends-on "auto-compile")
+(depends-on "avy")
 (depends-on "bind-key")
 (depends-on "bug-reference-github")
 (depends-on "bundler")
