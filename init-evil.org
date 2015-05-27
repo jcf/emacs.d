@@ -157,7 +157,7 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
     "ct" 'typed-clojure-check-ns
     "eb" 'cider-eval-buffer
     "ed" 'cider-eval-defun-at-point
-    "es" 'cider-eval-last-sexp
+    "es" 'cider-pprint-eval-last-sexp
     "er" 'cider-eval-region)
 #+end_src
 
