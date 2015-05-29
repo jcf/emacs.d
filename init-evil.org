@@ -58,10 +58,16 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
 
 #+begin_src emacs-lisp
   (evil-leader/set-key
+    "," 'evilnc-comment-operator
     "<SPC>" 'ace-jump-char-mode
     "a"  'projectile-toggle-between-implementation-and-test
     "b"  'ibuffer
     "cc" 'evilnc-comment-or-uncomment-lines
+    "ci" 'evilnc-copy-and-comment-lines
+    "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+    "cp" 'evilnc-comment-or-uncomment-paragraphs
+    ;; "cr" 'comment-or-uncomment-region
+    ;; "cv" 'evilnc-toggle-invert-comment-line-by-line
     "db" 'kill-buffer
     "df" 'delete-this-file
     "dw" 'jcf-delete-window
