@@ -69,8 +69,8 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
     "ee" 'eval-expression
     "es" 'eval-last-sexp
     "er" 'eval-region
-    "fa" 'helm-ag
     "fA" 'helm-do-ag
+    "fa" 'helm-do-ag-project-root
     "fb" 'helm-buffers-list
     "fd" 'projectile-dired
     "ff" 'helm-find-files
