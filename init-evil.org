@@ -173,7 +173,6 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
 
 #+begin_src emacs-lisp
   (evil-leader/set-key-for-mode 'cider-repl-mode
-    "cc" 'cider-connect
     "cj" 'cider-switch-to-last-clojure-buffer
     "cq" 'cider-quit
     "cr" 'cider-refresh
