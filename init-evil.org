@@ -150,7 +150,8 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
     "v" 'cider-test-run-test
     "V" 'cider-test-run-tests
     "cc" 'cider-connect
-    "cj" 'cider-jack-in
+    "cj" 'cider-switch-to-relevant-repl-buffer
+    "cJ" 'cider-jack-in
     "cq" 'cider-quit
     "cr" 'cider-refresh
     "cR" 'cider-restart
@@ -166,7 +167,7 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
 #+begin_src emacs-lisp
   (evil-leader/set-key-for-mode 'cider-repl-mode
     "cc" 'cider-connect
-    "cj" 'cider-jack-in
+    "cj" 'cider-switch-to-last-clojure-buffer
     "cq" 'cider-quit
     "cr" 'cider-refresh
     "cR" 'cider-restart)
