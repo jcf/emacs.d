@@ -61,6 +61,7 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
     "<SPC>" 'ace-jump-char-mode
     "a"  'projectile-toggle-between-implementation-and-test
     "b"  'ibuffer
+    "cc" 'evilnc-comment-or-uncomment-lines
     "db" 'kill-buffer
     "df" 'delete-this-file
     "dw" 'jcf-delete-window
@@ -149,7 +150,7 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
   (evil-leader/set-key-for-mode 'clojure-mode
     "v" 'cider-test-run-test
     "V" 'cider-test-run-tests
-    "cc" 'cider-connect
+    "cC" 'cider-connect
     "cj" 'cider-switch-to-relevant-repl-buffer
     "cJ" 'cider-jack-in
     "cq" 'cider-quit
