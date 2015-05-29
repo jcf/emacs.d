@@ -201,6 +201,15 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
   (evil-define-key 'normal cider-mode-map (kbd "gK") 'cider-javadoc)
 #+end_src
 
+* Undo granularity
+
+Undo like Vim: everything you do during an insert session will be undone in one
+chunk.
+
+#+begin_src emacs-lisp
+  (setq evil-want-fine-undo 'no)
+#+end_src
+
 * Extended ~%~ matches
 
 [[https://github.com/redguardtoo/evil-matchit][evil-matchit]] is a port of [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] by Benji Fisher. Matchit enhances ~%~ to
