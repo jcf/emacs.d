@@ -26,6 +26,7 @@
 (depends-on "coffee-mode")
 (depends-on "company")
 (depends-on "company-ghc")
+(depends-on "company-ghci")
 (depends-on "company-go")
 (depends-on "company-inf-ruby")
 (depends-on "company-restclient")
