@@ -13,6 +13,9 @@
   </a>
 #+END_HTML
 
+#+NAME: Richard Stallman
+[[https://dl.dropboxusercontent.com/u/508427/imgs/richard-stallman.jpg]]
+
 * Getting Started
 
 #+name: emacs-d-version
