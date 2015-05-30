@@ -1,0 +1,3 @@
+#!/bin/bash
+set -e
+EMACS="$(evm bin $EVM_TARGET)" cask $@

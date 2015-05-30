@@ -1,0 +1,29 @@
+machine:
+  environment:
+    CASK_URL: https://raw.github.com/cask/cask/master/go
+    EMACS_VERSION: 24.5
+    EVM_TARGET: emacs-$EMACS_VERSION-bin
+    EVM_URL: https://raw.github.com/rejeep/evm/master/go
+    PATH: "/home/ubuntu/.cask/bin:/home/ubuntu/.evm/bin:$PATH"
+
+checkout:
+  post:
+    - ln -s ~/emacs.d ~/.emacs.d
+
+dependencies:
+  cache_directories:
+    - /usr/local/evm
+    - ~/.cask
+    - ~/emacs.d/.cask
+  pre:
+    - echo $PATH
+    - sudo mkdir /usr/local/evm && sudo chown ubuntu:ubuntu /usr/local/evm
+    - curl -fsSkL $EVM_URL | bash
+    - evm install $EVM_TARGET --use --skip
+    - '[[ -d "~/.cask" ]] || git clone https://github.com/cask/cask.git ~/.cask'
+  override:
+    - bin/cask install
+
+test:
+  override:
+    - bin/cask exec ecukes --no-win
