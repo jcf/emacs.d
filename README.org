@@ -8,8 +8,8 @@
 #+LINK: cask-fetchers https://github.com/cask/cask/blob/1b012ab26b79cf1af9da9360447382f01162e266/cask.el#L180
 
 #+BEGIN_HTML
-  <a href="https://travis-ci.org/jcf/emacs.d">
-    <img src="https://travis-ci.org/jcf/emacs.d.svg?branch=master"></img>
+  <a href="https://circleci.com/gh/jcf/emacs.d/tree/master">
+    <img src="https://circleci.com/gh/jcf/emacs.d/tree/master.svg?style=svg"></img>
   </a>
 #+END_HTML
 
