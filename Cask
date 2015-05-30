@@ -135,7 +135,6 @@
 (depends-on "helm-spotify")
 (depends-on "helm-swoop")
 (depends-on "heroku")
-(depends-on "hi2")
 (depends-on "highlight-escape-sequences")
 (depends-on "highlight-symbol")
 (depends-on "hippie-expand-slime")
