@@ -580,9 +580,6 @@ Diminish isn't supported, so we have to use the slightly less powerful
       (sp-local-tag "s" "```scheme" "```")
       (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
 
-    (sp-with-modes '(html-mode sgml-mode)
-      (sp-local-pair "<" ">"))
-
     ;; Close a backtick with another backtick in clojure-mode
     (sp-local-pair 'clojure-mode "`" "`" :when '(sp-in-string-p))
 
