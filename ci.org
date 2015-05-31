@@ -1,0 +1,105 @@
+#+title: Running Tests
+#+author: James Conroy-Finn
+#+email: james@logi.cl
+#+startup: content
+#+options: toc:2 num:nil ^:nil
+
+* Continuous Integration
+
+In order to verify the behaviour of this Emacs configuration a number of
+Cucumber features are provided, and executed by [[https://github.com/ecukes/ecukes][ecukes]].
+
+Tests can be run locally via ~cask exec ecukes --no-win~, and will be run every
+time a changeset is pushed up to GitHub thanks to [[https://circleci.com/][CircleCI]].
+
+* CircleCI
+:properties:
+:tangle: circle.yml
+:header-args: :comments link
+:end:
+
+Our CircleCI build is configured using a YAML file at the root of the
+repository.
+
+** Machine (environment)
+
+Configuration of the build is done via environment variables, that can be set in
+one of a number of ways with CircleCI. For globally available environment
+variables we can use the `machine.environment` path.
+
+#+begin_src yaml
+machine:
+  environment:
+    CASK_URL: https://raw.github.com/cask/cask/master/go
+    EMACS_VERSION: 24.5
+    EVM_TARGET: emacs-24.5-bin
+    EVM_URL: https://raw.github.com/rejeep/evm/master/go
+    PATH: "/home/ubuntu/.cask/bin:/home/ubuntu/.evm/bin:$PATH"
+#+end_src
+
+** Checkout
+
+CircleCI clones the repository into ~/home/ubuntu/emacs.d~, but Emacs and [[https://github.com/cask/cask][Cask]]
+expect our configuration to live in ~/home/ubuntu/.emacs.d~. The simplest fix
+for this is to symlink our cloned repository.
+
+Attempting to change where the repository is cloned results in a lot of fiddling
+because every command starts in the 'hardcoded' default directory of
+~/home/ubuntu/emacs.d~.
+
+#+begin_src yaml
+checkout:
+  post:
+    - ln -s ~/emacs.d ~/.emacs.d
+#+end_src
+
+** Dependencies
+
+Firstly we specify which directories we want to cache between builds. Doing so
+should significantly speed up running our tests by avoiding expensive tasks like
+downloading and compiling dependencies.
+
+#+begin_src yaml
+dependencies:
+  cache_directories:
+    - /usr/local/evm
+    - ~/.cask
+    - ~/emacs.d/.cask
+#+end_src
+
+Now we to install a recent version of Emacs, which we do using evm. As soon as
+Emacs is installed, we install Cask by cloning the repository into ~~/.cask~
+(using the installer fails because it insists on picking up Emacs 23, which is
+not supported).
+
+#+begin_src yaml
+  pre:
+    - echo $PATH
+    - sudo mkdir /usr/local/evm && sudo chown ubuntu:ubuntu /usr/local/evm
+    - curl -fsSkL $EVM_URL | bash
+    - evm install $EVM_TARGET --use --skip
+    - '[[ -d "~/.cask" ]] || git clone https://github.com/cask/cask.git ~/.cask'
+#+end_src
+
+Dependencies are installed with a wrapper script that tells Cask where to find
+Emacs by setting `EMACS`.
+
+#+begin_src yaml
+    override:
+      - bin/cask install
+#+end_src
+
+The script itself is pretty simple.
+
+#+begin_src sh :tangle bin/cask :shebang #!/bin/bash
+set -e
+EMACS="$(evm bin $EVM_TARGET)" cask $@
+#+end_src
+
+** Test
+
+#+begin_src yaml
+test:
+  override:
+    - bin/cask exec ecukes --no-win
+#+end_src
