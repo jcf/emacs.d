@@ -85,8 +85,8 @@ Dependencies are installed with a wrapper script that tells Cask where to find
 Emacs by setting `EMACS`.
 
 #+begin_src yaml
-    override:
-      - bin/cask install
+  override:
+    - bin/cask install
 #+end_src
 
 The script itself is pretty simple.

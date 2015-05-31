@@ -42,8 +42,8 @@ dependencies:
 
 # [[file:~/.emacs.d/ci.org::*Dependencies][Dependencies:1]]
 
-    override:
-      - bin/cask install
+  override:
+    - bin/cask install
 
 # Dependencies:1 ends here
 
