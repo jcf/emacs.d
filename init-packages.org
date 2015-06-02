@@ -126,8 +126,9 @@ Some interesting options available to GNU ls:
 * Editorconfig
 
 #+begin_src emacs-lisp
-  (use-package editorconfig :mode
-    ("\\.editorconfig\\'" . conf-unix-mode))
+  (use-package editorconfig
+    :if (executable-find "editorconfig")
+    :mode ("\\.editorconfig\\'" . conf-unix-mode))
 #+end_src
 
 * erc
