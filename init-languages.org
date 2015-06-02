@@ -14,6 +14,8 @@ encounter, and configures them for effective use.
 
 * Clojure
 
+*NOTE*: Indenting qualified vars is [[https://github.com/clojure-emacs/clojure-mode/issues/278][not currently supported]].
+
 #+begin_src emacs-lisp
   (use-package clojure-mode
     :commands (clojure-mode)
@@ -38,6 +40,7 @@ encounter, and configures them for effective use.
     (define-clojure-indent
       (defroutes 'defun)
       (for-all 'defun)
+      (s/defrecord 2)
       (GET 2)
       (POST 2)
       (PUT 2)
