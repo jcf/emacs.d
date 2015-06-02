@@ -209,9 +209,10 @@ http://www.emacswiki.org/emacs/SetFonts
   (defvar jcf-default-font
     "Source Code Pro-13")
 
-  ;; (add-to-list 'default-frame-alist '(font jcf-default-font))
-  (set-face-attribute 'default nil :font jcf-default-font)
-  (set-frame-font jcf-default-font nil t)
+  (when (member jcf-default-font (font-family-list))
+    ;; (add-to-list 'default-frame-alist '(font jcf-default-font))
+    (set-face-attribute 'default nil :font jcf-default-font)
+    (set-frame-font jcf-default-font nil t))
 #+end_src
 
 * Font sizes
