@@ -50,7 +50,6 @@
 (depends-on "drag-stuff")
 (depends-on "dsvn")
 (depends-on "ecukes")
-(depends-on "editorconfig")
 (depends-on "edn")
 (depends-on "eldoc-eval")
 (depends-on "elein")

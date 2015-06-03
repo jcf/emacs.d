@@ -123,14 +123,6 @@ Some interesting options available to GNU ls:
     :commands svn-status)
 #+end_src
 
-* Editorconfig
-
-#+begin_src emacs-lisp
-  (use-package editorconfig
-    :if (executable-find "editorconfig")
-    :mode ("\\.editorconfig\\'" . conf-unix-mode))
-#+end_src
-
 * erc
 
 #+begin_src emacs-lisp
