@@ -48,6 +48,13 @@ targets etc.
   (setq org-outline-path-complete-in-steps t)
 #+end_src
 
+Preserve indentation when tangling a file. This ensures we can break up big
+blocks of code when working with indented code (e.g. Python, YAML).
+
+#+begin_src emacs-lisp
+(setq org-src-preserve-indentation t)
+#+end_src
+
 * org-indent-mode
 
 Automatically add indentation to line up blobs of text with the level of the

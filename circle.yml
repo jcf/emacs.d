@@ -1,29 +1,56 @@
+
+# [[file:~/.emacs.d/ci.org::*Machine%20(environment)][Machine\ \(environment\):1]]
+
 machine:
   environment:
     CASK_URL: https://raw.github.com/cask/cask/master/go
     EMACS_VERSION: 24.5
-    EVM_TARGET: emacs-$EMACS_VERSION-bin
+    EVM_TARGET: emacs-24.5-bin
     EVM_URL: https://raw.github.com/rejeep/evm/master/go
     PATH: "/home/ubuntu/.cask/bin:/home/ubuntu/.evm/bin:$PATH"
+
+# Machine\ \(environment\):1 ends here
+
+# [[file:~/.emacs.d/ci.org::*Checkout][Checkout:1]]
 
 checkout:
   post:
     - ln -s ~/emacs.d ~/.emacs.d
+
+# Checkout:1 ends here
+
+# [[file:~/.emacs.d/ci.org::*Dependencies][Dependencies:1]]
 
 dependencies:
   cache_directories:
     - /usr/local/evm
     - ~/.cask
     - ~/emacs.d/.cask
+
+# Dependencies:1 ends here
+
+# [[file:~/.emacs.d/ci.org::*Dependencies][Dependencies:1]]
+
   pre:
     - echo $PATH
     - sudo mkdir /usr/local/evm && sudo chown ubuntu:ubuntu /usr/local/evm
     - curl -fsSkL $EVM_URL | bash
     - evm install $EVM_TARGET --use --skip
     - '[[ -d "~/.cask" ]] || git clone https://github.com/cask/cask.git ~/.cask'
+
+# Dependencies:1 ends here
+
+# [[file:~/.emacs.d/ci.org::*Dependencies][Dependencies:1]]
+
   override:
     - bin/cask install
+
+# Dependencies:1 ends here
+
+# [[file:~/.emacs.d/ci.org::*Test][Test:1]]
 
 test:
   override:
     - bin/cask exec ecukes --no-win
+
+# Test:1 ends here

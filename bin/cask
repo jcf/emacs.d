@@ -1,3 +1,8 @@
 #!/bin/bash
+
+# [[file:~/.emacs.d/ci.org::*Dependencies][Dependencies:1]]
+
 set -e
 EMACS="$(evm bin $EVM_TARGET)" cask $@
+
+# Dependencies:1 ends here
