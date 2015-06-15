@@ -153,9 +153,16 @@ Enable ~<leader>~ in Dired, GNUs, Magit, and Notmuch.
 ** Clojure
 
 #+begin_src emacs-lisp
+  (defun jcf-cider-test-run-tests ()
+    (interactive)
+    (save-buffer)
+    (cider-test-run-tests nil))
+#+end_src
+
+#+begin_src emacs-lisp
   (evil-leader/set-key-for-mode 'clojure-mode
     "v" 'cider-test-run-test
-    "V" 'cider-test-run-tests
+    "V" 'jcf-cider-test-run-tests
     "cC" 'cider-connect
     "cj" 'cider-switch-to-relevant-repl-buffer
     "cJ" 'cider-jack-in
