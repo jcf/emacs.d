@@ -107,8 +107,7 @@ fringe.
 * Highlight current line
 
 #+begin_src emacs-lisp
-  (use-package hl-line
-    :config (global-hl-line-mode))
+  (use-package hl-line)
 #+end_src
 
 * Opacity
