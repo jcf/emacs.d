@@ -4,7 +4,6 @@
 #+STARTUP: content
 #+OPTIONS: toc:2 num:nil ^:nil
 #+LINK: dotfiles https://github.com/jcf-dotfiles
-#+LINK: source-code-pro http://store1.adobe.com/cfusion/store/html/index.cfm?event=displayFontPackage&code=1960
 
 * Abstract
 
