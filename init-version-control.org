@@ -16,6 +16,15 @@
 * Magit
 
 #+begin_src emacs-lisp
+  (defun jcf-git-commit-hook ()
+    "Setup the buffer for well formed commit messages."
+    (turn-on-flyspell)
+    (visual-line-mode 0)
+    (visual-fill-column-mode 0)
+    (turn-on-auto-fill))
+#+end_src
+
+#+begin_src emacs-lisp
   (use-package magit
     :commands magit-get-top-dir
     :diminish magit-auto-revert-mode
@@ -33,15 +42,13 @@
         (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
     (use-package git-blame)
-    (use-package git-commit-mode
-      :config
-      (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
-      (add-hook 'git-commit-mode-hook (lambda () (toggle-save-place 0))))
+    (use-package git-commit-mode)
     (use-package git-rebase-mode)
     (use-package gitignore-mode)
     (use-package gitconfig-mode)
     (use-package magit-svn :diminish magit-svn-mode)
-    (add-hook 'magit-mode-hook 'turn-on-magit-svn))
+    (add-hook 'magit-mode-hook 'turn-on-magit-svn)
+    (add-hook 'git-commit-mode-hook 'jcf-git-commit-hook))
 #+end_src
 
 Jump to the parent section with Command-Control-<up>.
