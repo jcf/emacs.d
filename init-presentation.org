@@ -5,6 +5,7 @@
 #+OPTIONS: toc:2 num:nil ^:nil
 #+LINK: fullframe https://github.com/tomterl/fullframe
 #+LINK: zenburn https://github.com/bbatsov/zenburn-emacs
+#+LINK: source-code-pro http://store1.adobe.com/cfusion/store/html/index.cfm?event=displayFontPackage&code=1960
 
 * Abstract
 
@@ -207,12 +208,14 @@ http://www.emacswiki.org/emacs/SetFonts
 
 #+begin_src emacs-lisp
   (defvar jcf-default-font
-    "Source Code Pro-13")
+    "Source Code Pro"
+    "The font to use everywhere. Has to be both readable, and awesome.")
 
   (when (member jcf-default-font (font-family-list))
-    ;; (add-to-list 'default-frame-alist '(font jcf-default-font))
-    (set-face-attribute 'default nil :font jcf-default-font)
-    (set-frame-font jcf-default-font nil t))
+    (let ((font (concat jcf-default-font "-13")))
+      ;; (add-to-list 'default-frame-alist '(font jcf-default-font))
+      (set-face-attribute 'default nil :font font)
+      (set-frame-font font nil t)))
 #+end_src
 
 * Font sizes
