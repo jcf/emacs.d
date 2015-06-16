@@ -297,14 +297,19 @@ evil-leader]] before evil itself.
 
 * Motions around wrapped lines
 
-Make up and down step through wrapped lines.
+Make j/k move up and down by visual line in both normal and visual mode. This
+helps with buffers that aren't hardwrapped.
 
 #+begin_src emacs-lisp
   (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-
   (define-key evil-normal-state-map (kbd "gj") 'evil-next-line)
   (define-key evil-normal-state-map (kbd "gk") 'evil-previous-line)
+
+  (define-key evil-visual-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-visual-state-map (kbd "k") 'evil-previous-visual-line)
+  (define-key evil-visual-state-map (kbd "gj") 'evil-next-line)
+  (define-key evil-visual-state-map (kbd "gk") 'evil-previous-line)
 #+end_src
 
 * Default cursor
