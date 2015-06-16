@@ -28,6 +28,8 @@ Always install Org from package to ensure we get a recent version.
         org-tags-column 80)
 #+end_src
 
+* Refile
+
 Refile targets include this file and any file contributing to the agenda - up to
 5 levels deep.
 
@@ -40,6 +42,8 @@ Targets start with the file name - allows creating level 1 tasks.
 #+begin_src emacs-lisp
   (setq org-refile-use-outline-path (quote file))
 #+end_src
+
+* Outline
 
 Targets complete in steps so we start with filename, TAB shows the next level of
 targets etc.
