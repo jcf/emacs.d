@@ -240,6 +240,7 @@
 (depends-on "smex")
 (depends-on "sql-indent")
 (depends-on "string-utils")
+(depends-on "swift-mode")
 (depends-on "switch-window")
 (depends-on "tagedit")
 (depends-on "tern")
