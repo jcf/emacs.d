@@ -254,6 +254,7 @@
 (depends-on "vagrant-tramp")
 (depends-on "vc-darcs")
 (depends-on "vcl-mode")
+(depends-on "vimrc-mode")
 (depends-on "visual-fill-column")
 (depends-on "web-mode")
 (depends-on "wgrep")
