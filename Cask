@@ -182,7 +182,6 @@
 (depends-on "nix-mode")
 (depends-on "notmuch")
 (depends-on "nyan-mode")
-(depends-on "org" :git "git://orgmode.org/org-mode.git")
 (depends-on "org-fstree")
 (depends-on "org-jekyll")
 (depends-on "org-mac-iCal")
