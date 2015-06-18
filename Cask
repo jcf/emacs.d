@@ -190,6 +190,7 @@
 (depends-on "org-pomodoro")
 (depends-on "org-trello")
 (depends-on "osx-location")
+(depends-on "ox-gfm")
 (depends-on "package-build")
 (depends-on "packed")
 (depends-on "page-break-lines")

@@ -58,6 +58,20 @@ targets etc.
   (add-hook 'org-mode-hook 'jcf-hard-wrap)
 #+end_src
 
+* Exporters
+
+** Markdown
+
+#+begin_src emacs-lisp
+  (require 'ox-md)
+#+end_src
+
+** GitHub flavoured Markdown
+
+#+begin_src emacs-lisp
+  (use-package ox-gfm)
+#+end_src
+
 * org-indent-mode
 
 Automatically add indentation to line up blobs of text with the level of the
