@@ -517,6 +517,27 @@ lisp-interaction-mode~.
   (use-package scratch)
 #+end_src
 
+* Shackle
+
+#+begin_quote
+~shackle~ gives you the means to put an end to popped up buffers not behaving
+they way you'd like them to. By setting up simple rules you can for instance
+make Emacs always select help buffers for you or make everything reuse your
+currently selected window.
+#+end_quote
+
+https://github.com/wasamasa/shackle
+
+#+begin_src emacs-lisp
+  (use-package shackle
+    :init
+    (setq
+     shackle-rules
+     '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4)
+       (compilation-mode :noselect t)
+       (t :select t))))
+#+end_src
+
 * Smart mode line
 
 Diminish isn't supported, so we have to use the slightly less powerful
