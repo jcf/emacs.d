@@ -69,7 +69,9 @@ using a simple API.
 
     ;; Use Helm to complete suggestions
     (define-key company-mode-map (kbd "C-:") 'helm-company)
-    (define-key company-active-map (kbd "C-:") 'helm-company))
+    (define-key company-active-map (kbd "C-:") 'helm-company)
+    (define-key company-active-map (kbd "C-n") 'company-select-next)
+    (define-key company-active-map (kbd "C-p") 'company-select-previous))
 #+end_src
 
 * Dired
