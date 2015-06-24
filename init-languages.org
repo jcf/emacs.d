@@ -192,6 +192,12 @@ Use conf-mode for [[https://github.com/ddollar/foreman][Foreman]] Procfiles.
     :commands feature-mode)
 #+end_src
 
+* EBNF
+
+#+begin_src emacs-lisp
+  (use-package ebnf)
+#+end_src
+
 * ERB
 
 #+begin_src emacs-lisp

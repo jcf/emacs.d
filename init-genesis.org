@@ -45,6 +45,16 @@ want. Each variable has corresponding documentation accessible via
    visible-bell t)
 #+end_src
 
+* Add site-lisp to load-path
+
+Occasionally some useful code isn't available in Melpa or any other package
+repository. Any Emacs Lisp that we want to pull in can be added to
+~\~/.emacs.d/lisp~.
+
+#+begin_src emacs-lisp
+  (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+#+end_src
+
 * Terminfo for ~term~
 
 When we run ~/usr/local/bin/zsh~ inside ~term~ we get a lot of escape
