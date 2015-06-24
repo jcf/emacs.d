@@ -614,6 +614,14 @@ the work in all modes that derive from text mode.
   (use-package visual-line)
   (use-package visual-fill-column)
 
+  (defun jcf-no-wrap ()
+    "Disable all wrapping."
+    (interactive)
+    (turn-off-auto-fill)
+    (toggle-truncate-lines 1)
+    (visual-line-mode 0)
+    (visual-fill-column-mode 0))
+
   (defun jcf-soft-wrap ()
     "Soft wrap the current buffer."
     (interactive)
@@ -628,7 +636,7 @@ the work in all modes that derive from text mode.
     (turn-on-auto-fill))
 
   (add-hook 'text-mode-hook 'jcf-soft-wrap)
-  (add-hook 'prog-mode-hook 'jcf-hard-wrap)
+  (add-hook 'prog-mode-hook 'jcf-no-wrap)
 #+end_src
 
 * Comint & Shell-like modes
