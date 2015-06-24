@@ -758,6 +758,7 @@ http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-m
     :mode (("Gemfile\\'" . ruby-mode)
            ("Kirkfile\\'" . ruby-mode)
            ("Rakefile\\'" . ruby-mode)
+           ("Vagrantfile\\'" . ruby-mode)
            ("\\.builder\\'" . ruby-mode)
            ("\\.gemspec\\'" . ruby-mode)
            ("\\.irbrc\\'" . ruby-mode)
