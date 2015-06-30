@@ -28,7 +28,7 @@ We can control the amount of output ~use-package~ generates by setting
     :commands (cider cider-connect cider-jack-in)
     :init
     (setq cider-auto-select-error-buffer t
-          cider-repl-pop-to-buffer-on-connect t
+          cider-repl-pop-to-buffer-on-connect nil
           cider-repl-use-clojure-font-lock t
           cider-repl-wrap-history t
           cider-repl-history-size 1000
