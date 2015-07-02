@@ -645,7 +645,6 @@ the work in all modes that derive from text mode.
     (visual-fill-column-mode 0)
     (turn-on-auto-fill))
 
-  (add-hook 'text-mode-hook 'jcf-soft-wrap)
   (add-hook 'prog-mode-hook 'jcf-no-wrap)
 #+end_src
 
