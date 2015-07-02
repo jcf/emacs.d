@@ -430,6 +430,8 @@ Used in some ~<leader>~ bindings below.
              (help-mode . emacs)
              (ielm-mode . insert)
              (magit-branch-manager-mode . emacs)
+             (magit-popup-mode . emacs)
+             (magit-refs-mode . emacs)
              (nrepl-mode . insert)
              (prodigy-mode . normal)
              (rdictcc-buffer-mode . emacs)
